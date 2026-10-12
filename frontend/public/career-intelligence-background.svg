@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Gradients for subtle data flows -->
+    <linearGradient id="flowBlueCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.32" />
+      <stop offset="60%" stop-color="#0891b2" stop-opacity="0.36" />
+      <stop offset="100%" stop-color="#0f766e" stop-opacity="0.18" />
+    </linearGradient>
+
+    <linearGradient id="flowCyanTeal" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0891b2" stop-opacity="0.28" />
+      <stop offset="60%" stop-color="#059669" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0.12" />
+    </linearGradient>
+
+    <linearGradient id="docOutlineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#0891b2" stop-opacity="0.12" />
+    </linearGradient>
+
+    <radialGradient id="nodePulseBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="nodePulseCyan" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0891b2" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#0891b2" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- 1. LEFT REGION: Subtle Abstract Resume & Ingestion Streams (Outer Perimeter) -->
+  <g class="bg-left-elements" opacity="0.8">
+    <!-- Abstract Document Outline -->
+    <rect x="70" y="160" width="170" height="240" rx="12" stroke="url(#docOutlineGrad)" stroke-width="1.5" stroke-dasharray="4 4" fill="#ffffff" fill-opacity="0.6" />
+    <line x1="95" y1="195" x2="165" y2="195" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.45" />
+    <line x1="95" y1="218" x2="205" y2="218" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.35" />
+    <line x1="95" y1="236" x2="190" y2="236" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.35" />
+    <line x1="95" y1="254" x2="175" y2="254" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.35" />
+    
+    <!-- Abstract Skill Blocks on Document -->
+    <rect x="95" y="278" width="44" height="16" rx="4" fill="#2563eb" fill-opacity="0.1" stroke="#2563eb" stroke-width="0.8" stroke-opacity="0.25" />
+    <rect x="145" y="278" width="48" height="16" rx="4" fill="#0891b2" fill-opacity="0.1" stroke="#0891b2" stroke-width="0.8" stroke-opacity="0.25" />
+    <rect x="95" y="300" width="52" height="16" rx="4" fill="#0f766e" fill-opacity="0.1" stroke="#0f766e" stroke-width="0.8" stroke-opacity="0.25" />
+
+    <!-- Flowing Parsing Data Streams (Moving Outward to Avoid Center) -->
+    <path d="M240 270 C340 270, 370 380, 460 390" stroke="url(#flowBlueCyan)" stroke-width="1.5" stroke-dasharray="5 5" />
+    <path d="M240 330 C320 330, 340 480, 440 500" stroke="url(#flowCyanTeal)" stroke-width="1.2" stroke-dasharray="4 4" />
+    
+    <!-- Left Geometric Data Points -->
+    <circle cx="460" cy="390" r="5" fill="#2563eb" fill-opacity="0.6" />
+    <circle cx="460" cy="390" r="14" fill="url(#nodePulseBlue)" />
+    <circle cx="440" cy="500" r="4" fill="#0891b2" fill-opacity="0.6" />
+    <circle cx="440" cy="500" r="12" fill="url(#nodePulseCyan)" />
+
+    <!-- Additional Subtle Perimeter Vector Elements -->
+    <circle cx="280" cy="180" r="2.5" fill="#2563eb" fill-opacity="0.4" />
+    <circle cx="380" cy="220" r="3" fill="#0891b2" fill-opacity="0.35" />
+    <line x1="280" y1="180" x2="380" y2="220" stroke="#2563eb" stroke-width="0.8" stroke-dasharray="3 3" stroke-opacity="0.25" />
+  </g>
+
+  <!-- 2. RIGHT REGION: Subtle AI Semantic Network & Vector Points (Outer Perimeter) -->
+  <g class="bg-right-elements" opacity="0.8">
+    <!-- Outer Semantic Network Nodes -->
+    <circle cx="1560" cy="210" r="18" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-opacity="0.4" />
+    <circle cx="1560" cy="210" r="6" fill="#2563eb" fill-opacity="0.55" />
+    <circle cx="1560" cy="210" r="24" fill="url(#nodePulseBlue)" />
+
+    <circle cx="1740" cy="320" r="22" fill="#ffffff" stroke="#0891b2" stroke-width="1.5" stroke-opacity="0.4" />
+    <circle cx="1740" cy="320" r="8" fill="#0891b2" fill-opacity="0.55" />
+    <circle cx="1740" cy="320" r="30" fill="url(#nodePulseCyan)" />
+
+    <circle cx="1620" cy="470" r="16" fill="#ffffff" stroke="#059669" stroke-width="1.5" stroke-opacity="0.4" />
+    <circle cx="1620" cy="470" r="6" fill="#059669" fill-opacity="0.55" />
+
+    <!-- Connecting Network Streams on Outer Right -->
+    <path d="M1560 210 C1640 230, 1680 280, 1740 320" stroke="url(#flowBlueCyan)" stroke-width="1.8" />
+    <path d="M1740 320 C1690 390, 1660 420, 1620 470" stroke="url(#flowCyanTeal)" stroke-width="1.6" />
+    <path d="M1560 210 C1520 330, 1550 420, 1620 470" stroke="url(#flowBlueCyan)" stroke-width="1.2" stroke-dasharray="4 4" />
+
+    <!-- Satellite Vector Points -->
+    <circle cx="1820" cy="200" r="3" fill="#2563eb" fill-opacity="0.4" />
+    <circle cx="1700" cy="140" r="3.5" fill="#0891b2" fill-opacity="0.4" />
+    <circle cx="1840" cy="430" r="3" fill="#0f766e" fill-opacity="0.4" />
+    <line x1="1740" y1="320" x2="1840" y2="430" stroke="#0f766e" stroke-width="1" stroke-opacity="0.2" stroke-dasharray="3 3" />
+    <line x1="1560" y1="210" x2="1700" y2="140" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" stroke-dasharray="3 3" />
+  </g>
+
+  <!-- 3. BOTTOM REGION: Subtle Career Pathway Streams Leading Gently Inward -->
+  <g class="bg-bottom-elements" opacity="0.65">
+    <path d="M420 480 C580 540, 680 660, 760 740" stroke="url(#flowBlueCyan)" stroke-width="1.4" stroke-dasharray="6 6" />
+    <path d="M1580 510 C1420 560, 1260 670, 1160 740" stroke="url(#flowCyanTeal)" stroke-width="1.4" stroke-dasharray="6 6" />
+    
+    <!-- Soft Milestone Nodes at Bottom Outer Area -->
+    <circle cx="760" cy="740" r="4" fill="#0891b2" fill-opacity="0.5" />
+    <circle cx="1160" cy="740" r="4" fill="#2563eb" fill-opacity="0.5" />
+  </g>
+
+  <!-- 4. Subtle Perimeter Crosshair Accents (Extreme Outer Corners Only) -->
+  <g class="bg-corner-crosshairs" opacity="0.3">
+    <path d="M40 50 L40 80 M25 65 L55 65" stroke="#2563eb" stroke-width="1" stroke-opacity="0.25" />
+    <path d="M1880 50 L1880 80 M1865 65 L1895 65" stroke="#0891b2" stroke-width="1" stroke-opacity="0.25" />
+  </g>
+</svg>

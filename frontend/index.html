@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CareerSense AI</title>
+    <script>
+      (function() {
+        try {
+          var mode = localStorage.getItem('careersense_theme_mode');
+          var theme = localStorage.getItem('careersense_theme');
+          var isDark = false;
+          if (mode === 'dark' || theme === 'dark') {
+            isDark = true;
+          } else if (mode === 'system' || !mode) {
+            isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          }
+          if (isDark) {
+            document.documentElement.classList.add('dark-mode');
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.style.backgroundColor = '#0b1220';
+            document.documentElement.style.color = '#f1f5f9';
+          } else {
+            document.documentElement.classList.remove('dark-mode');
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.style.backgroundColor = '#f8fafc';
+            document.documentElement.style.color = '#0f172a';
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <!-- Razorpay Checkout Integration -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+

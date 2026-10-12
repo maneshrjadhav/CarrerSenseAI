@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Linear Gradients for Semantic Streams -->
+    <linearGradient id="streamBlueCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.35" />
+      <stop offset="60%" stop-color="#0891b2" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#0f766e" stop-opacity="0.15" />
+    </linearGradient>
+
+    <linearGradient id="streamCyanTeal" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0891b2" stop-opacity="0.3" />
+      <stop offset="70%" stop-color="#059669" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0.1" />
+    </linearGradient>
+
+    <linearGradient id="docBorderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#0891b2" stop-opacity="0.15" />
+    </linearGradient>
+
+    <!-- Radial Glows for Node Points -->
+    <radialGradient id="glowNodeBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="glowNodeTeal" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0891b2" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#0891b2" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- 1. LEFT SIDE: Subtle Abstract Document & Data Stream (Outer Perimeter Only) -->
+  <g class="bg-left-perimeter" opacity="0.85">
+    <!-- Abstract Resume Silhouette Sheet 1 -->
+    <rect x="60" y="160" width="160" height="230" rx="10" stroke="url(#docBorderGrad)" stroke-width="1.5" stroke-dasharray="4 4" fill="#ffffff" fill-opacity="0.5" />
+    <line x1="85" y1="195" x2="155" y2="195" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.5" />
+    <line x1="85" y1="218" x2="195" y2="218" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.4" />
+    <line x1="85" y1="236" x2="180" y2="236" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.4" />
+    <line x1="85" y1="254" x2="165" y2="254" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.4" />
+    
+    <!-- Mini Skill Tags inside Left Doc -->
+    <rect x="85" y="278" width="42" height="15" rx="4" fill="#2563eb" fill-opacity="0.12" stroke="#2563eb" stroke-width="0.8" stroke-opacity="0.3" />
+    <rect x="133" y="278" width="46" height="15" rx="4" fill="#0891b2" fill-opacity="0.12" stroke="#0891b2" stroke-width="0.8" stroke-opacity="0.3" />
+    <rect x="85" y="300" width="50" height="15" rx="4" fill="#0f766e" fill-opacity="0.12" stroke="#0f766e" stroke-width="0.8" stroke-opacity="0.3" />
+
+    <!-- Outgoing Ingestion Streams from Left Doc -->
+    <path d="M220 270 C310 270, 330 380, 420 400" stroke="url(#streamBlueCyan)" stroke-width="1.5" stroke-dasharray="5 5" />
+    <path d="M220 330 C300 330, 310 490, 410 510" stroke="url(#streamCyanTeal)" stroke-width="1.2" stroke-dasharray="4 4" />
+    
+    <!-- Left Mid Data Points -->
+    <circle cx="420" cy="400" r="5" fill="#2563eb" fill-opacity="0.6" />
+    <circle cx="420" cy="400" r="14" fill="url(#glowNodeBlue)" />
+    <circle cx="410" cy="510" r="4" fill="#0891b2" fill-opacity="0.6" />
+
+    <!-- Subtle Abstract Syntax Tokens Floating on Far Left -->
+    <text x="70" y="440" font-family="monospace" font-size="11" fill="#2563eb" fill-opacity="0.35">&lt;nlp:tokens count="284"&gt;</text>
+    <text x="70" y="465" font-family="monospace" font-size="11" fill="#0891b2" fill-opacity="0.35">tf_idf_weights: normalized</text>
+    <text x="70" y="490" font-family="monospace" font-size="11" fill="#0f766e" fill-opacity="0.35">entity: [Python, React, SQL]</text>
+  </g>
+
+  <!-- 2. RIGHT SIDE: Subtle AI Semantic Network & Vector Points (Outer Perimeter Only) -->
+  <g class="bg-right-perimeter" opacity="0.85">
+    <!-- Right Semantic Network Nodes -->
+    <circle cx="1580" cy="200" r="18" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-opacity="0.4" />
+    <circle cx="1580" cy="200" r="6" fill="#2563eb" fill-opacity="0.6" />
+    <text x="1580" y="235" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#64748b" fill-opacity="0.7">Vector A</text>
+
+    <circle cx="1760" cy="310" r="22" fill="#ffffff" stroke="#0891b2" stroke-width="1.5" stroke-opacity="0.4" />
+    <circle cx="1760" cy="310" r="8" fill="#0891b2" fill-opacity="0.6" />
+    <text x="1760" y="350" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#64748b" fill-opacity="0.7">Job Space B</text>
+
+    <circle cx="1640" cy="460" r="16" fill="#ffffff" stroke="#059669" stroke-width="1.5" stroke-opacity="0.4" />
+    <circle cx="1640" cy="460" r="6" fill="#059669" fill-opacity="0.6" />
+    <text x="1640" y="492" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#64748b" fill-opacity="0.7">cos(θ) = 0.78</text>
+
+    <!-- Connecting Network Lines on Far Right -->
+    <path d="M1580 200 C1660 220, 1700 270, 1760 310" stroke="url(#streamBlueCyan)" stroke-width="1.8" />
+    <path d="M1760 310 C1710 380, 1680 410, 1640 460" stroke="url(#streamCyanTeal)" stroke-width="1.6" />
+    <path d="M1580 200 C1540 320, 1570 410, 1640 460" stroke="url(#streamBlueCyan)" stroke-width="1.2" stroke-dasharray="4 4" />
+
+    <!-- Distant Semantic Cluster Satellites -->
+    <circle cx="1830" cy="190" r="3" fill="#2563eb" fill-opacity="0.4" />
+    <circle cx="1720" cy="140" r="3.5" fill="#0891b2" fill-opacity="0.4" />
+    <circle cx="1860" cy="420" r="3" fill="#0f766e" fill-opacity="0.4" />
+    <line x1="1760" y1="310" x2="1860" y2="420" stroke="#0f766e" stroke-width="1" stroke-opacity="0.2" stroke-dasharray="3 3" />
+    <line x1="1580" y1="200" x2="1720" y2="140" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" stroke-dasharray="3 3" />
+
+    <!-- Subtle Code Metadata Tags on Right -->
+    <text x="1560" y="550" font-family="monospace" font-size="11" fill="#0891b2" fill-opacity="0.35">cos_sim: (A·B)/(||A||·||B||)</text>
+    <text x="1560" y="575" font-family="monospace" font-size="11" fill="#059669" fill-opacity="0.35">match_confidence: 78.4%</text>
+  </g>
+
+  <!-- 3. BOTTOM: Flowing Data Guidance Lines Leading Toward Preview -->
+  <g class="bg-bottom-lead" opacity="0.6">
+    <!-- Left to Center-Bottom convergence path -->
+    <path id="signalTrackLeft" d="M380 430 C560 480, 680 620, 750 710" stroke="url(#streamBlueCyan)" stroke-width="1.5" stroke-dasharray="6 6" />
+    <!-- Right to Center-Bottom convergence path -->
+    <path id="signalTrackRight" d="M1610 470 C1440 520, 1280 640, 1170 710" stroke="url(#streamCyanTeal)" stroke-width="1.5" stroke-dasharray="6 6" />
+  </g>
+
+  <!-- 4. Subtle Ambient Geometric Grid Coordinates (Extreme Corners Only) -->
+  <g class="bg-corner-accents" opacity="0.4">
+    <!-- Top-Left corner crosshairs -->
+    <path d="M40 50 L40 90 M20 70 L60 70" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" />
+    <!-- Top-Right corner crosshairs -->
+    <path d="M1880 50 L1880 90 M1860 70 L1900 70" stroke="#0891b2" stroke-width="1" stroke-opacity="0.2" />
+  </g>
+</svg>
+
