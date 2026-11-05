@@ -9,16 +9,15 @@ import {
   Clock,
   ArrowRight,
   TrendingUp,
-  HelpCircle,
-  ChevronDown,
-  ChevronUp,
   Layers,
   Award,
   ExternalLink,
   RefreshCw,
   Calendar,
   User,
-  Briefcase
+  Briefcase,
+  Check,
+  XCircle,
 } from 'lucide-react';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
@@ -33,7 +32,6 @@ export default function AnalysisResult() {
   const [loading, setLoading] = useState(true);
   const [analysisData, setAnalysisData] = useState(null);
   const [error, setError] = useState('');
-  const [showFormula, setShowFormula] = useState(false);
   const [generatingReport, setGeneratingReport] = useState(false);
   const [reportSuccess, setReportSuccess] = useState(false);
 
@@ -224,37 +222,6 @@ export default function AnalysisResult() {
                 <span className="pillar-sub">Value-add technical assets</span>
               </div>
             </div>
-
-            {/* Methodology Explainer Toggle */}
-            <div className="formula-toggle-wrap mt-4">
-              <button
-                type="button"
-                className="formula-toggle-btn"
-                onClick={() => setShowFormula(!showFormula)}
-              >
-                <HelpCircle size={15} />
-                <span>How was this score calculated?</span>
-                {showFormula ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
-              </button>
-
-              {showFormula && (
-                <div className="formula-details-box mt-3 animate-fade-in">
-                  <p className="font-semibold text-dark text-sm mb-1">Scoring Methodology &amp; Mathematical Formulation:</p>
-                  <p className="text-xs text-secondary mb-2">
-                    Our scoring engine computes an un-doctored, weighted combination of exact technical coverage and TF-IDF high-dimensional cosine semantic alignment:
-                  </p>
-                  <div className="code-formula-box">
-                    <code>
-                      Match Score = (60% × Skill Coverage) + (40% × TF-IDF Semantic Similarity)<br />
-                      = (0.60 × {skillCoverage}%) + (0.40 × {semanticSim}%) = {matchScore}%
-                    </code>
-                  </div>
-                  <p className="text-xs text-secondary mt-2">
-                    Weights configured dynamically in backend settings: 60% Required Skill Weight, 40% Natural Language Term Frequency Vector Weight.
-                  </p>
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </Card>
@@ -310,7 +277,10 @@ export default function AnalysisResult() {
             {missing_skills.map((gap) => (
               <div key={gap.skill_name} className={`skill-gap-card prio-${gap.priority?.toLowerCase() || 'medium'}`}>
                 <div className="gap-card-top flex-between">
-                  <h3 className="gap-skill-name font-bold text-base text-dark">✕ {gap.skill_name}</h3>
+                  <h3 className="gap-skill-name font-bold text-base text-dark" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                    <XCircle size={16} className="text-rose-500" />
+                    <span>{gap.skill_name}</span>
+                  </h3>
                   <Badge
                     variant={gap.priority === 'HIGH' ? 'rose' : gap.priority === 'MEDIUM' ? 'amber' : 'gray'}
                     size="sm"
@@ -368,7 +338,7 @@ export default function AnalysisResult() {
               <div key={skill.skill_name} className="matched-skill-card">
                 <div className="matched-card-top flex-between">
                   <div className="flex-items-center gap-2">
-                    <span className="text-emerald font-bold">✓</span>
+                    <Check size={16} className="text-emerald" />
                     <strong className="matched-skill-title">{skill.skill_name}</strong>
                   </div>
                   <Badge variant="emerald" size="sm">

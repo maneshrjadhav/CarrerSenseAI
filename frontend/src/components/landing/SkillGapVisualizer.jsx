@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, AlertCircle, Sparkles, Layers } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Sparkles, Layers, Check } from 'lucide-react';
 
 export default function SkillGapVisualizer() {
   const [filter, setFilter] = useState('all'); // 'all', 'matched', 'missing'
@@ -75,7 +75,9 @@ export default function SkillGapVisualizer() {
                 <div key={sk} className="skill-item-badge skill-matched">
                   <span className="dot-indicator green"></span>
                   <span className="skill-name-txt">{sk}</span>
-                  <span className="skill-status-tag tag-green">Verified ✓</span>
+                  <span className="skill-status-tag tag-green" style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                    <Check size={11} /> Verified
+                  </span>
                 </div>
               ))}
             </div>
@@ -126,9 +128,9 @@ export default function SkillGapVisualizer() {
                   <motion.div
                     key={req.name}
                     className={`skill-item-badge ${req.status === 'matched' ? 'skill-matched' : 'skill-missing'}`}
-                    initial={{ opacity: 0, y: 6 }}
+                    initial={{ opacity: 1, y: 0 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.15 }}
                   >
                     <span className={`dot-indicator ${req.status === 'matched' ? 'green' : 'amber'}`}></span>
                     <span className="skill-name-txt">{req.name}</span>

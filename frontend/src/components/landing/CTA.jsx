@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Sparkles, ArrowRight, UserPlus } from 'lucide-react';
+import { Sparkles, ArrowRight, UserPlus, ShieldCheck } from 'lucide-react';
 import Button from '../common/Button';
 
 export default function CTA() {
@@ -10,24 +9,18 @@ export default function CTA() {
   return (
     <section className="cta-master-section">
       <div className="section-container">
-        <motion.div
-          className="cta-banner-box"
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.55 }}
-        >
-          <div className="cta-ambient-circle" aria-hidden="true"></div>
+        <div className="cta-banner-box">
+          <div className="cta-ambient-circle" aria-hidden="true" />
 
           <div className="cta-content-inner">
             <div className="inline-badge-pill light-pill">
-              <Sparkles size={14} className="text-teal" />
-              <span>START YOUR JOURNEY</span>
+              <Sparkles size={14} className="text-cyan" />
+              <span>ACCELERATE YOUR CAREER</span>
             </div>
 
-            <h2 className="cta-headline">Ready to Understand Your Career Potential?</h2>
+            <h2 className="cta-headline">Ready to Understand Your True Career Readiness?</h2>
             <p className="cta-subheading">
-              Upload your resume and let CareerSense AI reveal the skills, opportunities and next steps that matter.
+              Upload your resume and let CareerSense AI compute your mathematical match confidence, isolate high-priority skill deficits, and build your milestone roadmap.
             </p>
 
             <div className="cta-buttons-group">
@@ -36,7 +29,7 @@ export default function CTA() {
                 size="lg"
                 icon={ArrowRight}
                 className="cta-main-btn"
-                onClick={() => navigate('/register')}
+                onClick={() => navigate('/analyze')}
               >
                 Analyze My Resume
               </Button>
@@ -50,10 +43,19 @@ export default function CTA() {
                 Create Free Account
               </Button>
             </div>
+
+            <div className="cta-footer-proof">
+              <span className="cta-proof-item">
+                <ShieldCheck size={14} className="text-emerald" /> Automated Resume Screening &amp; Placement Intelligence
+              </span>
+              <span className="cta-proof-dot">•</span>
+              <span className="cta-proof-item">B.Tech Engineering Project Demonstration</span>
+              <span className="cta-proof-dot">•</span>
+              <span className="cta-proof-item">No Credit Card Required</span>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 }
-

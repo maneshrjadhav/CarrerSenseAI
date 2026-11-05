@@ -10,6 +10,7 @@ import {
   Layers,
   BarChart3,
   Search,
+  Check,
 } from 'lucide-react';
 
 export default function ResumeScanDemo() {
@@ -196,7 +197,9 @@ export default function ResumeScanDemo() {
 
                     <div className="step-right-indicator">
                       {isPassed ? (
-                        <span className="badge-pass">✓ Verified</span>
+                        <span className="badge-pass" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <Check size={12} /> Verified
+                        </span>
                       ) : isCurrent ? (
                         <span className="badge-running">Parsing</span>
                       ) : (
@@ -215,7 +218,9 @@ export default function ResumeScanDemo() {
                 <strong className="score-box-number">78% Match Score</strong>
               </div>
               <div className="score-box-right">
-                <span className="score-status-tag tag-ready">Profile Processed ✓</span>
+                <span className="score-status-tag tag-ready" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  Profile Processed <Check size={12} />
+                </span>
               </div>
             </div>
           </div>

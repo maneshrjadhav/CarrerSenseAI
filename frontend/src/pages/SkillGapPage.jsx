@@ -30,7 +30,6 @@ import dashboardService from '../services/dashboardService';
 import { useToast } from '../context/ToastContext';
 import { getSkillCurriculum } from '../utils/skillCurriculum';
 import { evaluateReadiness } from '../utils/readinessHelper';
-import UpgradeModal from '../components/subscription/UpgradeModal';
 
 export default function SkillGapPage() {
   const { matchId: paramMatchId, analysisId } = useParams();
@@ -42,8 +41,6 @@ export default function SkillGapPage() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
-  const [subRequired, setSubRequired] = useState(false);
-  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('ALL'); // ALL | HIGH | MEDIUM | LOW
   const [activeModalSkill, setActiveModalSkill] = useState(null);
   const [addingSkill, setAddingSkill] = useState(false);
@@ -74,12 +71,7 @@ export default function SkillGapPage() {
         }
       } catch (err) {
         if (mounted) {
-          if (err.status === 403 || err.data?.subscription_required) {
-            setSubRequired(true);
-            setError(err.message || 'Skill Gap Analysis is a premium feature.');
-          } else {
-            setError(err.message || 'Failed to retrieve skill gaps.');
-          }
+          setError(err.message || 'Failed to retrieve skill gaps.');
         }
       } finally {
         if (mounted) setLoading(false);
@@ -109,11 +101,7 @@ export default function SkillGapPage() {
         toast.error(res.message || 'Failed to add skill to roadmap.');
       }
     } catch (err) {
-      if (err.status === 403 || err.data?.subscription_required) {
-        setUpgradeModalOpen(true);
-      } else {
-        toast.error(err.message || 'Error adding skill to roadmap.');
-      }
+      toast.error(err.message || 'Error adding skill to roadmap.');
     } finally {
       setAddingSkill(false);
       setActiveModalSkill(null);
@@ -132,56 +120,7 @@ export default function SkillGapPage() {
     );
   }
 
-  if (subRequired) {
-    return (
-      <div className="page-container">
-        <div className="page-header">
-          <BackButton to="/dashboard" label="Back to Dashboard" className="mb-3" />
-          <h1 className="page-title">Skill Gap Intelligence</h1>
-          <p className="page-subtitle">Prioritized analysis of technical & core competencies missing from your profile.</p>
-        </div>
-
-        <Card className="text-center py-5 mt-4" style={{ maxWidth: '680px', margin: '2rem auto' }}>
-          <div style={{ width: '64px', height: '64px', borderRadius: '50%', backgroundColor: 'rgba(37, 99, 235, 0.1)', color: 'var(--primary, #2563eb)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
-            <Layers size={32} />
-          </div>
-          <Badge variant="blue" size="md" className="mb-2">★ PREMIUM SUBSCRIPTION REQUIRED</Badge>
-          <h2 className="text-2xl font-bold text-dark mb-2">Unlock Skill Gap Intelligence</h2>
-          <p className="text-secondary max-w-lg mx-auto mb-6 text-sm" style={{ lineHeight: 1.6 }}>
-            Skill Gap Prioritization is an exclusive CareerSense AI feature. Upgrade to view high-priority missing skills, learning curriculum topics, and recommended practice projects.
-          </p>
-
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <Button
-              variant="primary"
-              size="lg"
-              icon={Sparkles}
-              onClick={() => setUpgradeModalOpen(true)}
-            >
-              Upgrade Now (From ₹83/mo) →
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => navigate('/pricing')}
-            >
-              Compare Plans
-            </Button>
-          </div>
-        </Card>
-
-        <UpgradeModal
-          isOpen={upgradeModalOpen}
-          onClose={() => setUpgradeModalOpen(false)}
-          featureName="skill_gap"
-          reasonMessage="Skill Gap Analysis requires an active CareerSense AI subscription."
-          onSuccessRedirect={window.location.pathname}
-        />
-      </div>
-    );
-  }
-
-  if (error && !subRequired && !data) {
+  if (error && !data) {
     return (
       <div className="page-container">
         <div className="page-header">
@@ -264,7 +203,7 @@ export default function SkillGapPage() {
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '4px',
+            gap: '6px',
             backgroundColor: 'rgba(239, 68, 68, 0.12)',
             color: '#dc2626',
             border: '1px solid rgba(239, 68, 68, 0.25)',
@@ -274,7 +213,7 @@ export default function SkillGapPage() {
             fontWeight: '700'
           }}
         >
-          🔴 High Priority
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#dc2626' }}></span> High Priority
         </span>
       );
     }
@@ -284,7 +223,7 @@ export default function SkillGapPage() {
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '4px',
+            gap: '6px',
             backgroundColor: 'rgba(245, 158, 11, 0.12)',
             color: '#d97706',
             border: '1px solid rgba(245, 158, 11, 0.25)',
@@ -294,7 +233,7 @@ export default function SkillGapPage() {
             fontWeight: '700'
           }}
         >
-          🟠 Medium Priority
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#d97706' }}></span> Medium Priority
         </span>
       );
     }
@@ -303,7 +242,7 @@ export default function SkillGapPage() {
         style={{
           display: 'inline-flex',
           alignItems: 'center',
-          gap: '4px',
+          gap: '6px',
           backgroundColor: 'rgba(16, 185, 129, 0.12)',
           color: '#059669',
           border: '1px solid rgba(16, 185, 129, 0.25)',
@@ -313,7 +252,7 @@ export default function SkillGapPage() {
           fontWeight: '700'
         }}
       >
-        🟢 Low Priority
+        <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#059669' }}></span> Low Priority
       </span>
     );
   };
@@ -340,7 +279,7 @@ export default function SkillGapPage() {
               <Badge variant="blue" size="sm">Role: {target_role}</Badge>
               {company_name && <Badge variant="slate" size="sm">{company_name}</Badge>}
               <Badge variant={isInterviewReady ? 'emerald' : 'amber'} size="sm">
-                {isInterviewReady ? '🎯 Interview Ready' : '🧭 Roadmap Recommended'}
+                {isInterviewReady ? 'Interview Ready' : 'Roadmap Recommended'}
               </Badge>
             </div>
             <h1 className="page-title" style={{ margin: 0 }}>Skill Gap Intelligence</h1>
@@ -493,7 +432,7 @@ export default function SkillGapPage() {
                     Interview Readiness Status
                   </h3>
                   <Badge variant={isInterviewReady ? 'emerald' : 'amber'} size="md">
-                    {isInterviewReady ? '✓ READY FOR MOCK INTERVIEW' : '⚠️ CAREER ROADMAP RECOMMENDED'}
+                    {isInterviewReady ? 'READY FOR MOCK INTERVIEW' : 'CAREER ROADMAP RECOMMENDED'}
                   </Badge>
                 </div>
                 <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -536,7 +475,7 @@ export default function SkillGapPage() {
                 Match Score vs. 80% Threshold
               </span>
               <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', fontWeight: 700, color: matchScore >= (readiness.threshold || 80) ? '#059669' : '#dc2626' }}>
-                {matchScore}% / {readiness.threshold || 80}% {matchScore >= (readiness.threshold || 80) ? '✓ Meets requirement' : `(${Math.round((readiness.threshold || 80) - matchScore)}% deficit)`}
+                {matchScore}% / {readiness.threshold || 80}% {matchScore >= (readiness.threshold || 80) ? '• Meets requirement' : `(${Math.round((readiness.threshold || 80) - matchScore)}% deficit)`}
               </p>
             </div>
 
@@ -546,8 +485,8 @@ export default function SkillGapPage() {
               </span>
               <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', fontWeight: 700, color: (readiness.critical_missing_count || (readiness.criticalGaps || []).length) === 0 ? '#059669' : '#dc2626' }}>
                 {(readiness.critical_missing_count || (readiness.criticalGaps || []).length) === 0
-                  ? '✓ 0 high-priority core competencies missing'
-                  : `⚠️ ${readiness.critical_missing_count || (readiness.criticalGaps || []).length} high-priority requirement(s) missing`}
+                  ? '0 high-priority core competencies missing'
+                  : `${readiness.critical_missing_count || (readiness.criticalGaps || []).length} high-priority requirement(s) missing`}
               </p>
             </div>
 
@@ -569,7 +508,7 @@ export default function SkillGapPage() {
       <Card
         className="mb-4"
         style={{ borderLeft: '5px solid #10b981' }}
-        title={`✓ Matched Competencies (${matchedCount})`}
+        title={`Matched Competencies (${matchedCount})`}
         subtitle="Skills verified in your resume that fulfill the job description's expectations"
       >
         {matched_skills.length === 0 ? (
@@ -638,7 +577,7 @@ export default function SkillGapPage() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
             <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span>✕ Missing Skills &amp; Actionable Learning Plans</span>
+              <span>Missing Skills &amp; Actionable Learning Plans</span>
               <span style={{ fontSize: '0.85rem', fontWeight: '600', padding: '2px 8px', borderRadius: '4px', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444' }}>
                 {filteredGaps.length} Gaps
               </span>
@@ -872,10 +811,13 @@ export default function SkillGapPage() {
                         borderRadius: '6px',
                         fontSize: '0.78rem',
                         fontWeight: '600',
-                        color: 'var(--text-sub)'
+                        color: 'var(--text-sub)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px'
                       }}
                     >
-                      📚 {r}
+                      <BookOpen size={12} /> {r}
                     </span>
                   ))}
                 </div>

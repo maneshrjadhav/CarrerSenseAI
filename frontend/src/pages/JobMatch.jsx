@@ -22,7 +22,8 @@ import {
   RotateCcw,
   FileUp,
   AlertTriangle,
-  FolderOpen
+  FolderOpen,
+  Check
 } from 'lucide-react';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
@@ -31,6 +32,7 @@ import BackButton from '../components/common/BackButton';
 import jobMatchService from '../services/jobMatchService';
 import analysisService from '../services/analysisService';
 import { useToast } from '../context/ToastContext';
+import JobMatchWelcomeModal from '../components/modals/JobMatchWelcomeModal';
 
 const PIPELINE_STAGES = [
   { id: 1, label: '01 Job Description Received' },
@@ -56,6 +58,7 @@ export default function JobMatch() {
   const navigate = useNavigate();
   const toast = useToast();
   const fileInputRef = useRef(null);
+  const jobDescriptionTextareaRef = useRef(null);
 
   const [resumes, setResumes] = useState([]);
   const [selectedResumeId, setSelectedResumeId] = useState(paramResumeId ? parseInt(paramResumeId) : null);
@@ -63,9 +66,12 @@ export default function JobMatch() {
   const [loadingResumes, setLoadingResumes] = useState(true);
 
   // Form State
-  const [targetRole, setTargetRole] = useState('Full Stack Developer');
-  const [companyName, setCompanyName] = useState('TechCorp Solutions');
-  const [jobDescription, setJobDescription] = useState(DEFAULT_SAMPLE_JD);
+  const [targetRole, setTargetRole] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [jobDescription, setJobDescription] = useState('');
+
+  // Welcome modal state
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
 
   // Upload state
   const [uploadingResume, setUploadingResume] = useState(false);
@@ -111,8 +117,14 @@ export default function JobMatch() {
         if (found) {
           setSelectedResume(found);
           setSelectedResumeId(found.id);
+        } else if (list.length > 0) {
+          // Requested resume is not in this user's library — fall back to the latest owned resume
+          setSelectedResume(list[0]);
+          setSelectedResumeId(list[0].id);
+          toast.info('The requested resume was not found in your library — switched to your latest resume.');
         } else {
-          setSelectedResumeId(parseInt(paramResumeId));
+          setSelectedResume(null);
+          setSelectedResumeId(null);
         }
       } else if (!selectedResumeId && list.length > 0) {
         setSelectedResume(list[0]);
@@ -131,6 +143,30 @@ export default function JobMatch() {
   useEffect(() => {
     fetchResumes();
   }, [paramResumeId]);
+
+  // First-time welcome popup check
+  useEffect(() => {
+    const welcomed = sessionStorage.getItem('cs_job_match_welcomed');
+    if (!welcomed && !jobDescription.trim()) {
+      setShowWelcomeModal(true);
+    }
+  }, []);
+
+  const handleCloseWelcomeModal = () => {
+    sessionStorage.setItem('cs_job_match_welcomed', 'true');
+    setShowWelcomeModal(false);
+  };
+
+  const handleConfirmWelcomeModal = () => {
+    sessionStorage.setItem('cs_job_match_welcomed', 'true');
+    setShowWelcomeModal(false);
+    setTimeout(() => {
+      if (jobDescriptionTextareaRef.current) {
+        jobDescriptionTextareaRef.current.focus();
+        jobDescriptionTextareaRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 150);
+  };
 
   // Handle switching resume
   const handleResumeSelect = (id) => {
@@ -152,6 +188,7 @@ export default function JobMatch() {
 
     try {
       setUploadingResume(true);
+      setErrorMessage('');
       toast.info(`Uploading and parsing ${file.name}...`);
       const uploadRes = await analysisService.uploadResume(file);
 
@@ -167,7 +204,9 @@ export default function JobMatch() {
         setSelectedResume(newlyAdded || null);
       }
     } catch (err) {
-      toast.error(err.message || 'Failed to upload resume. Please try again.');
+      const errMsg = err.response?.data?.message || err.message || 'Failed to upload resume. Please try again.';
+      setErrorMessage(errMsg);
+      toast.error(errMsg);
     } finally {
       setUploadingResume(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -256,13 +295,13 @@ export default function JobMatch() {
   };
 
   const isJdValid = jobDescription.trim().length >= 100;
-  const isFormValid = Boolean(selectedResumeId) && Boolean(targetRole.trim()) && isJdValid;
+  const isFormValid = Boolean(selectedResumeId) && Boolean(selectedResume) && Boolean(targetRole.trim()) && isJdValid;
 
   const handleStartMatch = async (e) => {
     if (e) e.preventDefault();
     setErrorMessage('');
 
-    if (!selectedResumeId) {
+    if (!selectedResumeId || !selectedResume) {
       setErrorMessage('Please upload or select a resume first.');
       toast.warning('Please select or upload a resume before matching.');
       return;
@@ -456,10 +495,13 @@ export default function JobMatch() {
                             fontWeight: '700',
                             padding: '2px 8px',
                             borderRadius: '9999px',
-                            border: '1px solid #a7f3d0'
+                            border: '1px solid #a7f3d0',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px'
                           }}
                         >
-                          ✓ Ready for Matching
+                          <Check size={12} /> Ready for Matching
                         </span>
                       </div>
                       <div
@@ -633,11 +675,13 @@ export default function JobMatch() {
                         color: isJdValid ? '#059669' : '#dc2626'
                       }}
                     >
-                      {jobDescription.length} / 5000 characters {isJdValid ? '✓' : '(minimum 100 required)'}
+                      {jobDescription.length} / 5000 characters {isJdValid ? '• Valid Length' : '(minimum 100 required)'}
                     </span>
                   </div>
                 </div>
                 <textarea
+                  ref={jobDescriptionTextareaRef}
+                  id="jobDescription"
                   className="form-textarea"
                   rows={9}
                   placeholder="Paste the full job requirements, technical responsibilities, frameworks, databases, and qualifications here..."
@@ -735,7 +779,7 @@ export default function JobMatch() {
                   onClick={handleStartMatch}
                   style={{ minWidth: '250px', fontSize: '1rem', fontWeight: '700' }}
                 >
-                  {analyzing ? 'Analyzing Job Match...' : '✨ Run Job Match Analysis'}
+                  {analyzing ? 'Analyzing Job Match...' : 'Run Job Match Analysis'}
                 </Button>
 
                 {!selectedResumeId && (
@@ -798,7 +842,7 @@ export default function JobMatch() {
                 <div>
                   <strong style={{ fontSize: '0.875rem', color: 'var(--text-main, #1e293b)', display: 'block' }}>Direct Skill Comparison</strong>
                   <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted, #64748b)' }}>
-                    Categorizes competencies into Matched (✓), Partial (◐), and Missing (✕) skills.
+                    Categorizes competencies into Matched, Partial, and Missing skills.
                   </p>
                 </div>
               </div>
@@ -888,8 +932,8 @@ export default function JobMatch() {
             <p style={{ fontSize: '0.875rem', color: 'var(--text-muted, #64748b)', lineHeight: '1.5', marginBottom: '20px' }}>
               This will remove <strong>{selectedResume?.filename}</strong> from your active selection for this job match.
               <br /><br />
-              <span style={{ color: '#059669', fontWeight: '600' }}>
-                ✓ Your resume file and prior analysis records in MySQL will NOT be deleted.
+              <span style={{ color: '#059669', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <CheckCircle2 size={14} /> Your resume file and prior analysis records in MySQL will NOT be deleted.
               </span>
             </p>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
@@ -963,6 +1007,13 @@ export default function JobMatch() {
           </div>
         </div>
       )}
+
+      {/* Welcome Modal for Job Matching */}
+      <JobMatchWelcomeModal
+        isOpen={showWelcomeModal}
+        onClose={handleCloseWelcomeModal}
+        onConfirm={handleConfirmWelcomeModal}
+      />
     </div>
   );
 }

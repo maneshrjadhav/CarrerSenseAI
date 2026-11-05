@@ -263,13 +263,21 @@ export default function LearningWorkspace({
                     border: '1px solid var(--border-color, #30415c)'
                   }}
                 >
-                  {currentIsLocked
-                    ? '🔒 Locked'
-                    : selectedItem.status === 'Completed'
-                    ? '✓ Completed'
-                    : selectedItem.status === 'In Progress'
-                    ? `▶ In Progress (${selectedItem.progress || taskProgressPercent}%)`
-                    : 'Not Started'}
+                  {currentIsLocked ? (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <Lock size={11} /> Locked
+                    </span>
+                  ) : selectedItem.status === 'Completed' ? (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <CheckCircle2 size={11} /> Completed
+                    </span>
+                  ) : selectedItem.status === 'In Progress' ? (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <PlayCircle size={11} /> In Progress ({selectedItem.progress || taskProgressPercent}%)
+                    </span>
+                  ) : (
+                    'Not Started'
+                  )}
                 </span>
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted, #94a3b8)' }}>
                   {selectedItem.duration_weeks}
@@ -413,8 +421,18 @@ export default function LearningWorkspace({
                         >
                           Phase {item.phase_number}: {item.skill_name}
                         </div>
-                        <div style={{ fontSize: '0.72rem', color: 'var(--text-muted, #94a3b8)', marginTop: '2px' }}>
-                          {isDone ? '✓ Completed' : locked ? 'Prerequisite Required' : item.duration_weeks}
+                        <div style={{ fontSize: '0.72rem', color: 'var(--text-muted, #94a3b8)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          {isDone ? (
+                            <>
+                              <CheckCircle2 size={11} className="text-emerald" /> Completed
+                            </>
+                          ) : locked ? (
+                            <>
+                              <Lock size={11} /> Prerequisite Required
+                            </>
+                          ) : (
+                            item.duration_weeks
+                          )}
                         </div>
                       </div>
                     </button>

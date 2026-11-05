@@ -6,6 +6,7 @@ CareerSense AI - Final Year Engineering Project Phase 2
 """
 
 import os
+import logging
 from sqlalchemy import func
 from flask import Blueprint, request, jsonify, current_app, send_file
 from extensions import db
@@ -13,14 +14,18 @@ from models import (
     User, Resume, JobDescription, Analysis, AnalysisSkill,
     SkillGap, Roadmap, RoadmapItem, Report
 )
+from models.resume_intelligence import ResumeAnalysis
 from utils.auth_helper import token_required, get_authenticated_user_id
 from services.matching_service import perform_comprehensive_match
 from services.roadmap_generator import generate_personalized_roadmap, generate_daily_tasks, SKILL_CURRICULUM
-from services.resume_parser import extract_candidate_metadata
+from services.resume_parser import extract_candidate_metadata, validate_and_extract_pdf
+from services.resume_quality_service import analyze_resume_quality
 from services.report_service import generate_pdf_report
 from services.readiness_service import evaluate_interview_readiness
 from services.subscription_service import check_feature_access, get_user_active_subscription, subscription_required
 from models.subscription import SubscriptionPlan
+
+logger = logging.getLogger(__name__)
 
 job_match_bp = Blueprint('job_match', __name__)
 
@@ -118,10 +123,19 @@ def analyze_job_match(current_user):
 
     resume_text = resume.extracted_text or ""
     if not resume_text.strip():
-        return jsonify({
-            "success": False,
-            "message": "No readable text found in this resume. Please upload a readable text PDF resume."
-        }), 422
+        if resume.file_path and os.path.exists(resume.file_path):
+            try:
+                extracted = validate_and_extract_pdf(resume.file_path)
+                resume_text = extracted.get('raw_text', '')
+                resume.extracted_text = resume_text
+                db.session.commit()
+            except Exception:
+                pass
+        if not resume_text.strip():
+            return jsonify({
+                "success": False,
+                "message": "No readable text found in this resume. Please upload a readable text PDF resume."
+            }), 422
 
     try:
         # Save JobDescription in MySQL
@@ -147,6 +161,15 @@ def analyze_job_match(current_user):
         cand_name = cand_meta.get('candidate_name') or current_user.full_name
         cand_email = cand_meta.get('email') or current_user.email
         cand_phone = cand_meta.get('phone') or current_user.phone
+
+        # Query or calculate independent Resume Quality Score
+        resume_analysis = db.session.query(ResumeAnalysis).filter_by(resume_id=resume.id).first()
+        resume_quality_score = round(resume_analysis.quality_score, 1) if resume_analysis else None
+        if resume_quality_score is None:
+            q_res = analyze_resume_quality(resume_text, cand_meta)
+            resume_quality_score = q_res.get('quality_score', 0.0)
+        metrics['resume_quality_score'] = resume_quality_score
+        metrics['quality_score'] = resume_quality_score
 
         # Create Analysis record in MySQL
         analysis = Analysis(
@@ -275,6 +298,13 @@ def analyze_job_match(current_user):
         max_critical = current_app.config.get('MAX_CRITICAL_GAPS_ALLOWED', 0)
         readiness = evaluate_interview_readiness(analysis, match_result['skill_gaps'], threshold, max_critical)
 
+        logger.info(
+            "[JobMatch Route] Analysis #%d created for user #%d - Resume #%d ('%s'), Target: '%s', "
+            "Resume Quality Score: %s, Skill Score: %.1f%%, TF-IDF Sim: %.1f%%, Final Match Score: %.1f%%",
+            analysis.id, current_user.id, resume.id, resume.filename, target_role,
+            resume_quality_score, metrics['skill_score'], metrics['tfidf_score'], metrics['final_score']
+        )
+
         return jsonify({
             "success": True,
             "message": "Job match analysis completed successfully.",
@@ -283,11 +313,18 @@ def analyze_job_match(current_user):
             "analysis": analysis.to_dict(),
             "target_role": target_role,
             "company_name": company_name,
+            "resume": {
+                "id": resume.id,
+                "filename": resume.filename
+            },
+            "resume_quality_score": resume_quality_score,
             "metrics": metrics,
             "matched_skills": match_result['matched_skills'],
             "missing_skills": match_result['missing_skills'],
             "partial_matches": match_result['partial_matches'],
             "extra_skills": match_result['extra_skills'],
+            "resume_skills": match_result.get('resume_skills', []),
+            "required_jd_skills": match_result.get('required_jd_skills', []),
             "skill_gaps": match_result['skill_gaps'],
             "roadmap": roadmap.to_dict(),
             "interview_readiness": readiness
@@ -351,6 +388,20 @@ def get_job_match(current_user, match_id):
     max_critical = current_app.config.get('MAX_CRITICAL_GAPS_ALLOWED', 0)
     readiness = evaluate_interview_readiness(analysis, sorted_gaps, threshold, max_critical)
 
+    # Build complete resume_skills and required_jd_skills
+    resume_skills_set = sorted(list({s['skill_name'] for s in matched + partial + extra}))
+    required_jd_skills_set = sorted(list({s['skill_name'] for s in matched + partial + missing if s.get('is_required', True)}))
+    if not required_jd_skills_set:
+        required_jd_skills_set = sorted(list({s['skill_name'] for s in matched + partial + missing}))
+
+    # Query or calculate independent Resume Quality Score
+    resume_analysis = db.session.query(ResumeAnalysis).filter_by(resume_id=resume.id).first() if resume else None
+    resume_quality_score = round(resume_analysis.quality_score, 1) if resume_analysis else None
+    if resume_quality_score is None and resume and resume.extracted_text:
+        cand_meta = extract_candidate_metadata(resume.extracted_text)
+        q_res = analyze_resume_quality(resume.extracted_text, cand_meta)
+        resume_quality_score = q_res.get('quality_score', 0.0)
+
     return jsonify({
         "success": True,
         "match_id": analysis.id,
@@ -362,12 +413,21 @@ def get_job_match(current_user, match_id):
             "id": resume.id if resume else None,
             "filename": resume.filename if resume else "Resume.pdf"
         },
+        "resume_quality_score": resume_quality_score,
         "has_subscription": bool(get_user_active_subscription(current_user.id)),
         "subscription": get_user_active_subscription(current_user.id).to_dict() if get_user_active_subscription(current_user.id) else None,
         "metrics": {
             "overall_match_score": analysis.match_score,
+            "final_match_score": analysis.match_score,
+            "final_score": analysis.match_score,
             "skill_coverage": analysis.skill_coverage,
+            "skill_match_score": analysis.skill_coverage,
+            "skill_score": analysis.skill_coverage,
             "semantic_similarity": analysis.semantic_similarity,
+            "tfidf_similarity_score": analysis.semantic_similarity,
+            "tfidf_score": analysis.semantic_similarity,
+            "resume_quality_score": resume_quality_score,
+            "quality_score": resume_quality_score,
             "total_required_skills": analysis.total_required_skills,
             "matched_skills_count": len(matched),
             "missing_skills_count": len(missing),
@@ -378,6 +438,8 @@ def get_job_match(current_user, match_id):
         "missing_skills": missing,
         "partial_matches": partial,
         "extra_skills": extra,
+        "resume_skills": resume_skills_set,
+        "required_jd_skills": required_jd_skills_set,
         "skill_gaps": sorted_gaps,
         "roadmap": roadmap.to_dict() if roadmap else None,
         "interview_readiness": readiness
@@ -853,10 +915,10 @@ def generate_match_roadmap(current_user, match_id, params=None):
         return jsonify({"success": False, "message": "Analysis not found or forbidden."}), 404
 
     data = params if params is not None else (request.get_json(silent=True) or {})
-    duration_weeks = int(data.get('duration_weeks') or 8)
-    daily_study_hours = float(data.get('daily_study_hours') or 1.0)
-    study_days_per_week = int(data.get('study_days_per_week') or 5)
-    learning_style = str(data.get('learning_style') or 'balanced')
+    duration_weeks = int(data.get('duration_weeks') or data.get('durationWeeks') or 8)
+    daily_study_hours = float(data.get('daily_study_hours') or data.get('dailyStudyHours') or 1.0)
+    study_days_per_week = int(data.get('study_days_per_week') or data.get('studyDaysPerWeek') or 5)
+    learning_style = str(data.get('learning_style') or data.get('learningStyle') or 'balanced')
 
     skill_gaps = db.session.query(SkillGap).filter_by(analysis_id=match_id).all()
     skills = db.session.query(AnalysisSkill).filter_by(analysis_id=match_id).all()
@@ -1085,12 +1147,14 @@ def regenerate_roadmap_direct(current_user):
 @career_roadmap_bp.route('/<int:match_id>/generate', methods=['POST'])
 @token_required
 def generate_standalone_roadmap(current_user, match_id):
-    return generate_match_roadmap(current_user, match_id)
+    data = request.get_json(silent=True) or {}
+    return generate_match_roadmap(current_user, match_id, data)
 
 @career_roadmap_bp.route('/<int:match_id>/regenerate', methods=['POST'])
 @token_required
 def regenerate_standalone_roadmap(current_user, match_id):
-    return generate_match_roadmap(current_user, match_id)
+    data = request.get_json(silent=True) or {}
+    return generate_match_roadmap(current_user, match_id, data)
 
 @career_roadmap_bp.route('/<int:match_id>/recalculate', methods=['POST'])
 @token_required

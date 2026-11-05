@@ -31,7 +31,7 @@ export default function CareerReadiness({ score = null, analysisId = null, targe
         <div className="readiness-explanation">
           <p className="readiness-copy">
             {isAnalyzed
-              ? `Evaluated match score against ${targetRole || 'target requisition'} based on 60% skill coverage and 40% TF-IDF cosine similarity.`
+              ? `Evaluated match score against ${targetRole || 'target requisition'} based on 70% skill coverage and 30% TF-IDF cosine similarity.`
               : 'Complete your first resume analysis to calculate your Career Readiness Score.'}
           </p>
           <span className="readiness-subtext">
@@ -56,7 +56,7 @@ export default function CareerReadiness({ score = null, analysisId = null, targe
             }
           }}
         >
-          {isAnalyzed ? 'View Analysis Report →' : 'Start Analysis'}
+          {isAnalyzed ? 'View Analysis Report' : 'Start Analysis'}
         </Button>
       </div>
     </div>

@@ -10,7 +10,7 @@ from models import (
     User, Resume, JobDescription, Analysis,
     AnalysisSkill, SkillGap, Roadmap, RoadmapItem, Report,
     ResumeSection, ResumeSkill, ResumeAnalysis, ResumeSuggestion,
-    InterviewSession, InterviewQuestion
+    InterviewSession, InterviewQuestion, PasswordResetOTP
 )
 from routes.auth import auth_bp
 from routes.dashboard import dashboard_bp

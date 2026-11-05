@@ -27,7 +27,7 @@ export default function DashboardView({ userName = 'Manesh' }) {
     <div className="dashboard-view">
       {/* Welcome Header */}
       <section className="welcome-banner">
-        <h2>Good evening, {userName} 👋</h2>
+        <h2>Good evening, {userName}</h2>
         <p className="welcome-subtext">Track your career readiness, resume match scores, and skill gap roadmaps.</p>
       </section>
 

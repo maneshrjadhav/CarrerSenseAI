@@ -34,16 +34,12 @@ export default function StatsStrip() {
     <div className="stats-strip-container">
       <div className="section-container">
         <div className="stats-strip-grid">
-          {stats.map((st, idx) => {
+          {stats.map((st) => {
             const Icon = st.icon;
             return (
-              <motion.div
+              <div
                 key={st.label}
                 className="stat-strip-card"
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-20px' }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
               >
                 <div className="stat-card-icon-box">
                   <Icon size={20} />
@@ -53,7 +49,7 @@ export default function StatsStrip() {
                   <span className="stat-metric-label">{st.label}</span>
                   <p className="stat-metric-desc">{st.desc}</p>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -61,4 +57,3 @@ export default function StatsStrip() {
     </div>
   );
 }
-

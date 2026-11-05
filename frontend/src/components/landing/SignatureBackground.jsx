@@ -8,11 +8,12 @@ export default function SignatureBackground({ variant = 'hero', className = '' }
         {/* 1. Subtle Engineering Grid Mesh */}
         <div className="bg-grid-mesh"></div>
 
-        {/* 2. Soft Outer Ambient Glow Orbs (Far Edges Only) */}
+        {/* 2. Soft Outer Ambient Glow Orbs */}
+        <div className="bg-ambient-orb orb-top-center"></div>
         <div className="bg-ambient-orb orb-left-edge"></div>
         <div className="bg-ambient-orb orb-right-edge"></div>
 
-        {/* 3. Real Dedicated Career Intelligence Background Asset (Imported) */}
+        {/* 3. Real Dedicated Career Intelligence Background Asset */}
         <div className="bg-asset-layer">
           <img
             src={bgImage}
@@ -22,8 +23,8 @@ export default function SignatureBackground({ variant = 'hero', className = '' }
           />
         </div>
 
-        {/* 4. Center Clean Radial Mask (Guarantees Pristine Background Behind Text) */}
-        <div className="bg-center-clean-mask"></div>
+        {/* 4. Soft Blue Atmospheric Gradient (High contrast, non-washed-out) */}
+        <div className="bg-gradient-overlay"></div>
       </div>
     );
   }

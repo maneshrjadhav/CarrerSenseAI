@@ -21,19 +21,19 @@ import {
 import chatService from '../../services/chatService';
 
 const SUGGESTED_PROMPTS = [
-  { label: '🎯 Explain my top skill gaps', query: 'Explain my top skill gaps for my target role' },
-  { label: "📖 Help me study today's lesson", query: "Help me study today's lesson for my active roadmap milestone" },
-  { label: '💻 Explain this code', query: 'Explain the technical code example from my current milestone' },
-  { label: '🎙️ Prepare me for a technical interview', query: 'Prepare me for a technical interview on my missing skills' },
-  { label: '🗺️ Review my roadmap progress', query: 'Review my roadmap progress and tell me what is next' },
-  { label: '📄 Improve my resume for ATS', query: 'How can I improve my resume for ATS screening and job match?' },
-  { label: '🇮🇳 हिंदी मार्गदर्शन (Hindi)', query: 'मेरे टारगेट रोल और स्किल गैप के बारे में हिंदी में समझाइए' },
-  { label: '🇮🇳 मराठी मार्गदर्शन (Marathi)', query: 'माझ्या करिअर रोडमॅप आणि कौशल्यांबद्दल मराठीत माहिती द्या' }
+  { label: 'Explain my skill gaps', query: 'Explain my skill gaps for my target role' },
+  { label: 'Make my study plan', query: 'Make a daily study plan for my active career roadmap' },
+  { label: 'Help me prepare for interviews', query: 'Help me prepare for a technical interview on my required skills' },
+  { label: 'Why is my match score low?', query: 'Why is my job match score low and how can I improve it?' },
+  { label: 'Explain Python & SQL concepts', query: 'Explain core Python, SQL and REST API concepts step by step' },
+  { label: 'Suggest mini-projects', query: 'Suggest hands-on portfolio mini-projects to strengthen my resume' },
+  { label: 'हिंदी मार्गदर्शन (Hindi)', query: 'मेरे टारगेट रोल और स्किल गैप के बारे में हिंदी में समझाइए' },
+  { label: 'मराठी मार्गदर्शन (Marathi)', query: 'माझ्या करिअर रोडमॅप आणि कौशल्यांबद्दल मराठीत माहिती द्या' }
 ];
 
 const INITIAL_WELCOME = {
   role: 'assistant',
-  content: `Hello! 👋 I am your **CareerSense AI Career Assistant**.\n\nI am connected directly to your profile and MySQL records. You can ask me anything about your:\n- **Resume Quality & ATS Score**\n- **Target Job Match & Missing Skills**\n- **Personalized Learning Roadmap & Study Tasks**\n- **Technical Interview Preparation**\n\nFeel free to ask in English, Hindi, or Marathi! How can I help you today?`,
+  content: `Hello! I'm **My Friend**, your personal AI career learning companion.\n\nI have direct real-time access to your profile, resume analysis, job match scores, and roadmap milestones. You can ask me to:\n- 🎯 **Explain your skill gaps** in simple language\n- 📅 **Make a daily study plan** based on your schedule\n- 💡 **Explain technical concepts** (Python, SQL, React, APIs, Docker)\n- 💼 **Help prepare for interviews** with sample questions & feedback\n- 🚀 **Suggest mini-projects** to boost your resume\n\nFeel free to ask in English, Hindi, or Marathi! How can I help you today?`,
   timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 };
 
@@ -270,7 +270,7 @@ export default function CareerAssistantChat() {
             e.currentTarget.style.transform = 'translateY(0) scale(1)';
             e.currentTarget.style.boxShadow = '0 10px 25px -3px rgba(2, 132, 199, 0.45)';
           }}
-          aria-label="Open AI Career Assistant"
+          aria-label="Open My Friend AI Career Assistant"
         >
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <Sparkles size={20} />
@@ -287,7 +287,7 @@ export default function CareerAssistantChat() {
               }}
             />
           </div>
-          <span>Career AI Assistant</span>
+          <span>My Friend AI</span>
         </button>
       )}
 
@@ -343,7 +343,7 @@ export default function CareerAssistantChat() {
               </div>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <strong style={{ fontSize: '0.95rem', fontWeight: '700' }}>CareerSense AI Assistant</strong>
+                  <strong style={{ fontSize: '0.95rem', fontWeight: '700' }}>My Friend — Career AI</strong>
                   <span
                     style={{
                       width: '8px',
@@ -357,7 +357,7 @@ export default function CareerAssistantChat() {
                   />
                 </div>
                 <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>
-                  {isOnline ? 'Online • Profile, Match & Roadmap Context' : 'Offline • Reconnecting...'}
+                  {isOnline ? 'Online • Your Supportive Career Companion' : 'Offline • Reconnecting...'}
                 </div>
               </div>
             </div>

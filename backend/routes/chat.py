@@ -136,7 +136,7 @@ def call_external_llm(user_message: str, history: list, context: dict) -> str:
         url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
         
         system_instruction = (
-            f"You are the CareerSense AI Career Advisor, a friendly, authoritative, and encouraging career coach. "
+            f"You are My Friend, the CareerSense AI Career Companion — a supportive, encouraging, and intelligent career mentor. "
             f"You have direct real-time access to the student's candidate profile and MySQL database records:\n"
             f"- Candidate Name: {context['candidate_name']}\n"
             f"- Resume Quality Score: {context['resume']['quality_score'] or 'Not analyzed yet'}/100\n"
@@ -367,16 +367,16 @@ def generate_contextual_advisory(user_message: str, context: dict) -> str:
 
     # 6. Default Greeting / General Assistance
     return (
-        f"Hello **{cand}**! 👋 I am your **CareerSense AI Career Assistant**.\n\n"
+        f"Hello **{cand}**! I am **My Friend**, your personal AI career learning companion.\n\n"
         f"I am connected to your profile and live MySQL database:\n"
         f"- **Target Role:** {target_role}\n"
         f"- **Job Match Score:** {match_score or 'Pending match'}%\n"
         f"- **Roadmap Progress:** {progress}%\n\n"
         f"Here are a few things you can ask me:\n"
         f"- *'What are my biggest skill gaps and how do I fix them?'*\n"
+        f"- *'Make a study plan for my available hours this week'*\n"
         f"- *'How can I boost my match score to 90%+?'*\n"
-        f"- *'What should I focus on this week in my roadmap?'*\n"
-        f"- *'How can I improve my resume for ATS screening?'*\n"
+        f"- *'Explain Python, SQL, or REST APIs step by step'*\n"
         f"- *'What interview questions should I expect for {target_role}?'*"
     )
 

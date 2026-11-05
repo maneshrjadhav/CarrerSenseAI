@@ -35,8 +35,8 @@ export default function JobMatchPreview({ matches = [] }) {
               style={{
                 padding: '10px 12px',
                 borderRadius: '8px',
-                border: '1px solid #e2e8f0',
-                background: '#f8fafc',
+                border: '1px solid var(--border-color)',
+                background: 'var(--card-subtle-bg)',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -46,18 +46,18 @@ export default function JobMatchPreview({ matches = [] }) {
               onClick={() => navigate(`/job-match-result/${m.id}`)}
             >
               <div>
-                <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: 600, color: '#1e293b' }}>
+                <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}>
                   {m.target_role}
                 </h4>
-                <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                   {m.matched_skills_count || 0} Matched • {m.missing_skills_count || 0} Gaps
                 </span>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <span style={{ fontSize: '1rem', fontWeight: 700, color: '#0284c7' }}>
+                <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--primary)' }}>
                   {m.match_score}%
                 </span>
-                <span style={{ display: 'block', fontSize: '0.65rem', color: '#94a3b8', textTransform: 'uppercase' }}>
+                <span style={{ display: 'block', fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
                   Score
                 </span>
               </div>
@@ -80,10 +80,10 @@ export default function JobMatchPreview({ matches = [] }) {
 
           <div className="job-match-empty-notice">
             <Briefcase size={28} className="text-primary mb-2" />
-            <h3 style={{ fontSize: '1.05rem', fontWeight: 600, margin: '4px 0', color: 'var(--text-primary, #fff)' }}>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 600, margin: '4px 0', color: 'var(--text-main)' }}>
               No job matching analysis available yet.
             </h3>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted, #94a3b8)', margin: 0, lineHeight: 1.5 }}>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
               Compare your resume against real industry job descriptions to calculate TF-IDF keyword match and vector cosine similarity.
             </p>
           </div>

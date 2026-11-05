@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { XCircle } from 'lucide-react';
 import Navbar from '../components/Navbar';
 
 export default function PaymentFailed() {
@@ -33,11 +34,10 @@ export default function PaymentFailed() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '2.5rem',
               margin: '0 auto 1.5rem auto',
             }}
           >
-            ✕
+            <XCircle size={40} />
           </div>
 
           <h1 style={{ fontSize: '1.8rem', fontWeight: 800, margin: '0 0 0.5rem 0' }}>

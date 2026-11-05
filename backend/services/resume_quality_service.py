@@ -7,6 +7,7 @@ CareerSense AI - Final Year Engineering Project
 import re
 from services.skill_analyzer import extract_skills_with_evidence
 from utils.skill_normalizer import get_skill_category
+from utils.score_feedback import get_resume_quality_feedback
 
 ACTION_VERBS = {
     'developed', 'built', 'created', 'designed', 'architected', 'implemented',
@@ -47,7 +48,10 @@ def analyze_resume_quality(raw_text: str, candidate_meta: dict) -> dict:
     section_score = 0.0
     if has_contact: section_score += 6.0
     if has_education: section_score += 6.0
-    if has_experience: section_score += 7.0
+    if has_experience:
+        section_score += 7.0
+    elif has_projects and len(sections.get('projects', '')) > 150:
+        section_score += 4.0
     if has_projects: section_score += 6.0
     if has_skills: section_score += 5.0
     section_score = min(30.0, section_score)
@@ -194,6 +198,7 @@ def analyze_resume_quality(raw_text: str, candidate_meta: dict) -> dict:
 
     return {
         "quality_score": final_quality_score,
+        "feedback_message": get_resume_quality_feedback(final_quality_score),
         "score_breakdown": {
             "section_completeness": round(section_score, 1),
             "skill_density": round(skill_score, 1),

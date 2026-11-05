@@ -1,0 +1,462 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/components/modals/ResumeUploadErrorModal.jsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=e994717c"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+let prevRefreshReg;
+let prevRefreshSig;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  prevRefreshReg = window.$RefreshReg$;
+  prevRefreshSig = window.$RefreshSig$;
+  window.$RefreshReg$ = RefreshRuntime.getRefreshReg("D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx");
+  window.$RefreshSig$ = RefreshRuntime.createSignatureFunctionForTransform;
+}
+var _s = $RefreshSig$();
+import __vite__cjsImport3_react from "/node_modules/.vite/deps/react.js?v=e994717c"; const React = __vite__cjsImport3_react.__esModule ? __vite__cjsImport3_react.default : __vite__cjsImport3_react; const useEffect = __vite__cjsImport3_react["useEffect"]; const useRef = __vite__cjsImport3_react["useRef"];
+import {
+  AlertTriangle,
+  X,
+  RotateCcw,
+  FileQuestion,
+  HelpCircle
+} from "/node_modules/.vite/deps/lucide-react.js?v=e994717c";
+import Button from "/src/components/common/Button.jsx";
+export default function ResumeUploadErrorModal({
+  isOpen,
+  onClose,
+  onRetry,
+  errorMessage = "Something went wrong while uploading your resume. Please try again."
+}) {
+  _s();
+  const modalRef = useRef(null);
+  const retryBtnRef = useRef(null);
+  useEffect(() => {
+    if (!isOpen) return;
+    const timer = setTimeout(() => {
+      if (retryBtnRef.current) {
+        retryBtnRef.current.focus();
+      }
+    }, 100);
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+  if (!isOpen) return null;
+  return /* @__PURE__ */ jsxDEV(
+    "div",
+    {
+      role: "dialog",
+      "aria-modal": "true",
+      "aria-labelledby": "upload-error-title",
+      style: {
+        position: "fixed",
+        inset: 0,
+        zIndex: 1100,
+        backgroundColor: "rgba(15, 23, 42, 0.65)",
+        backdropFilter: "blur(5px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "1.25rem",
+        animation: "csFadeIn 0.2s ease-out forwards"
+      },
+      onClick: (e) => {
+        if (modalRef.current && !modalRef.current.contains(e.target)) {
+          onClose();
+        }
+      },
+      children: /* @__PURE__ */ jsxDEV(
+        "div",
+        {
+          ref: modalRef,
+          style: {
+            backgroundColor: "#ffffff",
+            borderRadius: "18px",
+            width: "100%",
+            maxWidth: "500px",
+            boxShadow: "0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(226, 232, 240, 0.8)",
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+            animation: "csSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards"
+          },
+          children: [
+            /* @__PURE__ */ jsxDEV(
+              "div",
+              {
+                style: {
+                  height: "5px",
+                  background: "linear-gradient(90deg, #ef4444 0%, #f97316 100%)"
+                }
+              },
+              void 0,
+              false,
+              {
+                fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                lineNumber: 106,
+                columnNumber: 9
+              },
+              this
+            ),
+            /* @__PURE__ */ jsxDEV(
+              "div",
+              {
+                style: {
+                  padding: "1.5rem 1.75rem 0.75rem 1.75rem",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "space-between"
+                },
+                children: [
+                  /* @__PURE__ */ jsxDEV("div", { style: { display: "flex", alignItems: "center", gap: "14px" }, children: [
+                    /* @__PURE__ */ jsxDEV(
+                      "div",
+                      {
+                        style: {
+                          width: "50px",
+                          height: "50px",
+                          borderRadius: "14px",
+                          backgroundColor: "#fef2f2",
+                          border: "1px solid #fecaca",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#dc2626",
+                          boxShadow: "0 4px 12px rgba(239, 68, 68, 0.15)",
+                          flexShrink: 0
+                        },
+                        children: /* @__PURE__ */ jsxDEV(AlertTriangle, { size: 26 }, void 0, false, {
+                          fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                          lineNumber: 138,
+                          columnNumber: 15
+                        }, this)
+                      },
+                      void 0,
+                      false,
+                      {
+                        fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                        lineNumber: 123,
+                        columnNumber: 13
+                      },
+                      this
+                    ),
+                    /* @__PURE__ */ jsxDEV("div", { children: [
+                      /* @__PURE__ */ jsxDEV(
+                        "span",
+                        {
+                          style: {
+                            fontSize: "0.75rem",
+                            fontWeight: 700,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.06em",
+                            color: "#dc2626",
+                            background: "#fef2f2",
+                            padding: "2px 8px",
+                            borderRadius: "6px",
+                            border: "1px solid #fecaca"
+                          },
+                          children: "Upload Notice"
+                        },
+                        void 0,
+                        false,
+                        {
+                          fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                          lineNumber: 141,
+                          columnNumber: 15
+                        },
+                        this
+                      ),
+                      /* @__PURE__ */ jsxDEV(
+                        "h2",
+                        {
+                          id: "upload-error-title",
+                          style: {
+                            fontSize: "1.25rem",
+                            fontWeight: 800,
+                            color: "#0f172a",
+                            margin: "4px 0 0 0"
+                          },
+                          children: "Resume Upload Failed"
+                        },
+                        void 0,
+                        false,
+                        {
+                          fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                          lineNumber: 156,
+                          columnNumber: 15
+                        },
+                        this
+                      )
+                    ] }, void 0, true, {
+                      fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                      lineNumber: 140,
+                      columnNumber: 13
+                    }, this)
+                  ] }, void 0, true, {
+                    fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                    lineNumber: 122,
+                    columnNumber: 11
+                  }, this),
+                  /* @__PURE__ */ jsxDEV(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: onClose,
+                      "aria-label": "Close dialog",
+                      style: {
+                        background: "#f8fafc",
+                        border: "1px solid #e2e8f0",
+                        borderRadius: "8px",
+                        padding: "6px",
+                        cursor: "pointer",
+                        color: "#64748b"
+                      },
+                      children: /* @__PURE__ */ jsxDEV(X, { size: 18 }, void 0, false, {
+                        fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                        lineNumber: 183,
+                        columnNumber: 13
+                      }, this)
+                    },
+                    void 0,
+                    false,
+                    {
+                      fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                      lineNumber: 170,
+                      columnNumber: 11
+                    },
+                    this
+                  )
+                ]
+              },
+              void 0,
+              true,
+              {
+                fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                lineNumber: 114,
+                columnNumber: 9
+              },
+              this
+            ),
+            /* @__PURE__ */ jsxDEV("div", { style: { padding: "0.75rem 1.75rem 1.5rem 1.75rem" }, children: [
+              /* @__PURE__ */ jsxDEV(
+                "div",
+                {
+                  style: {
+                    backgroundColor: "#fff1f2",
+                    border: "1px solid #fecdd3",
+                    borderRadius: "12px",
+                    padding: "14px 16px",
+                    marginBottom: "1rem",
+                    color: "#9f1239",
+                    fontSize: "0.9rem",
+                    lineHeight: 1.5
+                  },
+                  children: errorMessage
+                },
+                void 0,
+                false,
+                {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                  lineNumber: 189,
+                  columnNumber: 11
+                },
+                this
+              ),
+              /* @__PURE__ */ jsxDEV(
+                "div",
+                {
+                  style: {
+                    backgroundColor: "#f8fafc",
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "10px",
+                    padding: "12px 14px",
+                    fontSize: "0.825rem",
+                    color: "#475569"
+                  },
+                  children: [
+                    /* @__PURE__ */ jsxDEV("div", { style: { fontWeight: 600, color: "#1e293b", marginBottom: "4px" }, children: "Upload Guidelines:" }, void 0, false, {
+                      fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                      lineNumber: 214,
+                      columnNumber: 13
+                    }, this),
+                    /* @__PURE__ */ jsxDEV("ul", { style: { margin: 0, paddingLeft: "18px", lineHeight: 1.6 }, children: [
+                      /* @__PURE__ */ jsxDEV("li", { children: "Ensure the file is a valid standard PDF (not password-protected)." }, void 0, false, {
+                        fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                        lineNumber: 218,
+                        columnNumber: 15
+                      }, this),
+                      /* @__PURE__ */ jsxDEV("li", { children: "File size must be 10 MB or smaller." }, void 0, false, {
+                        fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                        lineNumber: 219,
+                        columnNumber: 15
+                      }, this),
+                      /* @__PURE__ */ jsxDEV("li", { children: "Document should contain selectable text (not scanned flat images)." }, void 0, false, {
+                        fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                        lineNumber: 220,
+                        columnNumber: 15
+                      }, this)
+                    ] }, void 0, true, {
+                      fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                      lineNumber: 217,
+                      columnNumber: 13
+                    }, this)
+                  ]
+                },
+                void 0,
+                true,
+                {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                  lineNumber: 204,
+                  columnNumber: 11
+                },
+                this
+              )
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+              lineNumber: 188,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV(
+              "div",
+              {
+                style: {
+                  padding: "1.15rem 1.75rem",
+                  backgroundColor: "#f8fafc",
+                  borderTop: "1px solid #e2e8f0",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                  gap: "12px"
+                },
+                children: [
+                  /* @__PURE__ */ jsxDEV(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: onClose,
+                      style: {
+                        background: "#ffffff",
+                        border: "1px solid #cbd5e1",
+                        borderRadius: "10px",
+                        padding: "9px 16px",
+                        fontSize: "0.875rem",
+                        fontWeight: 600,
+                        color: "#475569",
+                        cursor: "pointer"
+                      },
+                      children: "Close"
+                    },
+                    void 0,
+                    false,
+                    {
+                      fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                      lineNumber: 237,
+                      columnNumber: 11
+                    },
+                    this
+                  ),
+                  /* @__PURE__ */ jsxDEV(
+                    "button",
+                    {
+                      ref: retryBtnRef,
+                      type: "button",
+                      onClick: onRetry,
+                      style: {
+                        background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
+                        border: "none",
+                        borderRadius: "10px",
+                        padding: "10px 18px",
+                        fontSize: "0.9rem",
+                        fontWeight: 700,
+                        color: "#ffffff",
+                        cursor: "pointer",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)"
+                      },
+                      children: [
+                        /* @__PURE__ */ jsxDEV(RotateCcw, { size: 15 }, void 0, false, {
+                          fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                          lineNumber: 273,
+                          columnNumber: 13
+                        }, this),
+                        /* @__PURE__ */ jsxDEV("span", { children: "Retry Upload" }, void 0, false, {
+                          fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                          lineNumber: 274,
+                          columnNumber: 13
+                        }, this)
+                      ]
+                    },
+                    void 0,
+                    true,
+                    {
+                      fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                      lineNumber: 254,
+                      columnNumber: 11
+                    },
+                    this
+                  )
+                ]
+              },
+              void 0,
+              true,
+              {
+                fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+                lineNumber: 226,
+                columnNumber: 9
+              },
+              this
+            )
+          ]
+        },
+        void 0,
+        true,
+        {
+          fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+          lineNumber: 91,
+          columnNumber: 7
+        },
+        this
+      )
+    },
+    void 0,
+    false,
+    {
+      fileName: "D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx",
+      lineNumber: 69,
+      columnNumber: 5
+    },
+    this
+  );
+}
+_s(ResumeUploadErrorModal, "C41qZ/LqU/2rXJnN9s+ZltOwj4s=");
+_c = ResumeUploadErrorModal;
+var _c;
+$RefreshReg$(_c, "ResumeUploadErrorModal");
+if (import.meta.hot && !inWebWorker) {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+if (import.meta.hot && !inWebWorker) {
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("D:/CareerSenseAI/frontend/src/components/modals/ResumeUploadErrorModal.jsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJtYXBwaW5ncyI6IkFBc0ZROzs7Ozs7Ozs7Ozs7Ozs7OztBQXRGUixPQUFPQSxTQUFTQyxXQUFXQyxjQUFjO0FBQ3pDO0FBQUEsRUFDRUM7QUFBQUEsRUFDQUM7QUFBQUEsRUFDQUM7QUFBQUEsRUFDQUM7QUFBQUEsRUFDQUM7QUFBQUEsT0FDSztBQUNQLE9BQU9DLFlBQVk7QUFPbkIsd0JBQXdCQyx1QkFBdUI7QUFBQSxFQUM3Q0M7QUFBQUEsRUFDQUM7QUFBQUEsRUFDQUM7QUFBQUEsRUFDQUMsZUFBZTtBQUNqQixHQUFHO0FBQUFDLEtBQUE7QUFDRCxRQUFNQyxXQUFXYixPQUFPLElBQUk7QUFDNUIsUUFBTWMsY0FBY2QsT0FBTyxJQUFJO0FBRS9CRCxZQUFVLE1BQU07QUFDZCxRQUFJLENBQUNTLE9BQVE7QUFFYixVQUFNTyxRQUFRQyxXQUFXLE1BQU07QUFDN0IsVUFBSUYsWUFBWUcsU0FBUztBQUN2Qkgsb0JBQVlHLFFBQVFDLE1BQU07QUFBQSxNQUM1QjtBQUFBLElBQ0YsR0FBRyxHQUFHO0FBRU4sVUFBTUMsZ0JBQWdCQSxDQUFDQyxNQUFNO0FBQzNCLFVBQUlBLEVBQUVDLFFBQVEsVUFBVTtBQUN0QlosZ0JBQVE7QUFBQSxNQUNWO0FBQUEsSUFDRjtBQUVBYSxXQUFPQyxpQkFBaUIsV0FBV0osYUFBYTtBQUNoRCxXQUFPLE1BQU07QUFDWEssbUJBQWFULEtBQUs7QUFDbEJPLGFBQU9HLG9CQUFvQixXQUFXTixhQUFhO0FBQUEsSUFDckQ7QUFBQSxFQUNGLEdBQUcsQ0FBQ1gsUUFBUUMsT0FBTyxDQUFDO0FBRXBCLE1BQUksQ0FBQ0QsT0FBUSxRQUFPO0FBRXBCLFNBQ0U7QUFBQSxJQUFDO0FBQUE7QUFBQSxNQUNDLE1BQUs7QUFBQSxNQUNMLGNBQVc7QUFBQSxNQUNYLG1CQUFnQjtBQUFBLE1BQ2hCLE9BQU87QUFBQSxRQUNMa0IsVUFBVTtBQUFBLFFBQ1ZDLE9BQU87QUFBQSxRQUNQQyxRQUFRO0FBQUEsUUFDUkMsaUJBQWlCO0FBQUEsUUFDakJDLGdCQUFnQjtBQUFBLFFBQ2hCQyxTQUFTO0FBQUEsUUFDVEMsWUFBWTtBQUFBLFFBQ1pDLGdCQUFnQjtBQUFBLFFBQ2hCQyxTQUFTO0FBQUEsUUFDVEMsV0FBVztBQUFBLE1BQ2I7QUFBQSxNQUNBLFNBQVMsQ0FBQ2YsTUFBTTtBQUNkLFlBQUlQLFNBQVNJLFdBQVcsQ0FBQ0osU0FBU0ksUUFBUW1CLFNBQVNoQixFQUFFaUIsTUFBTSxHQUFHO0FBQzVENUIsa0JBQVE7QUFBQSxRQUNWO0FBQUEsTUFDRjtBQUFBLE1BRUE7QUFBQSxRQUFDO0FBQUE7QUFBQSxVQUNDLEtBQUtJO0FBQUFBLFVBQ0wsT0FBTztBQUFBLFlBQ0xnQixpQkFBaUI7QUFBQSxZQUNqQlMsY0FBYztBQUFBLFlBQ2RDLE9BQU87QUFBQSxZQUNQQyxVQUFVO0FBQUEsWUFDVkMsV0FBVztBQUFBLFlBQ1hDLFVBQVU7QUFBQSxZQUNWWCxTQUFTO0FBQUEsWUFDVFksZUFBZTtBQUFBLFlBQ2ZSLFdBQVc7QUFBQSxVQUNiO0FBQUEsVUFHQTtBQUFBO0FBQUEsY0FBQztBQUFBO0FBQUEsZ0JBQ0MsT0FBTztBQUFBLGtCQUNMUyxRQUFRO0FBQUEsa0JBQ1JDLFlBQVk7QUFBQSxnQkFDZDtBQUFBO0FBQUEsY0FKRjtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsWUFJSTtBQUFBLFlBSUo7QUFBQSxjQUFDO0FBQUE7QUFBQSxnQkFDQyxPQUFPO0FBQUEsa0JBQ0xYLFNBQVM7QUFBQSxrQkFDVEgsU0FBUztBQUFBLGtCQUNUQyxZQUFZO0FBQUEsa0JBQ1pDLGdCQUFnQjtBQUFBLGdCQUNsQjtBQUFBLGdCQUVBO0FBQUEseUNBQUMsU0FBSSxPQUFPLEVBQUVGLFNBQVMsUUFBUUMsWUFBWSxVQUFVYyxLQUFLLE9BQU8sR0FDL0Q7QUFBQTtBQUFBLHNCQUFDO0FBQUE7QUFBQSx3QkFDQyxPQUFPO0FBQUEsMEJBQ0xQLE9BQU87QUFBQSwwQkFDUEssUUFBUTtBQUFBLDBCQUNSTixjQUFjO0FBQUEsMEJBQ2RULGlCQUFpQjtBQUFBLDBCQUNqQmtCLFFBQVE7QUFBQSwwQkFDUmhCLFNBQVM7QUFBQSwwQkFDVEMsWUFBWTtBQUFBLDBCQUNaQyxnQkFBZ0I7QUFBQSwwQkFDaEJlLE9BQU87QUFBQSwwQkFDUFAsV0FBVztBQUFBLDBCQUNYUSxZQUFZO0FBQUEsd0JBQ2Q7QUFBQSx3QkFFQSxpQ0FBQyxpQkFBYyxNQUFNLE1BQXJCO0FBQUE7QUFBQTtBQUFBO0FBQUEsK0JBQXdCO0FBQUE7QUFBQSxzQkFmMUI7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBLG9CQWdCQTtBQUFBLG9CQUNBLHVCQUFDLFNBQ0M7QUFBQTtBQUFBLHdCQUFDO0FBQUE7QUFBQSwwQkFDQyxPQUFPO0FBQUEsNEJBQ0xDLFVBQVU7QUFBQSw0QkFDVkMsWUFBWTtBQUFBLDRCQUNaQyxlQUFlO0FBQUEsNEJBQ2ZDLGVBQWU7QUFBQSw0QkFDZkwsT0FBTztBQUFBLDRCQUNQSCxZQUFZO0FBQUEsNEJBQ1pYLFNBQVM7QUFBQSw0QkFDVEksY0FBYztBQUFBLDRCQUNkUyxRQUFRO0FBQUEsMEJBQ1Y7QUFBQSwwQkFBRTtBQUFBO0FBQUEsd0JBWEo7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBLHNCQWNBO0FBQUEsc0JBQ0E7QUFBQSx3QkFBQztBQUFBO0FBQUEsMEJBQ0MsSUFBRztBQUFBLDBCQUNILE9BQU87QUFBQSw0QkFDTEcsVUFBVTtBQUFBLDRCQUNWQyxZQUFZO0FBQUEsNEJBQ1pILE9BQU87QUFBQSw0QkFDUE0sUUFBUTtBQUFBLDBCQUNWO0FBQUEsMEJBQUU7QUFBQTtBQUFBLHdCQVBKO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxzQkFVQTtBQUFBLHlCQTFCRjtBQUFBO0FBQUE7QUFBQTtBQUFBLDJCQTJCQTtBQUFBLHVCQTdDRjtBQUFBO0FBQUE7QUFBQTtBQUFBLHlCQThDQTtBQUFBLGtCQUVBO0FBQUEsb0JBQUM7QUFBQTtBQUFBLHNCQUNDLE1BQUs7QUFBQSxzQkFDTCxTQUFTN0M7QUFBQUEsc0JBQ1QsY0FBVztBQUFBLHNCQUNYLE9BQU87QUFBQSx3QkFDTG9DLFlBQVk7QUFBQSx3QkFDWkUsUUFBUTtBQUFBLHdCQUNSVCxjQUFjO0FBQUEsd0JBQ2RKLFNBQVM7QUFBQSx3QkFDVHFCLFFBQVE7QUFBQSx3QkFDUlAsT0FBTztBQUFBLHNCQUNUO0FBQUEsc0JBRUEsaUNBQUMsS0FBRSxNQUFNLE1BQVQ7QUFBQTtBQUFBO0FBQUE7QUFBQSw2QkFBWTtBQUFBO0FBQUEsb0JBYmQ7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBLGtCQWNBO0FBQUE7QUFBQTtBQUFBLGNBdEVGO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxZQXVFQTtBQUFBLFlBR0EsdUJBQUMsU0FBSSxPQUFPLEVBQUVkLFNBQVMsaUNBQWlDLEdBQ3REO0FBQUE7QUFBQSxnQkFBQztBQUFBO0FBQUEsa0JBQ0MsT0FBTztBQUFBLG9CQUNMTCxpQkFBaUI7QUFBQSxvQkFDakJrQixRQUFRO0FBQUEsb0JBQ1JULGNBQWM7QUFBQSxvQkFDZEosU0FBUztBQUFBLG9CQUNUc0IsY0FBYztBQUFBLG9CQUNkUixPQUFPO0FBQUEsb0JBQ1BFLFVBQVU7QUFBQSxvQkFDVk8sWUFBWTtBQUFBLGtCQUNkO0FBQUEsa0JBRUM5QztBQUFBQTtBQUFBQSxnQkFaSDtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsY0FhQTtBQUFBLGNBRUE7QUFBQSxnQkFBQztBQUFBO0FBQUEsa0JBQ0MsT0FBTztBQUFBLG9CQUNMa0IsaUJBQWlCO0FBQUEsb0JBQ2pCa0IsUUFBUTtBQUFBLG9CQUNSVCxjQUFjO0FBQUEsb0JBQ2RKLFNBQVM7QUFBQSxvQkFDVGdCLFVBQVU7QUFBQSxvQkFDVkYsT0FBTztBQUFBLGtCQUNUO0FBQUEsa0JBRUE7QUFBQSwyQ0FBQyxTQUFJLE9BQU8sRUFBRUcsWUFBWSxLQUFLSCxPQUFPLFdBQVdRLGNBQWMsTUFBTSxHQUFFLGtDQUF2RTtBQUFBO0FBQUE7QUFBQTtBQUFBLDJCQUVBO0FBQUEsb0JBQ0EsdUJBQUMsUUFBRyxPQUFPLEVBQUVGLFFBQVEsR0FBR0ksYUFBYSxRQUFRRCxZQUFZLElBQUksR0FDM0Q7QUFBQSw2Q0FBQyxRQUFHLGlGQUFKO0FBQUE7QUFBQTtBQUFBO0FBQUEsNkJBQXFFO0FBQUEsc0JBQ3JFLHVCQUFDLFFBQUcsbURBQUo7QUFBQTtBQUFBO0FBQUE7QUFBQSw2QkFBdUM7QUFBQSxzQkFDdkMsdUJBQUMsUUFBRyxrRkFBSjtBQUFBO0FBQUE7QUFBQTtBQUFBLDZCQUFzRTtBQUFBLHlCQUh4RTtBQUFBO0FBQUE7QUFBQTtBQUFBLDJCQUlBO0FBQUE7QUFBQTtBQUFBLGdCQWpCRjtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsY0FrQkE7QUFBQSxpQkFsQ0Y7QUFBQTtBQUFBO0FBQUE7QUFBQSxtQkFtQ0E7QUFBQSxZQUdBO0FBQUEsY0FBQztBQUFBO0FBQUEsZ0JBQ0MsT0FBTztBQUFBLGtCQUNMdkIsU0FBUztBQUFBLGtCQUNUTCxpQkFBaUI7QUFBQSxrQkFDakI4QixXQUFXO0FBQUEsa0JBQ1g1QixTQUFTO0FBQUEsa0JBQ1RDLFlBQVk7QUFBQSxrQkFDWkMsZ0JBQWdCO0FBQUEsa0JBQ2hCYSxLQUFLO0FBQUEsZ0JBQ1A7QUFBQSxnQkFFQTtBQUFBO0FBQUEsb0JBQUM7QUFBQTtBQUFBLHNCQUNDLE1BQUs7QUFBQSxzQkFDTCxTQUFTckM7QUFBQUEsc0JBQ1QsT0FBTztBQUFBLHdCQUNMb0MsWUFBWTtBQUFBLHdCQUNaRSxRQUFRO0FBQUEsd0JBQ1JULGNBQWM7QUFBQSx3QkFDZEosU0FBUztBQUFBLHdCQUNUZ0IsVUFBVTtBQUFBLHdCQUNWQyxZQUFZO0FBQUEsd0JBQ1pILE9BQU87QUFBQSx3QkFDUE8sUUFBUTtBQUFBLHNCQUNWO0FBQUEsc0JBQUU7QUFBQTtBQUFBLG9CQVpKO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxrQkFlQTtBQUFBLGtCQUVBO0FBQUEsb0JBQUM7QUFBQTtBQUFBLHNCQUNDLEtBQUt6QztBQUFBQSxzQkFDTCxNQUFLO0FBQUEsc0JBQ0wsU0FBU0o7QUFBQUEsc0JBQ1QsT0FBTztBQUFBLHdCQUNMbUMsWUFBWTtBQUFBLHdCQUNaRSxRQUFRO0FBQUEsd0JBQ1JULGNBQWM7QUFBQSx3QkFDZEosU0FBUztBQUFBLHdCQUNUZ0IsVUFBVTtBQUFBLHdCQUNWQyxZQUFZO0FBQUEsd0JBQ1pILE9BQU87QUFBQSx3QkFDUE8sUUFBUTtBQUFBLHdCQUNSeEIsU0FBUztBQUFBLHdCQUNUQyxZQUFZO0FBQUEsd0JBQ1pjLEtBQUs7QUFBQSx3QkFDTEwsV0FBVztBQUFBLHNCQUNiO0FBQUEsc0JBRUE7QUFBQSwrQ0FBQyxhQUFVLE1BQU0sTUFBakI7QUFBQTtBQUFBO0FBQUE7QUFBQSwrQkFBb0I7QUFBQSx3QkFDcEIsdUJBQUMsVUFBSyw0QkFBTjtBQUFBO0FBQUE7QUFBQTtBQUFBLCtCQUFrQjtBQUFBO0FBQUE7QUFBQSxvQkFwQnBCO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxrQkFxQkE7QUFBQTtBQUFBO0FBQUEsY0FqREY7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBLFlBa0RBO0FBQUE7QUFBQTtBQUFBLFFBekxGO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxNQTBMQTtBQUFBO0FBQUEsSUFoTkY7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBLEVBaU5BO0FBRUo7QUFBQzdCLEdBclB1Qkwsd0JBQXNCO0FBQUEsS0FBdEJBO0FBQXNCLElBQUFxRDtBQUFBLGFBQUFBLElBQUEiLCJuYW1lcyI6WyJSZWFjdCIsInVzZUVmZmVjdCIsInVzZVJlZiIsIkFsZXJ0VHJpYW5nbGUiLCJYIiwiUm90YXRlQ2N3IiwiRmlsZVF1ZXN0aW9uIiwiSGVscENpcmNsZSIsIkJ1dHRvbiIsIlJlc3VtZVVwbG9hZEVycm9yTW9kYWwiLCJpc09wZW4iLCJvbkNsb3NlIiwib25SZXRyeSIsImVycm9yTWVzc2FnZSIsIl9zIiwibW9kYWxSZWYiLCJyZXRyeUJ0blJlZiIsInRpbWVyIiwic2V0VGltZW91dCIsImN1cnJlbnQiLCJmb2N1cyIsImhhbmRsZUtleURvd24iLCJlIiwia2V5Iiwid2luZG93IiwiYWRkRXZlbnRMaXN0ZW5lciIsImNsZWFyVGltZW91dCIsInJlbW92ZUV2ZW50TGlzdGVuZXIiLCJwb3NpdGlvbiIsImluc2V0IiwiekluZGV4IiwiYmFja2dyb3VuZENvbG9yIiwiYmFja2Ryb3BGaWx0ZXIiLCJkaXNwbGF5IiwiYWxpZ25JdGVtcyIsImp1c3RpZnlDb250ZW50IiwicGFkZGluZyIsImFuaW1hdGlvbiIsImNvbnRhaW5zIiwidGFyZ2V0IiwiYm9yZGVyUmFkaXVzIiwid2lkdGgiLCJtYXhXaWR0aCIsImJveFNoYWRvdyIsIm92ZXJmbG93IiwiZmxleERpcmVjdGlvbiIsImhlaWdodCIsImJhY2tncm91bmQiLCJnYXAiLCJib3JkZXIiLCJjb2xvciIsImZsZXhTaHJpbmsiLCJmb250U2l6ZSIsImZvbnRXZWlnaHQiLCJ0ZXh0VHJhbnNmb3JtIiwibGV0dGVyU3BhY2luZyIsIm1hcmdpbiIsImN1cnNvciIsIm1hcmdpbkJvdHRvbSIsImxpbmVIZWlnaHQiLCJwYWRkaW5nTGVmdCIsImJvcmRlclRvcCIsIl9jIl0sImlnbm9yZUxpc3QiOltdLCJzb3VyY2VzIjpbIlJlc3VtZVVwbG9hZEVycm9yTW9kYWwuanN4Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBSZWFjdCwgeyB1c2VFZmZlY3QsIHVzZVJlZiB9IGZyb20gJ3JlYWN0JztcbmltcG9ydCB7XG4gIEFsZXJ0VHJpYW5nbGUsXG4gIFgsXG4gIFJvdGF0ZUNjdyxcbiAgRmlsZVF1ZXN0aW9uLFxuICBIZWxwQ2lyY2xlXG59IGZyb20gJ2x1Y2lkZS1yZWFjdCc7XG5pbXBvcnQgQnV0dG9uIGZyb20gJy4uL2NvbW1vbi9CdXR0b24nO1xuXG4vKipcbiAqIFJlc3VtZVVwbG9hZEVycm9yTW9kYWxcbiAqIERpc3BsYXllZCB3aGVuIHJlc3VtZSBmaWxlIHVwbG9hZCBvciBpbml0aWFsIHZhbGlkYXRpb24gZmFpbHMuXG4gKiBFeHBsYWlucyB0aGUgZXhhY3QgZmFpbHVyZSByZWFzb24gYW5kIGdpdmVzIGEgY2xlYW4gMS1jbGljayBSZXRyeSBvcHRpb24uXG4gKi9cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIFJlc3VtZVVwbG9hZEVycm9yTW9kYWwoe1xuICBpc09wZW4sXG4gIG9uQ2xvc2UsXG4gIG9uUmV0cnksXG4gIGVycm9yTWVzc2FnZSA9ICdTb21ldGhpbmcgd2VudCB3cm9uZyB3aGlsZSB1cGxvYWRpbmcgeW91ciByZXN1bWUuIFBsZWFzZSB0cnkgYWdhaW4uJ1xufSkge1xuICBjb25zdCBtb2RhbFJlZiA9IHVzZVJlZihudWxsKTtcbiAgY29uc3QgcmV0cnlCdG5SZWYgPSB1c2VSZWYobnVsbCk7XG5cbiAgdXNlRWZmZWN0KCgpID0+IHtcbiAgICBpZiAoIWlzT3BlbikgcmV0dXJuO1xuXG4gICAgY29uc3QgdGltZXIgPSBzZXRUaW1lb3V0KCgpID0+IHtcbiAgICAgIGlmIChyZXRyeUJ0blJlZi5jdXJyZW50KSB7XG4gICAgICAgIHJldHJ5QnRuUmVmLmN1cnJlbnQuZm9jdXMoKTtcbiAgICAgIH1cbiAgICB9LCAxMDApO1xuXG4gICAgY29uc3QgaGFuZGxlS2V5RG93biA9IChlKSA9PiB7XG4gICAgICBpZiAoZS5rZXkgPT09ICdFc2NhcGUnKSB7XG4gICAgICAgIG9uQ2xvc2UoKTtcbiAgICAgIH1cbiAgICB9O1xuXG4gICAgd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoJ2tleWRvd24nLCBoYW5kbGVLZXlEb3duKTtcbiAgICByZXR1cm4gKCkgPT4ge1xuICAgICAgY2xlYXJUaW1lb3V0KHRpbWVyKTtcbiAgICAgIHdpbmRvdy5yZW1vdmVFdmVudExpc3RlbmVyKCdrZXlkb3duJywgaGFuZGxlS2V5RG93bik7XG4gICAgfTtcbiAgfSwgW2lzT3Blbiwgb25DbG9zZV0pO1xuXG4gIGlmICghaXNPcGVuKSByZXR1cm4gbnVsbDtcblxuICByZXR1cm4gKFxuICAgIDxkaXZcbiAgICAgIHJvbGU9XCJkaWFsb2dcIlxuICAgICAgYXJpYS1tb2RhbD1cInRydWVcIlxuICAgICAgYXJpYS1sYWJlbGxlZGJ5PVwidXBsb2FkLWVycm9yLXRpdGxlXCJcbiAgICAgIHN0eWxlPXt7XG4gICAgICAgIHBvc2l0aW9uOiAnZml4ZWQnLFxuICAgICAgICBpbnNldDogMCxcbiAgICAgICAgekluZGV4OiAxMTAwLFxuICAgICAgICBiYWNrZ3JvdW5kQ29sb3I6ICdyZ2JhKDE1LCAyMywgNDIsIDAuNjUpJyxcbiAgICAgICAgYmFja2Ryb3BGaWx0ZXI6ICdibHVyKDVweCknLFxuICAgICAgICBkaXNwbGF5OiAnZmxleCcsXG4gICAgICAgIGFsaWduSXRlbXM6ICdjZW50ZXInLFxuICAgICAgICBqdXN0aWZ5Q29udGVudDogJ2NlbnRlcicsXG4gICAgICAgIHBhZGRpbmc6ICcxLjI1cmVtJyxcbiAgICAgICAgYW5pbWF0aW9uOiAnY3NGYWRlSW4gMC4ycyBlYXNlLW91dCBmb3J3YXJkcydcbiAgICAgIH19XG4gICAgICBvbkNsaWNrPXsoZSkgPT4ge1xuICAgICAgICBpZiAobW9kYWxSZWYuY3VycmVudCAmJiAhbW9kYWxSZWYuY3VycmVudC5jb250YWlucyhlLnRhcmdldCkpIHtcbiAgICAgICAgICBvbkNsb3NlKCk7XG4gICAgICAgIH1cbiAgICAgIH19XG4gICAgPlxuICAgICAgPGRpdlxuICAgICAgICByZWY9e21vZGFsUmVmfVxuICAgICAgICBzdHlsZT17e1xuICAgICAgICAgIGJhY2tncm91bmRDb2xvcjogJyNmZmZmZmYnLFxuICAgICAgICAgIGJvcmRlclJhZGl1czogJzE4cHgnLFxuICAgICAgICAgIHdpZHRoOiAnMTAwJScsXG4gICAgICAgICAgbWF4V2lkdGg6ICc1MDBweCcsXG4gICAgICAgICAgYm94U2hhZG93OiAnMCAyNXB4IDUwcHggLTEycHggcmdiYSgxNSwgMjMsIDQyLCAwLjI1KSwgMCAwIDAgMXB4IHJnYmEoMjI2LCAyMzIsIDI0MCwgMC44KScsXG4gICAgICAgICAgb3ZlcmZsb3c6ICdoaWRkZW4nLFxuICAgICAgICAgIGRpc3BsYXk6ICdmbGV4JyxcbiAgICAgICAgICBmbGV4RGlyZWN0aW9uOiAnY29sdW1uJyxcbiAgICAgICAgICBhbmltYXRpb246ICdjc1NsaWRlVXAgMC4yNXMgY3ViaWMtYmV6aWVyKDAuMTYsIDEsIDAuMywgMSkgZm9yd2FyZHMnXG4gICAgICAgIH19XG4gICAgICA+XG4gICAgICAgIHsvKiBBY2NlbnQgUmVkIEJhciAqL31cbiAgICAgICAgPGRpdlxuICAgICAgICAgIHN0eWxlPXt7XG4gICAgICAgICAgICBoZWlnaHQ6ICc1cHgnLFxuICAgICAgICAgICAgYmFja2dyb3VuZDogJ2xpbmVhci1ncmFkaWVudCg5MGRlZywgI2VmNDQ0NCAwJSwgI2Y5NzMxNiAxMDAlKSdcbiAgICAgICAgICB9fVxuICAgICAgICAvPlxuXG4gICAgICAgIHsvKiBNb2RhbCBIZWFkZXIgKi99XG4gICAgICAgIDxkaXZcbiAgICAgICAgICBzdHlsZT17e1xuICAgICAgICAgICAgcGFkZGluZzogJzEuNXJlbSAxLjc1cmVtIDAuNzVyZW0gMS43NXJlbScsXG4gICAgICAgICAgICBkaXNwbGF5OiAnZmxleCcsXG4gICAgICAgICAgICBhbGlnbkl0ZW1zOiAnZmxleC1zdGFydCcsXG4gICAgICAgICAgICBqdXN0aWZ5Q29udGVudDogJ3NwYWNlLWJldHdlZW4nXG4gICAgICAgICAgfX1cbiAgICAgICAgPlxuICAgICAgICAgIDxkaXYgc3R5bGU9e3sgZGlzcGxheTogJ2ZsZXgnLCBhbGlnbkl0ZW1zOiAnY2VudGVyJywgZ2FwOiAnMTRweCcgfX0+XG4gICAgICAgICAgICA8ZGl2XG4gICAgICAgICAgICAgIHN0eWxlPXt7XG4gICAgICAgICAgICAgICAgd2lkdGg6ICc1MHB4JyxcbiAgICAgICAgICAgICAgICBoZWlnaHQ6ICc1MHB4JyxcbiAgICAgICAgICAgICAgICBib3JkZXJSYWRpdXM6ICcxNHB4JyxcbiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kQ29sb3I6ICcjZmVmMmYyJyxcbiAgICAgICAgICAgICAgICBib3JkZXI6ICcxcHggc29saWQgI2ZlY2FjYScsXG4gICAgICAgICAgICAgICAgZGlzcGxheTogJ2ZsZXgnLFxuICAgICAgICAgICAgICAgIGFsaWduSXRlbXM6ICdjZW50ZXInLFxuICAgICAgICAgICAgICAgIGp1c3RpZnlDb250ZW50OiAnY2VudGVyJyxcbiAgICAgICAgICAgICAgICBjb2xvcjogJyNkYzI2MjYnLFxuICAgICAgICAgICAgICAgIGJveFNoYWRvdzogJzAgNHB4IDEycHggcmdiYSgyMzksIDY4LCA2OCwgMC4xNSknLFxuICAgICAgICAgICAgICAgIGZsZXhTaHJpbms6IDBcbiAgICAgICAgICAgICAgfX1cbiAgICAgICAgICAgID5cbiAgICAgICAgICAgICAgPEFsZXJ0VHJpYW5nbGUgc2l6ZT17MjZ9IC8+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIDxkaXY+XG4gICAgICAgICAgICAgIDxzcGFuXG4gICAgICAgICAgICAgICAgc3R5bGU9e3tcbiAgICAgICAgICAgICAgICAgIGZvbnRTaXplOiAnMC43NXJlbScsXG4gICAgICAgICAgICAgICAgICBmb250V2VpZ2h0OiA3MDAsXG4gICAgICAgICAgICAgICAgICB0ZXh0VHJhbnNmb3JtOiAndXBwZXJjYXNlJyxcbiAgICAgICAgICAgICAgICAgIGxldHRlclNwYWNpbmc6ICcwLjA2ZW0nLFxuICAgICAgICAgICAgICAgICAgY29sb3I6ICcjZGMyNjI2JyxcbiAgICAgICAgICAgICAgICAgIGJhY2tncm91bmQ6ICcjZmVmMmYyJyxcbiAgICAgICAgICAgICAgICAgIHBhZGRpbmc6ICcycHggOHB4JyxcbiAgICAgICAgICAgICAgICAgIGJvcmRlclJhZGl1czogJzZweCcsXG4gICAgICAgICAgICAgICAgICBib3JkZXI6ICcxcHggc29saWQgI2ZlY2FjYSdcbiAgICAgICAgICAgICAgICB9fVxuICAgICAgICAgICAgICA+XG4gICAgICAgICAgICAgICAgVXBsb2FkIE5vdGljZVxuICAgICAgICAgICAgICA8L3NwYW4+XG4gICAgICAgICAgICAgIDxoMlxuICAgICAgICAgICAgICAgIGlkPVwidXBsb2FkLWVycm9yLXRpdGxlXCJcbiAgICAgICAgICAgICAgICBzdHlsZT17e1xuICAgICAgICAgICAgICAgICAgZm9udFNpemU6ICcxLjI1cmVtJyxcbiAgICAgICAgICAgICAgICAgIGZvbnRXZWlnaHQ6IDgwMCxcbiAgICAgICAgICAgICAgICAgIGNvbG9yOiAnIzBmMTcyYScsXG4gICAgICAgICAgICAgICAgICBtYXJnaW46ICc0cHggMCAwIDAnXG4gICAgICAgICAgICAgICAgfX1cbiAgICAgICAgICAgICAgPlxuICAgICAgICAgICAgICAgIFJlc3VtZSBVcGxvYWQgRmFpbGVkXG4gICAgICAgICAgICAgIDwvaDI+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICA8L2Rpdj5cblxuICAgICAgICAgIDxidXR0b25cbiAgICAgICAgICAgIHR5cGU9XCJidXR0b25cIlxuICAgICAgICAgICAgb25DbGljaz17b25DbG9zZX1cbiAgICAgICAgICAgIGFyaWEtbGFiZWw9XCJDbG9zZSBkaWFsb2dcIlxuICAgICAgICAgICAgc3R5bGU9e3tcbiAgICAgICAgICAgICAgYmFja2dyb3VuZDogJyNmOGZhZmMnLFxuICAgICAgICAgICAgICBib3JkZXI6ICcxcHggc29saWQgI2UyZThmMCcsXG4gICAgICAgICAgICAgIGJvcmRlclJhZGl1czogJzhweCcsXG4gICAgICAgICAgICAgIHBhZGRpbmc6ICc2cHgnLFxuICAgICAgICAgICAgICBjdXJzb3I6ICdwb2ludGVyJyxcbiAgICAgICAgICAgICAgY29sb3I6ICcjNjQ3NDhiJ1xuICAgICAgICAgICAgfX1cbiAgICAgICAgICA+XG4gICAgICAgICAgICA8WCBzaXplPXsxOH0gLz5cbiAgICAgICAgICA8L2J1dHRvbj5cbiAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgey8qIE1vZGFsIEJvZHkgKi99XG4gICAgICAgIDxkaXYgc3R5bGU9e3sgcGFkZGluZzogJzAuNzVyZW0gMS43NXJlbSAxLjVyZW0gMS43NXJlbScgfX0+XG4gICAgICAgICAgPGRpdlxuICAgICAgICAgICAgc3R5bGU9e3tcbiAgICAgICAgICAgICAgYmFja2dyb3VuZENvbG9yOiAnI2ZmZjFmMicsXG4gICAgICAgICAgICAgIGJvcmRlcjogJzFweCBzb2xpZCAjZmVjZGQzJyxcbiAgICAgICAgICAgICAgYm9yZGVyUmFkaXVzOiAnMTJweCcsXG4gICAgICAgICAgICAgIHBhZGRpbmc6ICcxNHB4IDE2cHgnLFxuICAgICAgICAgICAgICBtYXJnaW5Cb3R0b206ICcxcmVtJyxcbiAgICAgICAgICAgICAgY29sb3I6ICcjOWYxMjM5JyxcbiAgICAgICAgICAgICAgZm9udFNpemU6ICcwLjlyZW0nLFxuICAgICAgICAgICAgICBsaW5lSGVpZ2h0OiAxLjVcbiAgICAgICAgICAgIH19XG4gICAgICAgICAgPlxuICAgICAgICAgICAge2Vycm9yTWVzc2FnZX1cbiAgICAgICAgICA8L2Rpdj5cblxuICAgICAgICAgIDxkaXZcbiAgICAgICAgICAgIHN0eWxlPXt7XG4gICAgICAgICAgICAgIGJhY2tncm91bmRDb2xvcjogJyNmOGZhZmMnLFxuICAgICAgICAgICAgICBib3JkZXI6ICcxcHggc29saWQgI2UyZThmMCcsXG4gICAgICAgICAgICAgIGJvcmRlclJhZGl1czogJzEwcHgnLFxuICAgICAgICAgICAgICBwYWRkaW5nOiAnMTJweCAxNHB4JyxcbiAgICAgICAgICAgICAgZm9udFNpemU6ICcwLjgyNXJlbScsXG4gICAgICAgICAgICAgIGNvbG9yOiAnIzQ3NTU2OSdcbiAgICAgICAgICAgIH19XG4gICAgICAgICAgPlxuICAgICAgICAgICAgPGRpdiBzdHlsZT17eyBmb250V2VpZ2h0OiA2MDAsIGNvbG9yOiAnIzFlMjkzYicsIG1hcmdpbkJvdHRvbTogJzRweCcgfX0+XG4gICAgICAgICAgICAgIFVwbG9hZCBHdWlkZWxpbmVzOlxuICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8dWwgc3R5bGU9e3sgbWFyZ2luOiAwLCBwYWRkaW5nTGVmdDogJzE4cHgnLCBsaW5lSGVpZ2h0OiAxLjYgfX0+XG4gICAgICAgICAgICAgIDxsaT5FbnN1cmUgdGhlIGZpbGUgaXMgYSB2YWxpZCBzdGFuZGFyZCBQREYgKG5vdCBwYXNzd29yZC1wcm90ZWN0ZWQpLjwvbGk+XG4gICAgICAgICAgICAgIDxsaT5GaWxlIHNpemUgbXVzdCBiZSAxMCBNQiBvciBzbWFsbGVyLjwvbGk+XG4gICAgICAgICAgICAgIDxsaT5Eb2N1bWVudCBzaG91bGQgY29udGFpbiBzZWxlY3RhYmxlIHRleHQgKG5vdCBzY2FubmVkIGZsYXQgaW1hZ2VzKS48L2xpPlxuICAgICAgICAgICAgPC91bD5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgey8qIEZvb3RlciAqL31cbiAgICAgICAgPGRpdlxuICAgICAgICAgIHN0eWxlPXt7XG4gICAgICAgICAgICBwYWRkaW5nOiAnMS4xNXJlbSAxLjc1cmVtJyxcbiAgICAgICAgICAgIGJhY2tncm91bmRDb2xvcjogJyNmOGZhZmMnLFxuICAgICAgICAgICAgYm9yZGVyVG9wOiAnMXB4IHNvbGlkICNlMmU4ZjAnLFxuICAgICAgICAgICAgZGlzcGxheTogJ2ZsZXgnLFxuICAgICAgICAgICAgYWxpZ25JdGVtczogJ2NlbnRlcicsXG4gICAgICAgICAgICBqdXN0aWZ5Q29udGVudDogJ2ZsZXgtZW5kJyxcbiAgICAgICAgICAgIGdhcDogJzEycHgnXG4gICAgICAgICAgfX1cbiAgICAgICAgPlxuICAgICAgICAgIDxidXR0b25cbiAgICAgICAgICAgIHR5cGU9XCJidXR0b25cIlxuICAgICAgICAgICAgb25DbGljaz17b25DbG9zZX1cbiAgICAgICAgICAgIHN0eWxlPXt7XG4gICAgICAgICAgICAgIGJhY2tncm91bmQ6ICcjZmZmZmZmJyxcbiAgICAgICAgICAgICAgYm9yZGVyOiAnMXB4IHNvbGlkICNjYmQ1ZTEnLFxuICAgICAgICAgICAgICBib3JkZXJSYWRpdXM6ICcxMHB4JyxcbiAgICAgICAgICAgICAgcGFkZGluZzogJzlweCAxNnB4JyxcbiAgICAgICAgICAgICAgZm9udFNpemU6ICcwLjg3NXJlbScsXG4gICAgICAgICAgICAgIGZvbnRXZWlnaHQ6IDYwMCxcbiAgICAgICAgICAgICAgY29sb3I6ICcjNDc1NTY5JyxcbiAgICAgICAgICAgICAgY3Vyc29yOiAncG9pbnRlcidcbiAgICAgICAgICAgIH19XG4gICAgICAgICAgPlxuICAgICAgICAgICAgQ2xvc2VcbiAgICAgICAgICA8L2J1dHRvbj5cblxuICAgICAgICAgIDxidXR0b25cbiAgICAgICAgICAgIHJlZj17cmV0cnlCdG5SZWZ9XG4gICAgICAgICAgICB0eXBlPVwiYnV0dG9uXCJcbiAgICAgICAgICAgIG9uQ2xpY2s9e29uUmV0cnl9XG4gICAgICAgICAgICBzdHlsZT17e1xuICAgICAgICAgICAgICBiYWNrZ3JvdW5kOiAnbGluZWFyLWdyYWRpZW50KDEzNWRlZywgIzI1NjNlYiAwJSwgIzFkNGVkOCAxMDAlKScsXG4gICAgICAgICAgICAgIGJvcmRlcjogJ25vbmUnLFxuICAgICAgICAgICAgICBib3JkZXJSYWRpdXM6ICcxMHB4JyxcbiAgICAgICAgICAgICAgcGFkZGluZzogJzEwcHggMThweCcsXG4gICAgICAgICAgICAgIGZvbnRTaXplOiAnMC45cmVtJyxcbiAgICAgICAgICAgICAgZm9udFdlaWdodDogNzAwLFxuICAgICAgICAgICAgICBjb2xvcjogJyNmZmZmZmYnLFxuICAgICAgICAgICAgICBjdXJzb3I6ICdwb2ludGVyJyxcbiAgICAgICAgICAgICAgZGlzcGxheTogJ2lubGluZS1mbGV4JyxcbiAgICAgICAgICAgICAgYWxpZ25JdGVtczogJ2NlbnRlcicsXG4gICAgICAgICAgICAgIGdhcDogJzZweCcsXG4gICAgICAgICAgICAgIGJveFNoYWRvdzogJzAgNHB4IDEycHggcmdiYSgzNywgOTksIDIzNSwgMC4zKSdcbiAgICAgICAgICAgIH19XG4gICAgICAgICAgPlxuICAgICAgICAgICAgPFJvdGF0ZUNjdyBzaXplPXsxNX0gLz5cbiAgICAgICAgICAgIDxzcGFuPlJldHJ5IFVwbG9hZDwvc3Bhbj5cbiAgICAgICAgICA8L2J1dHRvbj5cbiAgICAgICAgPC9kaXY+XG4gICAgICA8L2Rpdj5cbiAgICA8L2Rpdj5cbiAgKTtcbn1cbiJdLCJmaWxlIjoiRDovQ2FyZWVyU2Vuc2VBSS9mcm9udGVuZC9zcmMvY29tcG9uZW50cy9tb2RhbHMvUmVzdW1lVXBsb2FkRXJyb3JNb2RhbC5qc3gifQ==

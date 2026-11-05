@@ -56,9 +56,8 @@ def run_comprehensive_tests():
             db.session.commit()
             print("  Created Admin Account: admin@careersense.ai")
         else:
-            admin_user.role = "admin"
-            admin_user.password_hash = generate_password_hash("Admin@CareerSense2026", method="pbkdf2:sha256")
-            db.session.commit()
+            # NEVER reset the existing admin credentials - only report which account is used.
+            print(f"  Using existing Admin Account: {admin_user.email} (credentials untouched)")
 
         # Student A
         student_a = User.query.filter_by(email="student_a_test@careersense.ai").first()
@@ -374,31 +373,35 @@ def run_comprehensive_tests():
         # -------------------------------------------------------------
         # SCENARIO 13: Admin payment settings update and public config retrieval
         # -------------------------------------------------------------
-        print("\n[SCENARIO 13] Admin updates payment settings, public config verified...")
+        print("\n[SCENARIO 13] Admin payment settings round-trip (existing configured values)...")
+        # Read the CURRENTLY configured values and write them back unchanged.
+        # This verifies the admin update endpoint + public endpoint round-trip
+        # WITHOUT fabricating or overwriting real payment/bank details.
+        cfg_before = client.get('/api/subscription/payment-config').get_json()['payment_config']
+        settings_payload = {
+            'upi_id': cfg_before.get('upi_id') or '',
+            'account_holder_name': cfg_before.get('account_holder_name') or '',
+            'bank_name': cfg_before.get('bank_name') or '',
+            'account_number': cfg_before.get('account_number') or '',
+            'ifsc_code': cfg_before.get('ifsc_code') or '',
+            'account_type': cfg_before.get('account_type') or 'Current Account',
+            'payment_instructions': cfg_before.get('payment_instructions') or 'Transfer the exact amount and submit your UTR.'
+        }
         resp13_update = client.post(
             '/api/admin/payment-settings',
             headers={'Authorization': f'Bearer {admin_token}'},
-            data={
-                'upi_id': 'careersense.official@okaxis',
-                'account_holder_name': 'CareerSense AI EduTech Pvt Ltd',
-                'bank_name': 'HDFC Bank',
-                'account_number': '50100492817264',
-                'ifsc_code': 'HDFC0001234',
-                'account_type': 'Current Account',
-                'payment_instructions': 'Add Reference ID in UPI remarks for priority 15-min approval.'
-            }
+            data=settings_payload
         )
         assert resp13_update.status_code == 200, f"Update settings failed: {resp13_update.data}"
 
-        # Verify public config returns the updated settings
+        # Verify public config returns exactly the same configured values (unchanged)
         resp13_pub = client.get('/api/subscription/payment-config')
         assert resp13_pub.status_code == 200
         pub_config = resp13_pub.get_json()['payment_config']
-        assert pub_config['upi_id'] == 'careersense.official@okaxis'
-        assert pub_config['account_holder_name'] == 'CareerSense AI EduTech Pvt Ltd'
-        assert pub_config['account_number'] == '50100492817264'
-        assert pub_config['bank_name'] == 'HDFC Bank'
-        print(f"  [PASS] Settings updated and verified publicly: UPI ID={pub_config['upi_id']}, Bank={pub_config['bank_name']}")
+        for key in ('upi_id', 'account_holder_name', 'account_number', 'bank_name'):
+            if settings_payload[key]:
+                assert pub_config[key] == settings_payload[key], f"Round-trip mismatch for {key}"
+        print("  [PASS] Settings round-trip verified against existing configured values (values intentionally not printed for security)")
         passed_scenarios += 1
 
         # -------------------------------------------------------------

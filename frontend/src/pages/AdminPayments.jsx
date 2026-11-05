@@ -685,7 +685,8 @@ export default function AdminPayments() {
                         <td style={{ padding: '14px 16px' }}>
                           <div style={{ fontWeight: '600' }}>{req.plan_name}</div>
                           <span style={{ fontSize: '11px', color: 'var(--text-muted, #64748b)' }}>
-                            {req.plan_duration_months} {req.plan_duration_months === 1 ? 'Month' : 'Months'}
+                            {req.plan_duration_label ||
+                              `${req.plan_duration_months} ${req.plan_duration_months === 1 ? 'Month' : 'Months'}`}
                           </span>
                         </td>
 
@@ -1132,7 +1133,7 @@ export default function AdminPayments() {
               }}
             >
               <div><strong>Candidate:</strong> {selectedReq.student_name} ({selectedReq.student_email})</div>
-              <div><strong>Plan:</strong> {selectedReq.plan_name} ({selectedReq.plan_duration_months} Months)</div>
+              <div><strong>Plan:</strong> {selectedReq.plan_name} ({selectedReq.plan_duration_label || `${selectedReq.plan_duration_months} Months`})</div>
               <div><strong>Amount:</strong> ₹{selectedReq.amount_inr}</div>
             </div>
 

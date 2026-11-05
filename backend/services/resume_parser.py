@@ -142,13 +142,13 @@ def extract_candidate_metadata(raw_text: str, blocks: list = None) -> dict:
     sections = {}
     current_section = "summary"
     section_headers = {
-        'education': ['education', 'academic background', 'qualification', 'academics', 'degrees'],
-        'experience': ['experience', 'work experience', 'employment history', 'internships', 'work history', 'professional experience'],
-        'projects': ['projects', 'academic projects', 'key projects', 'personal projects'],
-        'skills': ['technical skills', 'skills', 'technologies', 'core competencies', 'skills & tools', 'technical proficiencies', 'soft skills'],
-        'certifications': ['certifications', 'licenses', 'courses', 'certificates'],
+        'education': ['education', 'academic background', 'qualification', 'academics', 'degrees', 'academic qualifications', 'educational background'],
+        'experience': ['experience', 'work experience', 'employment history', 'internships', 'work history', 'professional experience', 'employment'],
+        'projects': ['projects', 'academic projects', 'key projects', 'personal projects', 'technical projects'],
+        'skills': ['technical skills', 'skills', 'technologies', 'core competencies', 'skills & tools', 'technical proficiencies', 'soft skills', 'competencies', 'skillset'],
+        'certifications': ['certifications', 'licenses', 'courses', 'certificates', 'certifications & courses'],
         'achievements': ['achievements', 'awards', 'honors', 'accomplishments', 'extra-curricular activities', 'extracurricular'],
-        'summary': ['professional summary', 'about me', 'objective', 'career objective', 'summary']
+        'summary': ['professional summary', 'about me', 'objective', 'career objective', 'summary', 'profile', 'about']
     }
 
     section_lines = {k: [] for k in section_headers}

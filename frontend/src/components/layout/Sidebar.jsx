@@ -14,7 +14,6 @@ import {
   LifeBuoy,
   Sparkles,
   X,
-  CreditCard,
   ShieldCheck,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -34,7 +33,6 @@ export default function Sidebar({ isOpen, onClose }) {
   ];
 
   const accountNavigation = [
-    { to: '/pricing', label: 'Subscription Plans', icon: CreditCard },
     { to: '/profile', label: 'Profile', icon: User },
     { to: '/settings', label: 'Settings', icon: Settings },
   ];
@@ -122,29 +120,6 @@ export default function Sidebar({ isOpen, onClose }) {
               );
             })}
           </ul>
-
-          {user?.role === 'admin' && (
-            <>
-              <div className="nav-divider"></div>
-              <div className="nav-group-label" style={{ color: '#d97706' }}>
-                ADMINISTRATION
-              </div>
-              <ul className="nav-items">
-                <li>
-                  <NavLink
-                    to="/admin/payments"
-                    onClick={onClose}
-                    className={({ isActive }) =>
-                      `sidebar-link ${isActive ? 'active' : ''}`
-                    }
-                  >
-                    <ShieldCheck size={18} className="link-icon" style={{ color: '#d97706' }} />
-                    <span>Payment Approvals</span>
-                  </NavLink>
-                </li>
-              </ul>
-            </>
-          )}
         </nav>
 
         {/* Bottom Actions */}
@@ -152,7 +127,6 @@ export default function Sidebar({ isOpen, onClose }) {
           <button
             type="button"
             className="sidebar-link help-link"
-            style={{ width: '100%', marginBottom: '6px', background: 'transparent', border: 'none', textAlign: 'left', cursor: 'pointer' }}
             onClick={() => alert('CareerSense AI Support: Visit the documentation or contact support@careersense.ai')}
           >
             <LifeBuoy size={18} className="link-icon" />

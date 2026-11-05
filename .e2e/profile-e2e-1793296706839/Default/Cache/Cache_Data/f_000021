@@ -1,0 +1,299 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/components/landing/Hero.jsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=e994717c"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+let prevRefreshReg;
+let prevRefreshSig;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  prevRefreshReg = window.$RefreshReg$;
+  prevRefreshSig = window.$RefreshSig$;
+  window.$RefreshReg$ = RefreshRuntime.getRefreshReg("D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx");
+  window.$RefreshSig$ = RefreshRuntime.createSignatureFunctionForTransform;
+}
+var _s = $RefreshSig$();
+import __vite__cjsImport3_react from "/node_modules/.vite/deps/react.js?v=e994717c"; const React = __vite__cjsImport3_react.__esModule ? __vite__cjsImport3_react.default : __vite__cjsImport3_react;
+import { useNavigate } from "/node_modules/.vite/deps/react-router-dom.js?v=e994717c";
+import { motion } from "/node_modules/.vite/deps/framer-motion.js?v=e994717c";
+import {
+  Sparkles,
+  ArrowRight,
+  ChevronDown,
+  Cpu,
+  FileText,
+  BarChart3,
+  Layers
+} from "/node_modules/.vite/deps/lucide-react.js?v=e994717c";
+import Button from "/src/components/common/Button.jsx";
+import PipelinePreview from "/src/components/landing/PipelinePreview.jsx?t=1793295586750";
+import SignatureBackground from "/src/components/landing/SignatureBackground.jsx?t=1793295540268";
+export default function Hero() {
+  _s();
+  const navigate = useNavigate();
+  const scrollToHow = () => {
+    const el = document.getElementById("how");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+  const trustBadges = [
+    { label: "PyMuPDF Ingestion", icon: FileText },
+    { label: "NLTK NLP Processing", icon: Cpu },
+    { label: "TF-IDF Vector Space", icon: BarChart3 },
+    { label: "Skill Gap Differential", icon: Layers }
+  ];
+  return /* @__PURE__ */ jsxDEV("section", { className: "hero-master-container relative-overflow", children: [
+    /* @__PURE__ */ jsxDEV(SignatureBackground, { variant: "hero" }, void 0, false, {
+      fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+      lineNumber: 54,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("div", { className: "hero-inner-content", children: [
+      /* @__PURE__ */ jsxDEV(
+        motion.div,
+        {
+          className: "hero-pill-badge",
+          initial: { opacity: 0, y: -8 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.35 },
+          children: [
+            /* @__PURE__ */ jsxDEV(Sparkles, { size: 13, className: "badge-sparkle-icon" }, void 0, false, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+              lineNumber: 65,
+              columnNumber: 11
+            }, this),
+            /* @__PURE__ */ jsxDEV("span", { children: "AI + NLP CAREER INTELLIGENCE" }, void 0, false, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+              lineNumber: 66,
+              columnNumber: 11
+            }, this)
+          ]
+        },
+        void 0,
+        true,
+        {
+          fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+          lineNumber: 59,
+          columnNumber: 9
+        },
+        this
+      ),
+      /* @__PURE__ */ jsxDEV(
+        motion.h1,
+        {
+          className: "hero-headline-h1",
+          initial: { opacity: 0, y: 10 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.4, delay: 0.05 },
+          children: [
+            "Turn Your Resume Into Your ",
+            /* @__PURE__ */ jsxDEV("br", { className: "hero-desktop-br" }, void 0, false, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+              lineNumber: 76,
+              columnNumber: 38
+            }, this),
+            /* @__PURE__ */ jsxDEV("span", { className: "hero-gradient-text", children: "Career Roadmap." }, void 0, false, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+              lineNumber: 77,
+              columnNumber: 11
+            }, this)
+          ]
+        },
+        void 0,
+        true,
+        {
+          fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+          lineNumber: 70,
+          columnNumber: 9
+        },
+        this
+      ),
+      /* @__PURE__ */ jsxDEV(
+        motion.div,
+        {
+          className: "hero-subtitles-block",
+          initial: { opacity: 0, y: 8 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.4, delay: 0.1 },
+          children: [
+            /* @__PURE__ */ jsxDEV("p", { className: "hero-kicker-lead", children: "From resume understanding to career readiness." }, void 0, false, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+              lineNumber: 87,
+              columnNumber: 11
+            }, this),
+            /* @__PURE__ */ jsxDEV("p", { className: "hero-lead-description", children: "CareerSense AI uses NLP, TF-IDF vectorization, similarity analysis, and skill intelligence to transform resume data into actionable career guidance." }, void 0, false, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+              lineNumber: 88,
+              columnNumber: 11
+            }, this)
+          ]
+        },
+        void 0,
+        true,
+        {
+          fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+          lineNumber: 81,
+          columnNumber: 9
+        },
+        this
+      ),
+      /* @__PURE__ */ jsxDEV(
+        motion.div,
+        {
+          className: "hero-cta-buttons-row",
+          initial: { opacity: 0, y: 8 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.4, delay: 0.15 },
+          children: [
+            /* @__PURE__ */ jsxDEV(
+              Button,
+              {
+                variant: "primary",
+                size: "md",
+                icon: ArrowRight,
+                className: "hero-primary-btn",
+                onClick: () => navigate("/resume-analyzer"),
+                children: "Analyze My Resume"
+              },
+              void 0,
+              false,
+              {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+                lineNumber: 100,
+                columnNumber: 11
+              },
+              this
+            ),
+            /* @__PURE__ */ jsxDEV(
+              Button,
+              {
+                variant: "outline",
+                size: "md",
+                icon: ChevronDown,
+                className: "hero-secondary-btn",
+                onClick: scrollToHow,
+                children: "Explore Features"
+              },
+              void 0,
+              false,
+              {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+                lineNumber: 109,
+                columnNumber: 11
+              },
+              this
+            )
+          ]
+        },
+        void 0,
+        true,
+        {
+          fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+          lineNumber: 94,
+          columnNumber: 9
+        },
+        this
+      ),
+      /* @__PURE__ */ jsxDEV(
+        motion.div,
+        {
+          className: "hero-showcase-wrapper",
+          initial: { opacity: 0, y: 14 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.5, delay: 0.2 },
+          children: /* @__PURE__ */ jsxDEV(PipelinePreview, {}, void 0, false, {
+            fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+            lineNumber: 127,
+            columnNumber: 11
+          }, this)
+        },
+        void 0,
+        false,
+        {
+          fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+          lineNumber: 121,
+          columnNumber: 9
+        },
+        this
+      ),
+      /* @__PURE__ */ jsxDEV(
+        motion.div,
+        {
+          className: "hero-trust-bar",
+          initial: { opacity: 0 },
+          animate: { opacity: 1 },
+          transition: { duration: 0.45, delay: 0.25 },
+          children: [
+            /* @__PURE__ */ jsxDEV("span", { className: "trust-kicker", children: "VERIFIED TECHNICAL FOUNDATION" }, void 0, false, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+              lineNumber: 137,
+              columnNumber: 11
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "trust-badges-grid", children: trustBadges.map((b) => {
+              const Icon = b.icon;
+              return /* @__PURE__ */ jsxDEV("div", { className: "trust-badge-item", children: [
+                /* @__PURE__ */ jsxDEV(Icon, { size: 14, className: "trust-icon" }, void 0, false, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+                  lineNumber: 143,
+                  columnNumber: 19
+                }, this),
+                /* @__PURE__ */ jsxDEV("span", { children: b.label }, void 0, false, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+                  lineNumber: 144,
+                  columnNumber: 19
+                }, this)
+              ] }, b.label, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+                lineNumber: 142,
+                columnNumber: 17
+              }, this);
+            }) }, void 0, false, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+              lineNumber: 138,
+              columnNumber: 11
+            }, this)
+          ]
+        },
+        void 0,
+        true,
+        {
+          fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+          lineNumber: 131,
+          columnNumber: 9
+        },
+        this
+      )
+    ] }, void 0, true, {
+      fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+      lineNumber: 57,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx",
+    lineNumber: 52,
+    columnNumber: 5
+  }, this);
+}
+_s(Hero, "CzcTeTziyjMsSrAVmHuCCb6+Bfg=", false, function() {
+  return [useNavigate];
+});
+_c = Hero;
+var _c;
+$RefreshReg$(_c, "Hero");
+if (import.meta.hot && !inWebWorker) {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+if (import.meta.hot && !inWebWorker) {
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("D:/CareerSenseAI/frontend/src/components/landing/Hero.jsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+
+//# sourceMappingURL=data:application/json;base64,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InVzZU5hdmlnYXRlIiwibW90aW9uIiwiU3BhcmtsZXMiLCJBcnJvd1JpZ2h0IiwiQ2hldnJvbkRvd24iLCJDcHUiLCJGaWxlVGV4dCIsIkJhckNoYXJ0MyIsIkxheWVycyIsIkJ1dHRvbiIsIlBpcGVsaW5lUHJldmlldyIsIlNpZ25hdHVyZUJhY2tncm91bmQiLCJIZXJvIiwiX3MiLCJuYXZpZ2F0ZSIsInNjcm9sbFRvSG93IiwiZWwiLCJkb2N1bWVudCIsImdldEVsZW1lbnRCeUlkIiwic2Nyb2xsSW50b1ZpZXciLCJiZWhhdmlvciIsInRydXN0QmFkZ2VzIiwibGFiZWwiLCJpY29uIiwib3BhY2l0eSIsInkiLCJkdXJhdGlvbiIsImRlbGF5IiwibWFwIiwiYiIsIkljb24iLCJfYyJdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlcyI6WyJIZXJvLmpzeCJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSAncmVhY3QnO1xuaW1wb3J0IHsgdXNlTmF2aWdhdGUgfSBmcm9tICdyZWFjdC1yb3V0ZXItZG9tJztcbmltcG9ydCB7IG1vdGlvbiB9IGZyb20gJ2ZyYW1lci1tb3Rpb24nO1xuaW1wb3J0IHtcbiAgU3BhcmtsZXMsXG4gIEFycm93UmlnaHQsXG4gIENoZXZyb25Eb3duLFxuICBDcHUsXG4gIEZpbGVUZXh0LFxuICBCYXJDaGFydDMsXG4gIExheWVycyxcbn0gZnJvbSAnbHVjaWRlLXJlYWN0JztcbmltcG9ydCBCdXR0b24gZnJvbSAnLi4vY29tbW9uL0J1dHRvbic7XG5pbXBvcnQgUGlwZWxpbmVQcmV2aWV3IGZyb20gJy4vUGlwZWxpbmVQcmV2aWV3JztcbmltcG9ydCBTaWduYXR1cmVCYWNrZ3JvdW5kIGZyb20gJy4vU2lnbmF0dXJlQmFja2dyb3VuZCc7XG5cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEhlcm8oKSB7XG4gIGNvbnN0IG5hdmlnYXRlID0gdXNlTmF2aWdhdGUoKTtcblxuICBjb25zdCBzY3JvbGxUb0hvdyA9ICgpID0+IHtcbiAgICBjb25zdCBlbCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdob3cnKTtcbiAgICBpZiAoZWwpIGVsLnNjcm9sbEludG9WaWV3KHsgYmVoYXZpb3I6ICdzbW9vdGgnIH0pO1xuICB9O1xuXG4gIGNvbnN0IHRydXN0QmFkZ2VzID0gW1xuICAgIHsgbGFiZWw6ICdQeU11UERGIEluZ2VzdGlvbicsIGljb246IEZpbGVUZXh0IH0sXG4gICAgeyBsYWJlbDogJ05MVEsgTkxQIFByb2Nlc3NpbmcnLCBpY29uOiBDcHUgfSxcbiAgICB7IGxhYmVsOiAnVEYtSURGIFZlY3RvciBTcGFjZScsIGljb246IEJhckNoYXJ0MyB9LFxuICAgIHsgbGFiZWw6ICdTa2lsbCBHYXAgRGlmZmVyZW50aWFsJywgaWNvbjogTGF5ZXJzIH0sXG4gIF07XG5cbiAgcmV0dXJuIChcbiAgICA8c2VjdGlvbiBjbGFzc05hbWU9XCJoZXJvLW1hc3Rlci1jb250YWluZXIgcmVsYXRpdmUtb3ZlcmZsb3dcIj5cbiAgICAgIHsvKiBEZWRpY2F0ZWQgQmFja2dyb3VuZCBMYXllciB3aXRoIFN1YnRsZSBCbHVlIEFtYmllbnQgQXVyYSAqL31cbiAgICAgIDxTaWduYXR1cmVCYWNrZ3JvdW5kIHZhcmlhbnQ9XCJoZXJvXCIgLz5cblxuICAgICAgey8qIEhlcm8gRm9yZWdyb3VuZCBDb250ZW50ICovfVxuICAgICAgPGRpdiBjbGFzc05hbWU9XCJoZXJvLWlubmVyLWNvbnRlbnRcIj5cbiAgICAgICAgey8qIEJhZGdlICovfVxuICAgICAgICA8bW90aW9uLmRpdlxuICAgICAgICAgIGNsYXNzTmFtZT1cImhlcm8tcGlsbC1iYWRnZVwiXG4gICAgICAgICAgaW5pdGlhbD17eyBvcGFjaXR5OiAwLCB5OiAtOCB9fVxuICAgICAgICAgIGFuaW1hdGU9e3sgb3BhY2l0eTogMSwgeTogMCB9fVxuICAgICAgICAgIHRyYW5zaXRpb249e3sgZHVyYXRpb246IDAuMzUgfX1cbiAgICAgICAgPlxuICAgICAgICAgIDxTcGFya2xlcyBzaXplPXsxM30gY2xhc3NOYW1lPVwiYmFkZ2Utc3BhcmtsZS1pY29uXCIgLz5cbiAgICAgICAgICA8c3Bhbj5BSSArIE5MUCBDQVJFRVIgSU5URUxMSUdFTkNFPC9zcGFuPlxuICAgICAgICA8L21vdGlvbi5kaXY+XG5cbiAgICAgICAgey8qIE1haW4gSGVhZGxpbmUgKi99XG4gICAgICAgIDxtb3Rpb24uaDFcbiAgICAgICAgICBjbGFzc05hbWU9XCJoZXJvLWhlYWRsaW5lLWgxXCJcbiAgICAgICAgICBpbml0aWFsPXt7IG9wYWNpdHk6IDAsIHk6IDEwIH19XG4gICAgICAgICAgYW5pbWF0ZT17eyBvcGFjaXR5OiAxLCB5OiAwIH19XG4gICAgICAgICAgdHJhbnNpdGlvbj17eyBkdXJhdGlvbjogMC40LCBkZWxheTogMC4wNSB9fVxuICAgICAgICA+XG4gICAgICAgICAgVHVybiBZb3VyIFJlc3VtZSBJbnRvIFlvdXIgPGJyIGNsYXNzTmFtZT1cImhlcm8tZGVza3RvcC1iclwiIC8+XG4gICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwiaGVyby1ncmFkaWVudC10ZXh0XCI+Q2FyZWVyIFJvYWRtYXAuPC9zcGFuPlxuICAgICAgICA8L21vdGlvbi5oMT5cblxuICAgICAgICB7LyogU3VidGl0bGUgKi99XG4gICAgICAgIDxtb3Rpb24uZGl2XG4gICAgICAgICAgY2xhc3NOYW1lPVwiaGVyby1zdWJ0aXRsZXMtYmxvY2tcIlxuICAgICAgICAgIGluaXRpYWw9e3sgb3BhY2l0eTogMCwgeTogOCB9fVxuICAgICAgICAgIGFuaW1hdGU9e3sgb3BhY2l0eTogMSwgeTogMCB9fVxuICAgICAgICAgIHRyYW5zaXRpb249e3sgZHVyYXRpb246IDAuNCwgZGVsYXk6IDAuMSB9fVxuICAgICAgICA+XG4gICAgICAgICAgPHAgY2xhc3NOYW1lPVwiaGVyby1raWNrZXItbGVhZFwiPkZyb20gcmVzdW1lIHVuZGVyc3RhbmRpbmcgdG8gY2FyZWVyIHJlYWRpbmVzcy48L3A+XG4gICAgICAgICAgPHAgY2xhc3NOYW1lPVwiaGVyby1sZWFkLWRlc2NyaXB0aW9uXCI+XG4gICAgICAgICAgICBDYXJlZXJTZW5zZSBBSSB1c2VzIE5MUCwgVEYtSURGIHZlY3Rvcml6YXRpb24sIHNpbWlsYXJpdHkgYW5hbHlzaXMsIGFuZCBza2lsbCBpbnRlbGxpZ2VuY2UgdG8gdHJhbnNmb3JtIHJlc3VtZSBkYXRhIGludG8gYWN0aW9uYWJsZSBjYXJlZXIgZ3VpZGFuY2UuXG4gICAgICAgICAgPC9wPlxuICAgICAgICA8L21vdGlvbi5kaXY+XG5cbiAgICAgICAgey8qIENUQSBBY3Rpb24gQnV0dG9ucyAqL31cbiAgICAgICAgPG1vdGlvbi5kaXZcbiAgICAgICAgICBjbGFzc05hbWU9XCJoZXJvLWN0YS1idXR0b25zLXJvd1wiXG4gICAgICAgICAgaW5pdGlhbD17eyBvcGFjaXR5OiAwLCB5OiA4IH19XG4gICAgICAgICAgYW5pbWF0ZT17eyBvcGFjaXR5OiAxLCB5OiAwIH19XG4gICAgICAgICAgdHJhbnNpdGlvbj17eyBkdXJhdGlvbjogMC40LCBkZWxheTogMC4xNSB9fVxuICAgICAgICA+XG4gICAgICAgICAgPEJ1dHRvblxuICAgICAgICAgICAgdmFyaWFudD1cInByaW1hcnlcIlxuICAgICAgICAgICAgc2l6ZT1cIm1kXCJcbiAgICAgICAgICAgIGljb249e0Fycm93UmlnaHR9XG4gICAgICAgICAgICBjbGFzc05hbWU9XCJoZXJvLXByaW1hcnktYnRuXCJcbiAgICAgICAgICAgIG9uQ2xpY2s9eygpID0+IG5hdmlnYXRlKCcvcmVzdW1lLWFuYWx5emVyJyl9XG4gICAgICAgICAgPlxuICAgICAgICAgICAgQW5hbHl6ZSBNeSBSZXN1bWVcbiAgICAgICAgICA8L0J1dHRvbj5cbiAgICAgICAgICA8QnV0dG9uXG4gICAgICAgICAgICB2YXJpYW50PVwib3V0bGluZVwiXG4gICAgICAgICAgICBzaXplPVwibWRcIlxuICAgICAgICAgICAgaWNvbj17Q2hldnJvbkRvd259XG4gICAgICAgICAgICBjbGFzc05hbWU9XCJoZXJvLXNlY29uZGFyeS1idG5cIlxuICAgICAgICAgICAgb25DbGljaz17c2Nyb2xsVG9Ib3d9XG4gICAgICAgICAgPlxuICAgICAgICAgICAgRXhwbG9yZSBGZWF0dXJlc1xuICAgICAgICAgIDwvQnV0dG9uPlxuICAgICAgICA8L21vdGlvbi5kaXY+XG5cbiAgICAgICAgey8qIFByb2R1Y3QgUHJldmlldyBDb25zb2xlICovfVxuICAgICAgICA8bW90aW9uLmRpdlxuICAgICAgICAgIGNsYXNzTmFtZT1cImhlcm8tc2hvd2Nhc2Utd3JhcHBlclwiXG4gICAgICAgICAgaW5pdGlhbD17eyBvcGFjaXR5OiAwLCB5OiAxNCB9fVxuICAgICAgICAgIGFuaW1hdGU9e3sgb3BhY2l0eTogMSwgeTogMCB9fVxuICAgICAgICAgIHRyYW5zaXRpb249e3sgZHVyYXRpb246IDAuNSwgZGVsYXk6IDAuMiB9fVxuICAgICAgICA+XG4gICAgICAgICAgPFBpcGVsaW5lUHJldmlldyAvPlxuICAgICAgICA8L21vdGlvbi5kaXY+XG5cbiAgICAgICAgey8qIFRydXN0IEJhZGdlcyBCYXIgKi99XG4gICAgICAgIDxtb3Rpb24uZGl2XG4gICAgICAgICAgY2xhc3NOYW1lPVwiaGVyby10cnVzdC1iYXJcIlxuICAgICAgICAgIGluaXRpYWw9e3sgb3BhY2l0eTogMCB9fVxuICAgICAgICAgIGFuaW1hdGU9e3sgb3BhY2l0eTogMSB9fVxuICAgICAgICAgIHRyYW5zaXRpb249e3sgZHVyYXRpb246IDAuNDUsIGRlbGF5OiAwLjI1IH19XG4gICAgICAgID5cbiAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJ0cnVzdC1raWNrZXJcIj5WRVJJRklFRCBURUNITklDQUwgRk9VTkRBVElPTjwvc3Bhbj5cbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInRydXN0LWJhZGdlcy1ncmlkXCI+XG4gICAgICAgICAgICB7dHJ1c3RCYWRnZXMubWFwKChiKSA9PiB7XG4gICAgICAgICAgICAgIGNvbnN0IEljb24gPSBiLmljb247XG4gICAgICAgICAgICAgIHJldHVybiAoXG4gICAgICAgICAgICAgICAgPGRpdiBrZXk9e2IubGFiZWx9IGNsYXNzTmFtZT1cInRydXN0LWJhZGdlLWl0ZW1cIj5cbiAgICAgICAgICAgICAgICAgIDxJY29uIHNpemU9ezE0fSBjbGFzc05hbWU9XCJ0cnVzdC1pY29uXCIgLz5cbiAgICAgICAgICAgICAgICAgIDxzcGFuPntiLmxhYmVsfTwvc3Bhbj5cbiAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgKTtcbiAgICAgICAgICAgIH0pfVxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L21vdGlvbi5kaXY+XG4gICAgICA8L2Rpdj5cbiAgICA8L3NlY3Rpb24+XG4gICk7XG59XG4iXSwiZmlsZSI6IkQ6L0NhcmVlclNlbnNlQUkvZnJvbnRlbmQvc3JjL2NvbXBvbmVudHMvbGFuZGluZy9IZXJvLmpzeCJ9

@@ -31,9 +31,11 @@ def run():
     admin_token = None
     other_student_token = None
     with app.app_context():
-        student = User.query.filter_by(id=4).first()
+        # Isolated fixture accounts ONLY - never mutate real owner accounts.
+        student = User.query.filter_by(email='student_b_test@careersense.ai').first()
+        other_student = User.query.filter_by(email='student_a_test@careersense.ai').first()
         admin = User.query.filter_by(role='admin').first()
-        other_student = User.query.filter_by(id=6).first()
+        assert student and other_student and admin, 'Fixture accounts missing (students/admin).'
         student_token = create_access_token(identity=str(student.id))
         admin_token = create_access_token(identity=str(admin.id))
         other_student_token = create_access_token(identity=str(other_student.id))
@@ -133,20 +135,21 @@ def run():
     rej_ok = r_rej.status_code == 200 and rej_res.get('payment_request', {}).get('status') == 'rejected'
     print(f"[{'PASS' if rej_ok else 'FAIL'}] 10. Admin Rejection Workflow: Rejection reason recorded, sub stays inactive")
 
-    # 12. Test Admin Payment Settings Edit
+    # 12. Test Admin Payment Settings Edit (round-trip of existing configured values)
+    cfg_now = requests.get(f"{BASE_URL}/subscription/payment-config").json().get('payment_config', {})
     settings_payload = {
-        "upi_id": "verified.careersense@okhdfcbank",
-        "account_holder_name": "CareerSense Technologies India Pvt Ltd",
-        "bank_name": "HDFC Bank",
-        "account_number": "50200088991122",
-        "ifsc_code": "HDFC0001234",
-        "account_type": "Current Account",
-        "payment_instructions": "Scan QR or send UPI payment. Note your UTR and submit for verification."
+        "upi_id": cfg_now.get('upi_id') or '',
+        "account_holder_name": cfg_now.get('account_holder_name') or '',
+        "bank_name": cfg_now.get('bank_name') or '',
+        "account_number": cfg_now.get('account_number') or '',
+        "ifsc_code": cfg_now.get('ifsc_code') or '',
+        "account_type": cfg_now.get('account_type') or 'Current Account',
+        "payment_instructions": cfg_now.get('payment_instructions') or 'Transfer the exact amount and submit your UTR.'
     }
     r_set = requests.post(f"{BASE_URL}/admin/payment-settings", json=settings_payload, headers=admin_headers)
     set_res = r_set.json()
-    set_ok = r_set.status_code == 200 and set_res.get('payment_settings', {}).get('upi_id') == "verified.careersense@okhdfcbank"
-    print(f"[{'PASS' if set_ok else 'FAIL'}] 11. Admin Payment Settings: Update verified UPI & bank account details")
+    set_ok = r_set.status_code == 200 and set_res.get('payment_settings', {}).get('upi_id') == settings_payload['upi_id']
+    print(f"[{'PASS' if set_ok else 'FAIL'}] 11. Admin Payment Settings: round-trip of existing configured values (not printed for security)")
 
     print("=" * 70)
     print("BACKEND PAYMENT REQUEST & ADMIN APPROVAL TESTS COMPLETE")

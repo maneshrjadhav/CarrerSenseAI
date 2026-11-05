@@ -115,6 +115,8 @@ class PaymentRequest(db.Model):
             'plan_id': self.plan_id,
             'plan_name': self.plan.plan_name if self.plan else None,
             'plan_duration_months': self.plan.duration_months if self.plan else None,
+            'plan_duration_label': self.plan.duration_label if self.plan else None,
+            'plan_type': self.plan.plan_type if self.plan else None,
             'amount_inr': self.amount_inr,
             'currency': self.currency,
             'payment_method': self.payment_method,

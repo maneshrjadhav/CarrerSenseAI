@@ -13,10 +13,23 @@ from extensions import db
 class SubscriptionPlan(db.Model):
     __tablename__ = 'subscription_plans'
 
+    PLAN_TYPE_SUBSCRIPTION = 'subscription'
+    PLAN_TYPE_ATS_PASS = 'ats_pass'
+
+    # Features each plan type grants. The one-day ATS pass grants ONLY the
+    # JD-based ATS report download; it must never unlock the premium career
+    # intelligence modules (skill gap, roadmap, interview prep).
+    GRANTS_BY_PLAN_TYPE = {
+        PLAN_TYPE_SUBSCRIPTION: {'skill_gap', 'career_roadmap', 'interview_prep', 'ats_report'},
+        PLAN_TYPE_ATS_PASS: {'ats_report'},
+    }
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     plan_name = Column(String(100), nullable=False)
     plan_code = Column(String(50), unique=True, nullable=False, index=True)
+    plan_type = Column(String(30), default='subscription', nullable=False, index=True)
     duration_months = Column(Integer, nullable=False)
+    duration_days = Column(Integer, nullable=True)
     price_inr = Column(Float, nullable=False)
     features_json = Column(Text, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
@@ -37,14 +50,45 @@ class SubscriptionPlan(db.Model):
     def set_features(self, features_list):
         self.features_json = json.dumps(features_list)
 
+    @property
+    def grants_features(self):
+        return set(self.GRANTS_BY_PLAN_TYPE.get(self.plan_type or 'subscription', set()))
+
+    @property
+    def total_duration_days(self):
+        """Authoritative entitlement length in days for this plan."""
+        if self.duration_days:
+            return int(self.duration_days)
+        months = int(self.duration_months or 0)
+        if months == 12:
+            return 365
+        return months * 30
+
+    @property
+    def duration_label(self):
+        if self.plan_type == self.PLAN_TYPE_ATS_PASS or (self.duration_days and not self.duration_months):
+            days = self.total_duration_days
+            return '1 day' if days == 1 else f'{days} days'
+        months = int(self.duration_months or 0)
+        if months == 1:
+            return '1 month'
+        if months == 12:
+            return '1 year'
+        return f'{months} months'
+
     def to_dict(self):
         return {
             'id': self.id,
             'plan_name': self.plan_name,
             'plan_code': self.plan_code,
+            'plan_type': self.plan_type or 'subscription',
             'duration_months': self.duration_months,
+            'duration_days': self.total_duration_days,
+            'total_duration_days': self.total_duration_days,
+            'duration_label': self.duration_label,
             'price_inr': self.price_inr,
             'features': self.get_features(),
+            'grants_features': sorted(self.grants_features),
             'is_active': self.is_active,
             'is_popular': self.is_popular,
             'created_at': self.created_at.isoformat() if self.created_at else None

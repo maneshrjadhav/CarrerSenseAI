@@ -33,13 +33,13 @@ export default function Profile() {
   }, []);
 
   const [formData, setFormData] = useState({
-    name: user?.name || 'Manesh Jadhav',
-    email: user?.email || 'manesh@example.com',
-    phone: user?.phone || '+91 98765 43210',
-    dob: user?.dob || '2003-05-15',
-    education: 'B.Tech in Computer Engineering (2022 - 2026)',
-    role: user?.role === 'recruiter' ? 'Recruiter' : 'Candidate (Full Stack / Software Engineer)',
-    skills: 'Python, React, JavaScript, MySQL, Flask, HTML/CSS, Git, Tailwind CSS',
+    name: user?.name || '',
+    email: user?.email || '',
+    phone: user?.phone || '',
+    dob: user?.dob || '',
+    education: user?.education || '',
+    role: user?.role === 'recruiter' ? 'Recruiter' : 'Candidate',
+    skills: user?.skills || '',
   });
 
   const handleSave = (e) => {
@@ -50,12 +50,17 @@ export default function Profile() {
     setTimeout(() => setSaveSuccess(false), 3000);
   };
 
-  const initials = formData.name
-    .split(' ')
+  const initials = (formData.name || '')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
     .map((n) => n[0])
     .join('')
     .substring(0, 2)
     .toUpperCase();
+
+  const hasPremiumSub = Boolean(subscription?.features_access?.skill_gap);
+  const hasAtsPass = Boolean(subscription?.active_ats_pass);
 
   return (
     <div className="page-container">
@@ -75,8 +80,8 @@ export default function Profile() {
       </div>
 
       {saveSuccess && (
-        <div className="auth-alert-success mb-4">
-          ✓ Profile changes saved successfully!
+        <div className="auth-alert-success mb-4" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <CheckCircle size={16} /> Profile changes saved successfully!
         </div>
       )}
 
@@ -84,64 +89,62 @@ export default function Profile() {
         {/* Left Column: Avatar & Summary */}
         <div className="profile-card-left">
           <Card className="text-center profile-avatar-card">
-            <div className="profile-large-avatar">{initials}</div>
-            <h3 className="profile-name-heading">{formData.name}</h3>
+            <div className="profile-large-avatar">{initials || '?'}</div>
+            <h3 className="profile-name-heading">{formData.name || 'Unnamed Candidate'}</h3>
             <Badge variant="blue" size="md" className="my-2">{formData.role}</Badge>
-            <p className="profile-tagline">Computer Engineering Undergraduate • AI &amp; Web Developer</p>
+            {formData.email && <p className="profile-tagline">{formData.email}</p>}
           </Card>
 
-          {/* Subscription & Entitlement Status Card */}
+          {/* Platform Access Status Card */}
           <Card className="mt-4" style={{ textAlign: 'left' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <CreditCard size={18} className="text-primary" />
-                <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700 }}>Subscription Plan</h4>
+                <Sparkles size={18} className="text-primary" />
+                <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700 }}>Platform Access</h4>
               </div>
-              <Badge variant={subscription?.has_active_subscription ? 'emerald' : 'amber'} size="sm">
-                {subscription?.has_active_subscription ? 'ACTIVE PRO' : 'FREE TIER'}
+              <Badge variant="emerald" size="sm">
+                FULL ACCESS UNLOCKED
               </Badge>
             </div>
 
-            {loadingSub ? (
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Checking subscription status...</p>
-            ) : subscription?.has_active_subscription ? (
-              <div>
-                <div style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.25rem' }}>
-                  {subscription.subscription?.plan?.plan_name || 'CareerSense Pro'}
+            <div>
+              <div style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.25rem' }}>
+                Free All-Inclusive Access
+              </div>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.75rem', lineHeight: 1.5 }}>
+                All career intelligence features are 100% free and unlocked for your account:
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginBottom: '1rem', fontSize: '0.8rem', color: 'var(--text-main)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <CheckCircle size={14} style={{ color: '#10b981' }} />
+                  <span>Personalized Career Roadmap</span>
                 </div>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-                  Valid until {new Date(subscription.subscription?.end_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} ({subscription.subscription?.days_remaining} days remaining)
-                </p>
-                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    style={{ width: '100%' }}
-                    onClick={() => navigate('/pricing')}
-                  >
-                    Extend / Change Plan →
-                  </Button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <CheckCircle size={14} style={{ color: '#10b981' }} />
+                  <span>Sequential Milestone Progression</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <CheckCircle size={14} style={{ color: '#10b981' }} />
+                  <span>Skill Gap Intelligence</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <CheckCircle size={14} style={{ color: '#10b981' }} />
+                  <span>AI Mock Interview Simulator</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <CheckCircle size={14} style={{ color: '#10b981' }} />
+                  <span>ATS Report Downloads</span>
                 </div>
               </div>
-            ) : (
-              <div>
-                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.25rem' }}>
-                  Free Candidate Tier
-                </div>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.85rem', lineHeight: 1.4 }}>
-                  Resume parsing and ATS scoring included. Upgrade for Skill Gap Intelligence, Career Roadmap, and Mock Interviews.
-                </p>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  icon={Sparkles}
-                  style={{ width: '100%' }}
-                  onClick={() => navigate('/pricing')}
-                >
-                  Upgrade to Pro (From ₹83/mo) →
-                </Button>
-              </div>
-            )}
+              <Button
+                variant="outline"
+                size="sm"
+                style={{ width: '100%' }}
+                onClick={() => navigate('/dashboard')}
+              >
+                Go to Dashboard →
+              </Button>
+            </div>
           </Card>
         </div>
 

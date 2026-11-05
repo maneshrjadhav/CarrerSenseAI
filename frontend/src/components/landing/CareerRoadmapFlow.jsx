@@ -76,7 +76,7 @@ export default function CareerRoadmapFlow() {
       desc: 'Candidate Readiness reaches 92%+ with full project portfolio backing and confident interview poise.',
       icon: CheckCircle2,
       color: '#059669',
-      duration: 'Goal Achieved ✓',
+      duration: 'Goal Achieved',
     },
   ];
 
@@ -101,14 +101,9 @@ export default function CareerRoadmapFlow() {
               const Icon = m.icon;
 
               return (
-                <motion.div
+                <div
                   key={m.stage}
                   className="roadmap-milestone-card"
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-30px' }}
-                  transition={{ duration: 0.45, delay: idx * 0.08 }}
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 >
                   <div className="milestone-top-meta">
                     <span
@@ -132,7 +127,7 @@ export default function CareerRoadmapFlow() {
                   <p className="milestone-desc">{m.desc}</p>
 
                   <div className="milestone-card-accent" style={{ backgroundColor: m.color }}></div>
-                </motion.div>
+                </div>
               );
             })}
           </div>

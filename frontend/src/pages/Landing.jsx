@@ -1,16 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles, ArrowRight, ShieldCheck, Heart } from 'lucide-react';
 import LandingNavbar from '../components/landing/LandingNavbar';
 import Hero from '../components/landing/Hero';
 import StatsStrip from '../components/landing/StatsStrip';
 import FeatureCard, { WHY_FEATURES } from '../components/landing/FeatureCard';
 import HowItWorks from '../components/landing/HowItWorks';
-import CareerIntelligenceMap from '../components/landing/CareerIntelligenceMap';
-import ResumeScanDemo from '../components/landing/ResumeScanDemo';
-import SkillGapVisualizer from '../components/landing/SkillGapVisualizer';
-import CareerRoadmapFlow from '../components/landing/CareerRoadmapFlow';
 import DemoPreview from '../components/landing/DemoPreview';
+import CareerRoadmapFlow from '../components/landing/CareerRoadmapFlow';
 import CTA from '../components/landing/CTA';
 
 export default function Landing() {
@@ -19,20 +16,23 @@ export default function Landing() {
       {/* 1. Frosted Sticky Navigation Bar */}
       <LandingNavbar />
 
-      {/* 2. Hero Section with Real Career Intelligence Background */}
+      {/* 2. Hero Section with Integrated Pipeline Preview */}
       <Hero />
 
-      {/* Process Verification Stats Strip */}
+      {/* Quantitative Process Verification Strip */}
       <StatsStrip />
 
-      {/* 3. Why CareerSense AI (Core Capabilities Grid) */}
-      <section id="why" className="landing-section-block bg-white">
+      {/* 3. Platform Capabilities (Core Intelligence Modules) */}
+      <section id="capabilities" className="landing-section-block bg-white">
         <div className="section-container">
           <div className="section-title-wrap text-center">
-            <span className="section-eyebrow">WHY CAREERSENSE AI</span>
+            <div className="inline-badge-pill">
+              <Sparkles size={14} className="text-primary" />
+              <span>CORE ARCHITECTURE</span>
+            </div>
             <h2 className="section-main-heading">Built for Quantitative Career Readiness</h2>
             <p className="section-sub-heading">
-              Combining Natural Language Processing and Vector Space Models to provide honest, verifiable candidate guidance.
+              Combining Natural Language Processing and Vector Space Models to provide honest, verifiable candidate guidance without black-box guesswork.
             </p>
           </div>
 
@@ -44,28 +44,19 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* 4. How It Works (6-Step Sequential Timeline) */}
+      {/* 4. How It Works (4-Step Sequential System Workflow) */}
       <HowItWorks />
 
-      {/* 5. Career Intelligence / Semantic Map */}
-      <CareerIntelligenceMap />
-
-      {/* 6. Interactive Resume Scan Demo */}
-      <ResumeScanDemo />
-
-      {/* 7. Skill Gap Visualization (Set Difference Matrix) */}
-      <SkillGapVisualizer />
-
-      {/* 8. Career Roadmap (Progressive 7-Stage Flow) */}
-      <CareerRoadmapFlow />
-
-      {/* 9. Live Dashboard Showcase (Interactive Simulator) */}
+      {/* 5. Deep Analytical Precision Dashboard */}
       <DemoPreview />
 
-      {/* 10. Call to Action */}
+      {/* 6. Sequential Career Roadmap (Milestone Progression) */}
+      <CareerRoadmapFlow />
+
+      {/* 7. Final Call to Action */}
       <CTA />
 
-      {/* 11. SaaS Footer with Compact Technology Stack (Requirement Part 14) */}
+      {/* 8. SaaS Master Footer with Architecture & Tech Stack */}
       <footer className="saas-footer-master">
         <div className="section-container">
           <div className="footer-columns-grid">
@@ -78,10 +69,10 @@ export default function Landing() {
                 <span className="footer-brand-title">CareerSense AI</span>
               </div>
               <p className="footer-mission-text">
-                Intelligent Resume Screening &amp; Career Guidance System designed for academic excellence, recruitment automation, and student placement acceleration.
+                Intelligent Resume Screening &amp; Career Guidance System designed for academic excellence, recruitment automation, and engineering student placement acceleration.
               </p>
 
-              {/* Compact Technology Stack Section (Requirement Part 14) */}
+              {/* Technology Stack Tags */}
               <div className="footer-tech-stack-wrap">
                 <span className="tech-stack-label">POWERED BY CORE TECHNOLOGIES</span>
                 <div className="tech-stack-pills">
@@ -98,29 +89,27 @@ export default function Landing() {
               </div>
             </div>
 
-            {/* Product Capabilities Column */}
+            {/* Platform Capabilities Column */}
             <div className="footer-nav-col">
               <h4 className="footer-heading">Capabilities</h4>
               <ul className="footer-links-list">
-                <li><a href="#why">Resume Screening</a></li>
-                <li><a href="#why">NLP Text Processing</a></li>
-                <li><a href="#why">TF-IDF Matching</a></li>
-                <li><a href="#skill-gap">Skill Gap Detection</a></li>
-                <li><a href="#roadmap">Career Roadmap</a></li>
-                <li><a href="#why">Interview Preparation</a></li>
+                <li><a href="#capabilities">Resume Screening</a></li>
+                <li><a href="#capabilities">NLP Normalization</a></li>
+                <li><a href="#capabilities">TF-IDF Vector Matching</a></li>
+                <li><a href="#capabilities">Skill Gap Detection</a></li>
+                <li><a href="#roadmap">Milestone Roadmaps</a></li>
+                <li><a href="#capabilities">Interview Simulation</a></li>
               </ul>
             </div>
 
-            {/* Navigation & Tools Column */}
+            {/* Architecture & Workflow Column */}
             <div className="footer-nav-col">
-              <h4 className="footer-heading">Architecture &amp; Tools</h4>
+              <h4 className="footer-heading">Architecture</h4>
               <ul className="footer-links-list">
-                <li><a href="#how">How It Works</a></li>
-                <li><a href="#semantic-map">Semantic Knowledge Graph</a></li>
-                <li><a href="#scan-demo">Interactive Resume Scan</a></li>
-                <li><a href="#skill-gap">Skill Difference Matrix</a></li>
-                <li><a href="#roadmap">Milestone Roadmap</a></li>
-                <li><Link to="/analyze">Direct Analysis Tool</Link></li>
+                <li><a href="#how-it-works">How It Works (4 Steps)</a></li>
+                <li><a href="#analytics">Analytical Precision Console</a></li>
+                <li><a href="#roadmap">Career Roadmap Timeline</a></li>
+                <li><Link to="/analyze">Upload &amp; Direct Analysis</Link></li>
               </ul>
             </div>
 
@@ -131,18 +120,20 @@ export default function Landing() {
                 <li><Link to="/login">Sign In</Link></li>
                 <li><Link to="/register">Create Free Account</Link></li>
                 <li><Link to="/dashboard">Candidate Dashboard</Link></li>
-                <li><Link to="/resumes">My Uploaded Resumes</Link></li>
-                <li><Link to="/settings">Application Settings</Link></li>
+                <li><Link to="/profile">Profile &amp; Credentials</Link></li>
+                <li><Link to="/settings">System Settings</Link></li>
               </ul>
             </div>
           </div>
 
+          {/* Bottom Bar with Academic Demonstration Accreditation */}
           <div className="footer-bottom-bar">
-            <div className="footer-copyright-note">
+            <div className="footer-copyright">
               © 2026 CareerSense AI. Built with React, Flask, MySQL &amp; NLP.
             </div>
-            <div className="footer-meta-academic">
-              B.Tech Major Project Demonstration • All rights reserved.
+            <div className="footer-project-tag">
+              <ShieldCheck size={14} className="text-emerald inline-icon" />
+              <span>B.Tech Major Engineering Project Demonstration • All rights reserved.</span>
             </div>
           </div>
         </div>

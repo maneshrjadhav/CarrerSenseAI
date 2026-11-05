@@ -15,7 +15,8 @@ import {
   Briefcase,
   ExternalLink,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Check
 } from 'lucide-react';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
@@ -23,6 +24,9 @@ import BackButton from '../components/common/BackButton';
 import analysisService from '../services/analysisService';
 import { getAuthToken } from '../services/authService';
 import TargetedResumeBuilderModal from '../components/resume/TargetedResumeBuilderModal';
+import ResumeUploadSuccessModal from '../components/modals/ResumeUploadSuccessModal';
+import ResumeUploadErrorModal from '../components/modals/ResumeUploadErrorModal';
+import ResumeAnalysisCompleteModal from '../components/modals/ResumeAnalysisCompleteModal';
 
 const PROCESSING_STEPS = [
   { id: 1, label: '01 Uploading Resume' },
@@ -43,6 +47,16 @@ export default function Analyze() {
   const [analyzing, setAnalyzing] = useState(false);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+
+  // Smart Interactive Popups State
+  const [uploadedResumeId, setUploadedResumeId] = useState(null);
+  const [uploadSuccessModalOpen, setUploadSuccessModalOpen] = useState(false);
+  const [uploadErrorModalOpen, setUploadErrorModalOpen] = useState(false);
+  const [uploadErrorMessage, setUploadErrorMessage] = useState('');
+  const [uploadedFileData, setUploadedFileData] = useState(null);
+
+  const [analysisCompleteModalOpen, setAnalysisCompleteModalOpen] = useState(false);
+  const [analysisCompleteData, setAnalysisCompleteData] = useState(null);
 
   // Targeted resume builder state
   const [targetedBuilderOpen, setTargetedBuilderOpen] = useState(false);
@@ -77,28 +91,58 @@ export default function Analyze() {
     return `${(bytes / 1024).toFixed(1)} KB`;
   };
 
-  const handleSelectedFile = (selected) => {
+  const handleSelectedFile = async (selected) => {
     setFileError('');
     setErrorMessage('');
 
     if (!selected) return;
 
     if (!selected.name.toLowerCase().endsWith('.pdf')) {
-      setFileError('Invalid file format. Only PDF files are accepted.');
+      const err = 'Invalid file format. Only PDF files are accepted.';
+      setFileError(err);
+      setUploadErrorMessage(err);
+      setUploadErrorModalOpen(true);
       return;
     }
 
     if (selected.size === 0) {
-      setFileError('The selected file is empty (0 bytes). Please select a valid PDF.');
+      const err = 'The selected file is empty (0 bytes). Please select a valid PDF.';
+      setFileError(err);
+      setUploadErrorMessage(err);
+      setUploadErrorModalOpen(true);
       return;
     }
 
     if (selected.size > 10 * 1024 * 1024) {
-      setFileError('File size exceeds the 10 MB limit. Please select a smaller PDF.');
+      const err = 'File size exceeds the 10 MB limit. Please select a smaller PDF.';
+      setFileError(err);
+      setUploadErrorMessage(err);
+      setUploadErrorModalOpen(true);
       return;
     }
 
     setFile(selected);
+
+    // Promptly upload to backend to initiate verification and show Success Popup
+    try {
+      const uploadResult = await analysisService.uploadResume(selected);
+      if (uploadResult && uploadResult.resume_id) {
+        setUploadedResumeId(uploadResult.resume_id);
+        setUploadedFileData({
+          filename: selected.name,
+          fileSize: selected.size,
+          resumeId: uploadResult.resume_id
+        });
+        setUploadSuccessModalOpen(true);
+      } else {
+        throw new Error(uploadResult?.message || 'Failed to upload resume.');
+      }
+    } catch (err) {
+      const msg = err.response?.data?.message || err.message || 'Something went wrong while uploading your resume.';
+      setErrorMessage(msg);
+      setUploadErrorMessage(msg);
+      setUploadErrorModalOpen(true);
+    }
   };
 
   const handleFileDrop = (e) => {
@@ -112,14 +156,18 @@ export default function Analyze() {
   const handleRemoveFile = (e) => {
     e.stopPropagation();
     setFile(null);
+    setUploadedResumeId(null);
+    setUploadedFileData(null);
     setFileError('');
+    setErrorMessage('');
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const handleStartAnalysis = async (e) => {
-    if (e) e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     setErrorMessage('');
     setFileError('');
+    setUploadSuccessModalOpen(false);
 
     const token = getAuthToken();
     if (!token) {
@@ -127,7 +175,7 @@ export default function Analyze() {
       return;
     }
 
-    if (!file) {
+    if (!file && !uploadedResumeId) {
       setFileError('Please select a PDF resume first.');
       return;
     }
@@ -146,12 +194,14 @@ export default function Analyze() {
     }, 450);
 
     try {
-      // 1. Upload Resume PDF to MySQL backend
-      const uploadResult = await analysisService.uploadResume(file);
-      const resumeId = uploadResult.resume_id;
-
+      let resumeId = uploadedResumeId;
       if (!resumeId) {
-        throw new Error(uploadResult.message || 'Failed to initialize resume record.');
+        const uploadResult = await analysisService.uploadResume(file);
+        resumeId = uploadResult.resume_id;
+        setUploadedResumeId(resumeId);
+        if (!resumeId) {
+          throw new Error(uploadResult.message || 'Failed to initialize resume record.');
+        }
       }
 
       // Check if user also provided optional JD for full matching
@@ -172,14 +222,21 @@ export default function Analyze() {
         }, 600);
       } else {
         // Run independent Resume Intelligence Analysis
-        await analysisService.analyzeResume(resumeId);
+        const analysisRes = await analysisService.analyzeResume(resumeId);
 
         clearInterval(stepInterval);
         setActiveStepIndex(PROCESSING_STEPS.length - 1);
+        setAnalyzing(false);
 
-        setTimeout(() => {
-          navigate(`/resume-analysis/${resumeId}`);
-        }, 600);
+        // Show Analysis Complete Modal with actual backend data
+        setAnalysisCompleteData({
+          candidateName: analysisRes?.candidate_name || 'Candidate',
+          qualityScore: analysisRes?.quality_score || 0,
+          totalSkills: analysisRes?.total_skills_detected || (analysisRes?.skills ? analysisRes.skills.length : 0),
+          skills: analysisRes?.skills || [],
+          resumeId: resumeId
+        });
+        setAnalysisCompleteModalOpen(true);
       }
     } catch (err) {
       clearInterval(stepInterval);
@@ -286,6 +343,9 @@ export default function Analyze() {
                         <strong style={{ fontSize: '1rem', color: '#1e293b' }}>{file.name}</strong>
                         <span
                           style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
                             backgroundColor: '#ecfdf5',
                             color: '#059669',
                             border: '1px solid #a7f3d0',
@@ -295,15 +355,15 @@ export default function Analyze() {
                             borderRadius: '9999px'
                           }}
                         >
-                          ✓ Resume selected
+                          <Check size={12} /> Resume selected
                         </span>
                       </div>
                       <div style={{ marginTop: '4px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#64748b' }}>
                         <span>{formatFileSize(file.size)}</span>
                         <span>•</span>
-                        <span style={{ color: '#059669', fontWeight: '600' }}>✓ PDF only</span>
+                        <span style={{ color: '#059669', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '3px' }}><Check size={11} /> PDF only</span>
                         <span>•</span>
-                        <span style={{ color: '#0284c7', fontWeight: '600' }}>✓ Ready for analysis</span>
+                        <span style={{ color: '#0284c7', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '3px' }}><Check size={11} /> Ready for analysis</span>
                       </div>
                     </div>
                   </div>
@@ -329,10 +389,10 @@ export default function Analyze() {
                   <p style={{ fontSize: '0.875rem', color: '#64748b', margin: '0 0 12px 0' }}>
                     OR <span style={{ color: '#0284c7', fontWeight: 600, textDecoration: 'underline' }}>Browse from computer</span>
                   </p>
-                  <div style={{ display: 'inline-flex', gap: '12px', fontSize: '0.75rem', color: '#64748b', background: '#f1f5f9', padding: '4px 12px', borderRadius: '9999px' }}>
-                    <span>✓ PDF only</span>
+                  <div style={{ display: 'inline-flex', gap: '12px', fontSize: '0.75rem', color: '#64748b', background: '#f1f5f9', padding: '4px 12px', borderRadius: '9999px', alignItems: 'center' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}><Check size={11} /> PDF only</span>
                     <span>•</span>
-                    <span>✓ Maximum 10 MB</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}><Check size={11} /> Maximum 10 MB</span>
                   </div>
                 </div>
               )}
@@ -369,7 +429,7 @@ export default function Analyze() {
                   cursor: file ? 'pointer' : 'not-allowed'
                 }}
               >
-                {analyzing ? 'Analyzing Profile...' : '✨ Analyze My Resume'}
+                {analyzing ? 'Analyzing Profile...' : 'Analyze My Resume'}
               </Button>
             </div>
           </Card>
@@ -512,6 +572,41 @@ export default function Analyze() {
           targetRole: targetRole || 'Software Engineer',
           companyName: companyName,
           jobDescription: jobDescription,
+        }}
+      />
+
+      {/* 1. Resume Upload Success Modal */}
+      <ResumeUploadSuccessModal
+        isOpen={uploadSuccessModalOpen}
+        onClose={() => setUploadSuccessModalOpen(false)}
+        onStartAnalysis={handleStartAnalysis}
+        fileData={uploadedFileData || { filename: file?.name, fileSize: file?.size, resumeId: uploadedResumeId }}
+      />
+
+      {/* 2. Resume Upload Error Modal */}
+      <ResumeUploadErrorModal
+        isOpen={uploadErrorModalOpen}
+        onClose={() => setUploadErrorModalOpen(false)}
+        onRetry={() => {
+          setUploadErrorModalOpen(false);
+          fileInputRef.current?.click();
+        }}
+        errorMessage={uploadErrorMessage}
+      />
+
+      {/* 3. Resume Analysis Complete Modal */}
+      <ResumeAnalysisCompleteModal
+        isOpen={analysisCompleteModalOpen}
+        onClose={() => setAnalysisCompleteModalOpen(false)}
+        resumeId={analysisCompleteData?.resumeId || uploadedResumeId}
+        analysisData={analysisCompleteData || {}}
+        onViewAnalysis={() => {
+          setAnalysisCompleteModalOpen(false);
+          navigate(`/resume-analysis/${analysisCompleteData?.resumeId || uploadedResumeId}`);
+        }}
+        onMatchJob={() => {
+          setAnalysisCompleteModalOpen(false);
+          navigate(`/job-match/${analysisCompleteData?.resumeId || uploadedResumeId}`);
         }}
       />
     </div>

@@ -20,7 +20,8 @@ import {
   Wrench,
   BookOpen,
   ChevronRight,
-  Download
+  Download,
+  Check
 } from 'lucide-react';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
@@ -28,7 +29,8 @@ import Badge from '../components/common/Badge';
 import BackButton from '../components/common/BackButton';
 import analysisService from '../services/analysisService';
 import { useToast } from '../context/ToastContext';
-import UpgradeModal from '../components/subscription/UpgradeModal';
+import { getResumeQualityFeedback } from '../config/scoreFeedbackConfig';
+import CareerRoadmapRecommendation from '../components/resume/CareerRoadmapRecommendation';
 
 export default function ResumeAnalysisResult() {
   const { resumeId } = useParams();
@@ -40,7 +42,6 @@ export default function ResumeAnalysisResult() {
   const [error, setError] = useState('');
   const [expandedCategories, setExpandedCategories] = useState({});
   const [downloadingReport, setDownloadingReport] = useState(false);
-  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
 
   const handleDownloadAtsReport = async () => {
     if (!resumeId) return;
@@ -56,11 +57,7 @@ export default function ResumeAnalysisResult() {
         toast.error(res.message || 'Could not generate report.');
       }
     } catch (err) {
-      if (err.status === 403 || err.data?.subscription_required) {
-        setUpgradeModalOpen(true);
-      } else {
-        toast.error(err.message || 'Failed to download ATS report.');
-      }
+      toast.error(err.message || 'Failed to download ATS report.');
     } finally {
       setDownloadingReport(false);
     }
@@ -185,7 +182,7 @@ export default function ResumeAnalysisResult() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '6px' }}>
               <h1 className="page-title" style={{ margin: 0 }}>Resume Intelligence Report</h1>
-              <Badge variant="emerald" size="sm">✓ MySQL Verified</Badge>
+              <Badge variant="emerald" size="sm">MySQL Verified</Badge>
               <Badge variant="blue" size="sm">ID #{resume.id}</Badge>
             </div>
             <p className="page-subtitle" style={{ margin: 0 }}>
@@ -268,6 +265,11 @@ export default function ResumeAnalysisResult() {
                   {rating.label}
                 </Badge>
               </div>
+              <div style={{ padding: '8px 12px', background: 'rgba(37, 99, 235, 0.08)', borderRadius: '8px', border: '1px solid rgba(37, 99, 235, 0.2)', marginBottom: '10px' }}>
+                <span style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                  {data?.feedback_message || getResumeQualityFeedback(score)}
+                </span>
+              </div>
               <p style={{ fontSize: '0.875rem', color: 'var(--text-sub)', margin: '0 0 14px 0', lineHeight: '1.4' }}>
                 {score >= 80
                   ? 'Your resume demonstrates high section completeness, strong technical terminology, and clean ATS parseability.'
@@ -344,6 +346,12 @@ export default function ResumeAnalysisResult() {
         </Card>
       </div>
 
+      {/* Conditional Career Roadmap Guidance based on actual Job Match Score */}
+      <CareerRoadmapRecommendation
+        jobMatch={data?.job_match}
+        resumeId={resumeId}
+      />
+
       {/* Detected Skills by Category */}
       <Card
         title={`Detected Skills (${skills.length})`}
@@ -410,9 +418,7 @@ export default function ResumeAnalysisResult() {
                       >
                         <span>{sk.skill_name}</span>
                         {sk.confidence && (
-                          <span style={{ fontSize: '0.7rem', color: 'var(--emerald)', fontWeight: '600' }}>
-                            ✓
-                          </span>
+                          <Check size={11} style={{ color: 'var(--emerald)', marginLeft: '4px' }} />
                         )}
                       </span>
                     ))}
@@ -617,14 +623,6 @@ export default function ResumeAnalysisResult() {
           </div>
         </div>
       </Card>
-
-      <UpgradeModal
-        isOpen={upgradeModalOpen}
-        onClose={() => setUpgradeModalOpen(false)}
-        featureName="ats_report"
-        reasonMessage="ATS Evaluation Report generation and PDF download is a premium feature. Please choose a subscription plan to download your official ATS report."
-        onSuccessRedirect={window.location.pathname}
-      />
     </div>
   );
 }

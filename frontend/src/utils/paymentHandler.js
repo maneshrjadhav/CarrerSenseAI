@@ -102,7 +102,7 @@ function renderSandboxPaymentModal(orderData, { paymentMethod = 'upi', onSuccess
               justify-content: center;
               gap: 6px;
             ">
-              ⚡ UPI / QR
+              UPI / QR (Instant)
             </button>
             <button type="button" id="btn-method-card" style="
               padding: 10px 12px;
@@ -118,7 +118,7 @@ function renderSandboxPaymentModal(orderData, { paymentMethod = 'upi', onSuccess
               justify-content: center;
               gap: 6px;
             ">
-              💳 Debit / Card
+              Debit / Credit Card
             </button>
           </div>
         </div>
@@ -158,7 +158,7 @@ function renderSandboxPaymentModal(orderData, { paymentMethod = 'upi', onSuccess
             justify-content: center;
             gap: 8px;
           ">
-            <span>✓</span> Simulate Successful Payment (₹${orderData.amount_inr || (orderData.amount / 100)})
+            Simulate Successful Payment (₹${orderData.amount_inr || (orderData.amount / 100)})
           </button>
           <button type="button" id="btn-cancel-payment" style="
             width: 100%;

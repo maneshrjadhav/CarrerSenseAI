@@ -18,130 +18,97 @@ FEATURE_DISPLAY_NAMES = {
     'ats_report': 'ATS Compliance & Job-Match Report (PDF Generation & Download)'
 }
 
+class FreePlan:
+    id = 1
+    plan_name = "Full Access (Free)"
+    plan_type = "subscription"
+    price_inr = 0
+    duration_months = 120
+    is_active = True
+    grants_features = {'skill_gap', 'career_roadmap', 'interview_prep', 'ats_report'}
+
+    def to_dict(self):
+        return {
+            'id': 1,
+            'plan_name': 'Full Access (Free)',
+            'plan_type': 'subscription',
+            'price_inr': 0,
+            'duration_months': 120,
+            'is_active': True,
+            'grants_features': ['skill_gap', 'career_roadmap', 'interview_prep', 'ats_report']
+        }
+
+class FreeAccessSubscription:
+    def __init__(self, user_id: int):
+        self.id = 1
+        self.user_id = user_id
+        self.plan_id = 1
+        self.status = 'active'
+        self.is_currently_active = True
+        self.remaining_days = 3650
+        self.days_remaining = 3650
+        self.start_date = datetime(2025, 1, 1)
+        self.end_date = datetime(2035, 1, 1)
+        self.plan = FreePlan()
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'plan_id': self.plan_id,
+            'plan': self.plan.to_dict(),
+            'status': 'active',
+            'is_active': True,
+            'days_remaining': 3650,
+            'start_date': self.start_date.isoformat(),
+            'end_date': self.end_date.isoformat()
+        }
+
 def get_user_active_subscription(user_id: int):
     """
-    Retrieves the current valid, active subscription for the user.
-    Automatically expires subscriptions whose end_date is in the past.
+    Returns active subscription representation so all existing code passes active checks.
+    Under the free-access model, all registered users have full active access.
     """
-    now = datetime.utcnow()
+    return FreeAccessSubscription(user_id)
 
-    # Find subscriptions marked active
-    subs = db.session.query(UserSubscription).filter(
-        UserSubscription.user_id == user_id,
-        UserSubscription.status == 'active'
-    ).order_by(UserSubscription.end_date.desc()).all()
+def get_active_subscription_granting(user_id: int, feature_name: str):
+    """Returns active subscription for the feature (all features unlocked)."""
+    return get_user_active_subscription(user_id)
 
-    active_sub = None
-    for sub in subs:
-        if sub.end_date < now:
-            sub.status = 'expired'
-            db.session.add(sub)
-        elif not active_sub:
-            active_sub = sub
-
-    if subs:
-        db.session.commit()
-
-    return active_sub
+def get_user_feature_entitlements(user_id: int) -> dict:
+    """Returns which features are unlocked. All features are 100% unlocked for registered users."""
+    return {
+        'skill_gap': True,
+        'career_roadmap': True,
+        'interview_prep': True,
+        'ats_report': True
+    }
 
 def check_feature_access(user_id: int, feature_name: str = None) -> dict:
     """
-    Evaluates whether the user has entitlement to access a paid feature.
-    
-    Paid features:
-    - 'skill_gap'
-    - 'career_roadmap'
-    - 'interview_prep'
-    
-    Returns:
-    {
-        "allowed": bool,
-        "reason": "active" | "subscription_required" | "subscription_expired",
-        "message": str,
-        "subscription": dict | None,
-        "feature_name": str
-    }
+    Evaluates whether the user has entitlement to access a feature.
+    Under the free-access model, all features are completely unlocked for all registered users.
     """
     sub = get_user_active_subscription(user_id)
-    feature_label = FEATURE_DISPLAY_NAMES.get(feature_name, feature_name or 'Paid Module')
-
-    if not sub:
-        # Check if user has a pending payment request awaiting admin verification
-        pending_req = db.session.query(PaymentRequest).filter_by(
-            user_id=user_id,
-            status='pending_verification'
-        ).order_by(PaymentRequest.created_at.desc()).first()
-
-        if pending_req:
-            return {
-                "allowed": False,
-                "reason": "payment_pending_verification",
-                "message": f"Your payment of ₹{int(pending_req.amount_inr)} (Ref: {pending_req.request_reference}) is currently pending admin verification. Access will be unlocked once approved.",
-                "subscription": None,
-                "pending_request": pending_req.to_dict(),
-                "feature_name": feature_name
-            }
-
-        # Check if user had a previous subscription that expired
-        past_sub = db.session.query(UserSubscription).filter(
-            UserSubscription.user_id == user_id,
-            UserSubscription.status == 'expired'
-        ).order_by(UserSubscription.end_date.desc()).first()
-
-        if past_sub:
-            return {
-                "allowed": False,
-                "reason": "subscription_expired",
-                "message": f"Your subscription expired on {past_sub.end_date.strftime('%d %b %Y')}. Please renew to access {feature_label}.",
-                "subscription": past_sub.to_dict(),
-                "feature_name": feature_name
-            }
-
-        return {
-            "allowed": False,
-            "reason": "subscription_required",
-            "message": f"{feature_label} is a premium CareerSense AI feature. Please subscribe to a plan to continue.",
-            "subscription": None,
-            "feature_name": feature_name
-        }
-
     return {
         "allowed": True,
-        "reason": "active",
-        "message": f"Access granted under {sub.plan.plan_name}.",
+        "reason": "free_access",
+        "message": "All CareerSense AI features are freely accessible without a subscription.",
         "subscription": sub.to_dict(),
         "feature_name": feature_name
     }
 
 def subscription_required(feature_name: str = None):
     """
-    Decorator to enforce paid subscription access on Flask routes.
-    Must be used AFTER @token_required.
+    Decorator for Flask routes. Verifies user authentication.
+    All authenticated candidates have free access to all features without subscription gating.
     """
     def decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
-            # Extract current_user from kwargs or args (token_required passes current_user=user)
             current_user = kwargs.get('current_user') or (args[0] if args else None)
             if not current_user or not getattr(current_user, 'id', None):
                 return jsonify({"success": False, "message": "Authentication required."}), 401
-
-            access = check_feature_access(current_user.id, feature_name)
-            if not access["allowed"]:
-                # Fetch available active plans for upgrade modal
-                plans = db.session.query(SubscriptionPlan).filter_by(is_active=True).all()
-                return jsonify({
-                    "success": False,
-                    "access_denied": True,
-                    "subscription_required": True,
-                    "feature": feature_name,
-                    "reason": access["reason"],
-                    "message": access["message"],
-                    "pending_request": access.get("pending_request"),
-                    "upgrade_url": "/pricing",
-                    "available_plans": [p.to_dict() for p in plans]
-                }), 403
-
             return f(*args, **kwargs)
         return wrapper
     return decorator
@@ -149,22 +116,34 @@ def subscription_required(feature_name: str = None):
 def activate_user_subscription(user_id: int, plan_id: int, payment_id: int = None) -> UserSubscription:
     """
     Activates or extends a subscription for a user after verified payment.
+
+    Duration is server-controlled by the plan catalog (plan.total_duration_days).
+    An active subscription of the same plan type is extended from its current
+    end date; a different plan type (e.g. the one-day ATS pass vs. a monthly
+    subscription) always creates a separate entitlement row so purchasing a
+    pass can never overwrite or extend a career subscription and vice versa.
     """
     plan = db.session.query(SubscriptionPlan).filter_by(id=plan_id).first()
     if not plan:
         raise ValueError(f"Subscription plan id {plan_id} not found.")
 
     now = datetime.utcnow()
-    # Check if user already has an active subscription to extend it seamlessly
-    current_sub = get_user_active_subscription(user_id)
+    duration_days = plan.total_duration_days
+    if not duration_days or duration_days <= 0:
+        raise ValueError(f"Plan '{plan.plan_name}' has an invalid duration configuration.")
+    plan_type = plan.plan_type or 'subscription'
 
-    duration_days = plan.duration_months * 30
-    if plan.duration_months == 12:
-        duration_days = 365
+    # Look for an active subscription of the same plan type to extend
+    current_sub = db.session.query(UserSubscription).filter(
+        UserSubscription.user_id == user_id,
+        UserSubscription.status == 'active',
+        UserSubscription.end_date >= now
+    ).join(SubscriptionPlan, UserSubscription.plan_id == SubscriptionPlan.id).filter(
+        SubscriptionPlan.plan_type == plan_type
+    ).order_by(UserSubscription.end_date.desc()).first()
 
     if current_sub:
-        start_date = current_sub.start_date
-        # Extend from current end date
+        # Extend from the current end date so active days are never lost
         end_date = current_sub.end_date + timedelta(days=duration_days)
         current_sub.plan_id = plan.id
         current_sub.end_date = end_date

@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './context/ToastContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import AdminRoute from './components/auth/AdminRoute';
 import AppLayout from './components/layout/AppLayout';
 
 // Public Pages
@@ -95,9 +96,23 @@ export default function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/settings" element={<Settings />} />
 
-                {/* Admin Portal Routes */}
-                <Route path="/admin/payments" element={<AdminPayments />} />
-                <Route path="/admin/payment-settings" element={<AdminPayments />} />
+                {/* Admin Portal Routes (administrator role enforced) */}
+                <Route
+                  path="/admin/payments"
+                  element={
+                    <AdminRoute>
+                      <AdminPayments />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/admin/payment-settings"
+                  element={
+                    <AdminRoute>
+                      <AdminPayments />
+                    </AdminRoute>
+                  }
+                />
               </Route>
 
               {/* Catch-all fallback */}

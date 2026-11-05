@@ -46,11 +46,10 @@ def run_tests():
 
     test_user = None
     with app.app_context():
-        test_user = User.query.filter_by(id=4).first()
-        if not test_user:
-            test_user = User.query.filter(User.resumes.any()).first()
-        if not test_user:
-            test_user = User.query.first()
+        # Use the isolated Phase-5 fixture account only.
+        # NEVER run validation against real owner accounts (protects user data).
+        test_user = User.query.filter_by(email="p5_test_1791806455@careersense.ai").first()
+        assert test_user is not None, "Isolated test fixture user missing."
         token = create_access_token(identity=str(test_user.id))
 
     headers = {
@@ -64,9 +63,10 @@ def run_tests():
     r = requests.get(f"{BASE_URL}/subscription/plans", headers=headers)
     plans = r.json().get('plans', [])
     has_4_plans = len(plans) == 4
-    all_have_ats_report = all('ATS Report Generation & Download' in p.get('features', []) for p in plans)
+    # All plans must grant the ats_report entitlement (display labels differ by plan type)
+    all_have_ats_report = all('ats_report' in p.get('grants_features', []) for p in plans)
     print_result("2. Subscription Plans: 4 Standard Plans Available", has_4_plans, f"Found {len(plans)} plans")
-    print_result("3. Subscription Plans: All 4 include ATS Report Generation", all_have_ats_report)
+    print_result("3. Subscription Plans: All 4 grant ATS Report access (ats_report entitlement)", all_have_ats_report)
 
     # 4. Test Razorpay Order Creation for all 4 plans
     order_results = []

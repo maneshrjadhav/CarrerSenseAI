@@ -13,6 +13,7 @@ from models.payment_request import PaymentSettings, PaymentRequest
 from utils.auth_helper import token_required, get_authenticated_user_id
 from services.subscription_service import (
     get_user_active_subscription,
+    get_user_feature_entitlements,
     check_feature_access
 )
 from services.payment_service import (
@@ -32,8 +33,11 @@ subscription_bp = Blueprint('subscription', __name__)
 
 @subscription_bp.route('/plans', methods=['GET'])
 def get_plans():
-    """Returns all active CareerSense AI subscription plans."""
-    plans = db.session.query(SubscriptionPlan).filter_by(is_active=True).order_by(SubscriptionPlan.duration_months.asc()).all()
+    """Returns all active CareerSense AI plans (single authoritative catalog)."""
+    plans = db.session.query(SubscriptionPlan).filter_by(is_active=True).order_by(
+        SubscriptionPlan.duration_months.asc(),
+        SubscriptionPlan.price_inr.asc()
+    ).all()
     return jsonify({
         "success": True,
         "plans": [p.to_dict() for p in plans]
@@ -51,34 +55,16 @@ def get_payment_config():
 @subscription_bp.route('/current', methods=['GET'])
 @token_required
 def get_current_subscription(current_user):
-    """Returns current active subscription status, plan details, and pending payment requests."""
+    """Returns current active subscription status, plan details, and entitlements (100% free access)."""
     active_sub = get_user_active_subscription(current_user.id)
-
-    # Check for pending payment requests awaiting admin verification
-    pending_req = db.session.query(PaymentRequest).filter_by(
-        user_id=current_user.id,
-        status='pending_verification'
-    ).order_by(PaymentRequest.created_at.desc()).first()
-
-    if not pending_req:
-        pending_req = db.session.query(PaymentRequest).filter_by(
-            user_id=current_user.id,
-            status='awaiting_payment'
-        ).order_by(PaymentRequest.created_at.desc()).first()
-
-    # Feature gating status
-    modules_access = {
-        "skill_gap": bool(active_sub),
-        "career_roadmap": bool(active_sub),
-        "interview_prep": bool(active_sub),
-        "ats_report": bool(active_sub)
-    }
+    modules_access = get_user_feature_entitlements(current_user.id)
 
     return jsonify({
         "success": True,
-        "has_active_subscription": bool(active_sub),
+        "has_active_subscription": True,
         "subscription": active_sub.to_dict() if active_sub else None,
-        "pending_payment_request": pending_req.to_dict() if pending_req else None,
+        "active_ats_pass": None,
+        "pending_payment_request": None,
         "features_access": modules_access,
         "user": {
             "id": current_user.id,
@@ -91,13 +77,12 @@ def get_current_subscription(current_user):
 @subscription_bp.route('/check-access/<feature_name>', methods=['GET'])
 @token_required
 def check_feature(current_user, feature_name):
-    """Evaluates access entitlement for a specific paid module."""
+    """Evaluates access entitlement for a specific module (all features freely accessible)."""
     access = check_feature_access(current_user.id, feature_name)
-    status_code = 200 if access["allowed"] else 403
     return jsonify({
-        "success": access["allowed"],
+        "success": True,
         **access
-    }), status_code
+    }), 200
 
 # ============================================================================
 # STUDENT PAYMENT REQUEST WORKFLOW

@@ -6,10 +6,14 @@ CareerSense AI - Final Year Engineering Project
 """
 
 import re
+import logging
 from config import Config
 from services.skill_analyzer import extract_skills_with_evidence, extract_jd_skills
 from services.tfidf_matcher import compute_similarity
 from utils.skill_normalizer import get_skill_category
+from utils.score_feedback import get_job_match_feedback, get_job_match_conditional_action
+
+logger = logging.getLogger(__name__)
 
 # Duration estimates based on skill complexity
 ESTIMATED_DURATIONS = {
@@ -160,9 +164,15 @@ def perform_comprehensive_match(resume_text: str, jd_text: str, target_role: str
     partial_matches = []
     missing_skills = []
     skill_gaps = []
+    seen_requirements = set()
 
     # Helper function to classify a single JD requirement
     def evaluate_requirement(s_name: str, s_info: dict, is_required: bool):
+        norm_key = s_name.strip().lower()
+        if norm_key in seen_requirements:
+            return
+        seen_requirements.add(norm_key)
+
         cat = s_info['category']
 
         # Path 1: Direct match in candidate skills
@@ -328,12 +338,17 @@ def perform_comprehensive_match(resume_text: str, jd_text: str, target_role: str
     else:
         skill_coverage_score = req_coverage_score
 
-    # Configurable overall weighting: default 60% skill coverage + 40% semantic similarity
-    cov_weight = Config.SKILL_COVERAGE_WEIGHT
-    sem_weight = Config.SEMANTIC_SIMILARITY_WEIGHT
+    # Component scores guaranteed between 0.0 and 100.0
+    skill_score = max(0.0, min(100.0, float(skill_coverage_score)))
+    tfidf_score = max(0.0, min(100.0, float(semantic_sim_score)))
 
-    overall_match_score = round((cov_weight * skill_coverage_score) + (sem_weight * semantic_sim_score), 1)
-    overall_match_score = max(0.0, min(100.0, overall_match_score))
+    # Weighted formula: final_score = (skill_score * 0.70) + (tfidf_score * 0.30)
+    cov_weight = float(getattr(Config, 'SKILL_COVERAGE_WEIGHT', 0.70))
+    sem_weight = float(getattr(Config, 'SEMANTIC_SIMILARITY_WEIGHT', 0.30))
+
+    final_score = round((skill_score * cov_weight) + (tfidf_score * sem_weight), 1)
+    final_score = max(0.0, min(100.0, final_score))
+    overall_match_score = final_score
 
     # Sort gaps: HIGH first, then MEDIUM, then LOW
     priority_order = {'HIGH': 0, 'MEDIUM': 1, 'LOW': 2}
@@ -344,13 +359,38 @@ def perform_comprehensive_match(resume_text: str, jd_text: str, target_role: str
     if min_exp_years > 0:
         exp_note = f"Target role specifies {min_exp_years}+ years commercial experience. Prioritize practical projects and internship experience."
 
+    # Normalized unique skill lists for candidate and JD
+    resume_skills_list = sorted(list(cand_keys))
+    required_jd_skills_list = sorted(list(required_dict.keys()))
+
+    raw_sim_val = tfidf_result.get('raw_cosine_similarity', tfidf_result.get('cosine_similarity', 0.0))
+    feedback_message = get_job_match_feedback(final_score)
+    cond_action = get_job_match_conditional_action(final_score)
+
+    logger.info(
+        "[Match Engine] Match evaluated - Resume length: %d chars, JD length: %d chars, "
+        "Resume Skills: %d, JD Required: %d, Matched: %d, Partial: %d, Missing: %d, "
+        "Skill Score: %.1f%%, TF-IDF Raw: %.4f (%.1f%%), Final Match Score: %.1f%%",
+        len(resume_text), len(jd_text), len(cand_skills), len(required_dict),
+        len(matched_skills), len(partial_matches), len(missing_skills),
+        skill_score, raw_sim_val, tfidf_score, final_score
+    )
+
     return {
         "metrics": {
-            "overall_match_score": overall_match_score,
-            "skill_coverage": skill_coverage_score,
+            "overall_match_score": final_score,
+            "final_match_score": final_score,
+            "final_score": final_score,
+            "skill_coverage": skill_score,
+            "skill_match_score": skill_score,
+            "skill_score": skill_score,
             "required_skill_coverage": req_coverage_score,
             "preferred_skill_coverage": pref_coverage_score,
-            "semantic_similarity": semantic_sim_score,
+            "semantic_similarity": tfidf_score,
+            "tfidf_similarity_score": tfidf_score,
+            "tfidf_score": tfidf_score,
+            "raw_cosine_similarity": raw_sim_val,
+            "cosine_similarity": round(raw_sim_val, 4),
             "total_required_skills": total_required if total_required > 0 else len(all_evaluated_names),
             "total_preferred_skills": total_preferred,
             "matched_skills_count": len(matched_skills),
@@ -361,11 +401,13 @@ def perform_comprehensive_match(resume_text: str, jd_text: str, target_role: str
             "experience_assessment": exp_note,
             "weights": {
                 "skill_coverage_weight": cov_weight,
-                "semantic_similarity_weight": sem_weight
+                "semantic_similarity_weight": sem_weight,
+                "skill_score_weight": 0.70,
+                "tfidf_score_weight": 0.30
             },
             "formula_explanation": (
-                f"Overall Score = ({int(cov_weight*100)}% × Skill Coverage {skill_coverage_score}%) + "
-                f"({int(sem_weight*100)}% × Semantic Similarity {semantic_sim_score}%) = {overall_match_score}%"
+                f"Final Match Score = (Skill Match Score {skill_score}% × 0.70) + "
+                f"(TF-IDF Similarity Score {tfidf_score}% × 0.30) = {final_score}%"
             )
         },
         "matched_skills": matched_skills,
@@ -373,6 +415,14 @@ def perform_comprehensive_match(resume_text: str, jd_text: str, target_role: str
         "skill_gaps": skill_gaps,
         "partial_matches": partial_matches,
         "extra_skills": extra_skills,
+        "resume_skills": resume_skills_list,
+        "required_jd_skills": required_jd_skills_list,
         "candidate_skills_total": len(cand_skills),
-        "jd_skills_total": len(all_evaluated_names)
+        "jd_skills_total": len(all_evaluated_names),
+        "feedback_message": feedback_message,
+        "encouraging_message": cond_action["encouraging_message"],
+        "recommended_action": cond_action["action"],
+        "action_button_label": cond_action["button_text"],
+        "action_route": cond_action["route"],
+        "is_interview_ready": cond_action["is_interview_ready"]
     }

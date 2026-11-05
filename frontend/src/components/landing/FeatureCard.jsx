@@ -9,7 +9,6 @@ import {
   HelpCircle,
   Briefcase,
   ArrowRight,
-  Sparkles,
 } from 'lucide-react';
 
 export const WHY_FEATURES = [
@@ -32,10 +31,10 @@ export const WHY_FEATURES = [
     microPreview: 'Text → Tokens → Clean Text → Lemmatization',
   },
   {
-    id: 'tfidf',
-    title: 'TF-IDF Vector Matching',
+    id: 'jobmatching',
+    title: 'Smart Job Matching & TF-IDF',
     category: 'Vector Modeling',
-    desc: 'Transform resumes and job specifications into TF-IDF vector spaces to compute objective mathematical Cosine Similarity.',
+    desc: 'Transform resumes and job specifications into TF-IDF vector spaces to compute objective mathematical Cosine Similarity and match scoring.',
     icon: Target,
     color: '#0f766e',
     microPreview: 'Resume Vector → Job Vector → Similarity Score',
@@ -67,31 +66,17 @@ export const WHY_FEATURES = [
     color: '#2563eb',
     microPreview: 'Skills → Questions → Practice Simulation',
   },
-  {
-    id: 'jobmatching',
-    title: 'AI Job Matching',
-    category: 'Recommendation Core',
-    desc: 'Calculate bidirectional match confidence across hundreds of job requisitions, ranking top opportunities by domain affinity.',
-    icon: Briefcase,
-    color: '#059669',
-    microPreview: 'Candidate Embeddings ↔ Requisitions ↔ Ranked Matches',
-  },
 ];
 
-export default function FeatureCard({ feature, index = 0 }) {
+export default function FeatureCard({ feature }) {
   const [hovered, setHovered] = useState(false);
   const Icon = feature.icon;
 
   return (
-    <motion.div
+    <div
       className={`cs-feature-card ${hovered ? 'hovered' : ''}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.45, delay: index * 0.07 }}
-      whileHover={{ y: -6, transition: { duration: 0.2 } }}
     >
       {/* Background Subtle Gradient Mesh on hover */}
       <div
@@ -102,17 +87,15 @@ export default function FeatureCard({ feature, index = 0 }) {
       />
 
       <div className="feature-card-header">
-        <motion.div
+        <div
           className="feature-icon-wrapper"
           style={{ backgroundColor: `${feature.color}15`, color: feature.color }}
-          animate={hovered ? { rotate: [0, -10, 10, 0], scale: 1.08 } : { rotate: 0, scale: 1 }}
-          transition={{ duration: 0.4 }}
         >
           <Icon size={22} className="feature-lucide-icon" />
-        </motion.div>
+        </div>
         <span
           className="feature-category-pill"
-          style={{ backgroundColor: `${feature.color}10`, color: feature.color }}
+          style={{ backgroundColor: `${feature.color}12`, color: feature.color }}
         >
           {feature.category}
         </span>
@@ -129,10 +112,10 @@ export default function FeatureCard({ feature, index = 0 }) {
 
       <div className="feature-card-footer">
         <span className="learn-more-text">Explore Capability</span>
-        <motion.div animate={hovered ? { x: 5 } : { x: 0 }} transition={{ duration: 0.2 }}>
+        <div style={{ transform: hovered ? 'translateX(4px)' : 'none', transition: 'transform 0.2s ease' }}>
           <ArrowRight size={15} className="feature-arrow-icon" style={{ color: feature.color }} />
-        </motion.div>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

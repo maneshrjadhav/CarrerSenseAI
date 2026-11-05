@@ -12,9 +12,22 @@ import {
 } from 'lucide-react';
 import Button from '../common/Button';
 
-export default function CareerRoadmapPreview({ roadmap = null }) {
+const ITEM_STATUS_LABELS = {
+  Completed: 'Done',
+  'In Progress': 'In Progress',
+  'Not Started': 'Not Started',
+};
+
+export default function CareerRoadmapPreview({ roadmap = null, roadmapSummary = null }) {
   const navigate = useNavigate();
-  const hasRoadmap = Boolean(roadmap && ((roadmap.items && roadmap.items.length > 0) || (roadmap.stages && roadmap.stages.length > 0)));
+  const items = (roadmap && roadmap.items) || [];
+  const hasRoadmap = items.length > 0;
+
+  const completedPhases = items.filter((i) => i.status === 'Completed').length;
+  const allPhasesCompleted = hasRoadmap && completedPhases === items.length;
+  const rawProgress = roadmap?.overall_progress || 0;
+  // Never display 100% unless every phase is genuinely completed.
+  const displayProgress = allPhasesCompleted ? 100 : Math.min(rawProgress, 99);
 
   const timelineSteps = [
     { label: 'Current Skills', icon: CheckCircle2, status: 'Input' },
@@ -33,50 +46,75 @@ export default function CareerRoadmapPreview({ roadmap = null }) {
           <h2 className="card-title">Your Career Roadmap</h2>
         </div>
         <span className={`status-pill ${hasRoadmap ? 'status-pill-emerald' : 'status-pill-neutral'}`}>
-          {hasRoadmap ? `${roadmap.overall_progress || 0}% Complete` : 'Awaiting Analysis'}
+          {hasRoadmap ? `${displayProgress}% Complete` : 'Awaiting Analysis'}
         </span>
       </div>
 
       {hasRoadmap ? (
         <div style={{ marginBottom: '16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1e293b' }}>
+            <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}>
               Personalized Learning Progress
             </span>
-            <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0284c7' }}>
-              {roadmap.overall_progress || 0}%
+            <span style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--primary)' }}>
+              {displayProgress}%
             </span>
           </div>
-          <div style={{ height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden', marginBottom: '14px' }}>
+          <div style={{ height: '8px', background: 'var(--border-color)', borderRadius: '4px', overflow: 'hidden', marginBottom: '10px' }}>
             <div
               style={{
                 height: '100%',
-                width: `${roadmap.overall_progress || 0}%`,
-                background: '#0284c7',
+                width: `${displayProgress}%`,
+                background: 'var(--primary)',
                 borderRadius: '4px',
                 transition: 'width 0.4s'
               }}
             ></div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {(roadmap.items || []).slice(0, 3).map((item) => (
+
+          {roadmapSummary && (
+            <div className="roadmap-summary-stats">
+              <span className="roadmap-stat">
+                {roadmapSummary.completed_phases}/{roadmapSummary.total_phases} phases complete
+              </span>
+              <span className="roadmap-stat">
+                {roadmapSummary.tasks_completed}/{roadmapSummary.tasks_total} tasks done
+              </span>
+              {roadmapSummary.current_phase && (
+                <span className="roadmap-stat">
+                  Current: Phase {roadmapSummary.current_phase}
+                  {roadmapSummary.current_phase_skill ? ` — ${roadmapSummary.current_phase_skill}` : ''}
+                </span>
+              )}
+            </div>
+          )}
+
+          {roadmapSummary?.next_task && (
+            <div className="roadmap-next-task">
+              <span className="next-task-label">Next task</span>
+              <span className="next-task-title">{roadmapSummary.next_task.title}</span>
+            </div>
+          )}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '10px' }}>
+            {items.slice(0, 3).map((item) => (
               <div
                 key={item.id}
                 style={{
                   padding: '8px 12px',
                   borderRadius: '6px',
-                  background: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  background: 'var(--card-subtle-bg)',
+                  border: '1px solid var(--border-color)',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center'
                 }}
               >
                 <div>
-                  <span style={{ fontSize: '0.75rem', color: '#0284c7', fontWeight: 700, display: 'block' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 700, display: 'block' }}>
                     Phase {item.phase_number} • {item.duration_weeks}
                   </span>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#1e293b' }}>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>
                     {item.skill_name}
                   </span>
                 </div>
@@ -86,11 +124,11 @@ export default function CareerRoadmapPreview({ roadmap = null }) {
                     fontWeight: 700,
                     padding: '2px 8px',
                     borderRadius: '4px',
-                    background: item.status === 'completed' ? '#dcfce7' : item.status === 'in_progress' ? '#e0f2fe' : '#f1f5f9',
-                    color: item.status === 'completed' ? '#15803d' : item.status === 'in_progress' ? '#0369a1' : '#64748b'
+                    background: item.status === 'Completed' ? 'var(--emerald-light)' : item.status === 'In Progress' ? 'var(--primary-light)' : 'var(--card-subtle-bg)',
+                    color: item.status === 'Completed' ? 'var(--emerald)' : item.status === 'In Progress' ? 'var(--primary)' : 'var(--text-muted)'
                   }}
                 >
-                  {item.status === 'completed' ? 'Done' : item.status === 'in_progress' ? 'In Progress' : 'Not Started'}
+                  {ITEM_STATUS_LABELS[item.status] || item.status}
                 </span>
               </div>
             ))}
@@ -99,7 +137,7 @@ export default function CareerRoadmapPreview({ roadmap = null }) {
       ) : (
         <div className="roadmap-preview-body">
           <p className="roadmap-lead-text">
-            Your personalized roadmap will appear after resume analysis.
+            Your personalized roadmap will appear after you generate one from a job match.
           </p>
 
           {/* Interactive Visual Timeline Placeholder */}
@@ -122,7 +160,7 @@ export default function CareerRoadmapPreview({ roadmap = null }) {
           </div>
 
           <span className="roadmap-subtext-note">
-            The roadmap engine sequences missing skills into structured 30-60-90 day learning milestones with curated resources.
+            The roadmap engine sequences missing skills into structured learning milestones with curated resources.
           </span>
         </div>
       )}
@@ -140,4 +178,3 @@ export default function CareerRoadmapPreview({ roadmap = null }) {
     </div>
   );
 }
-

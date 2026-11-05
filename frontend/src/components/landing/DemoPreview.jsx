@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Sparkles,
   ArrowRight,
@@ -8,228 +7,321 @@ import {
   CheckCircle2,
   AlertCircle,
   Briefcase,
-  Compass,
-  Lightbulb,
   Award,
-  ShieldCheck,
+  Cpu,
+  FileCheck2,
 } from 'lucide-react';
 import Button from '../common/Button';
 
 export default function DemoPreview() {
   const navigate = useNavigate();
-  const [selectedRole, setSelectedRole] = useState('Frontend Developer');
+  const [selectedRole, setSelectedRole] = useState('Full Stack AI Engineer');
 
-  // Exact 3 tabs & metrics from Requirement 23
   const demoPresets = {
+    'Full Stack AI Engineer': {
+      title: 'Full Stack AI Engineer',
+      candidateName: 'Alex Morgan',
+      resumeScore: 86,
+      atsCompliance: 'Sample Quality: 86/100',
+      matchScore: 82,
+      skillOverlapPct: 84,
+      cosineSimilarityPct: 77,
+      readinessIndex: 88,
+      verifiedSkills: ['Python', 'React.js', 'Flask', 'MySQL', 'REST APIs', 'Git', 'NLTK', 'Scikit-Learn'],
+      missingSkills: ['Docker Containerization', 'AWS Cloud (EC2/RDS)', 'Redis Caching'],
+      strongestDomain: 'NLP Parsing & Full-Stack API Integration (High Affinity)',
+      priorityRemediation: 'Containerize microservices with Docker Compose (+8% match boost)',
+      recommendedStep: 'Complete Milestone Phase 2: Docker Containerization Architecture',
+    },
     'Frontend Developer': {
-      resumeScore: 78,
-      jobMatches: 14,
-      skillsMatched: 24,
-      skillsMissing: 7,
-      careerReadiness: 82,
-      matchedList: ['React.js', 'JavaScript (ES6+)', 'HTML5', 'CSS3/Tailwind', 'Git & GitHub', 'REST APIs'],
-      missingList: ['TypeScript', 'Next.js SSR', 'Webpack/Vite Build Optimization'],
-      roadmapSummary: 'Master TypeScript typing, followed by Next.js App Router and production bundle optimization.',
-      strongestArea: 'Component Architecture & Responsive UI (94%)',
-      opportunity: 'Modern Full-Stack SSR with Next.js (+15% boost)',
-      nextSkill: 'TypeScript Type Systems & Generics',
+      title: 'Frontend Developer',
+      candidateName: 'Sarah Chen',
+      resumeScore: 84,
+      atsCompliance: 'Sample Quality: 84/100',
+      matchScore: 78,
+      skillOverlapPct: 80,
+      cosineSimilarityPct: 73,
+      readinessIndex: 82,
+      verifiedSkills: ['React.js', 'JavaScript (ES6+)', 'HTML5 / CSS3', 'Tailwind CSS', 'REST APIs', 'Git'],
+      missingSkills: ['TypeScript Generics', 'Next.js App Router', 'Vite Bundle Optimization'],
+      strongestDomain: 'Modern Reactive Component Architecture (High Affinity)',
+      priorityRemediation: 'Adopt TypeScript strict typing in frontend state models (+12% match boost)',
+      recommendedStep: 'Complete Milestone Phase 2: TypeScript Generics & Type Systems',
     },
     'Python Backend Engineer': {
-      resumeScore: 74,
-      jobMatches: 11,
-      skillsMatched: 21,
-      skillsMissing: 9,
-      careerReadiness: 76,
-      matchedList: ['Python', 'Flask', 'SQL / MySQL', 'RESTful API Design', 'Git Version Control'],
-      missingList: ['Docker Containerization', 'AWS Cloud (EC2/RDS)', 'Redis Caching', 'Celery Async Workers'],
-      roadmapSummary: 'Containerize Flask services with Docker, set up Redis caching layers, and deploy to AWS EC2.',
-      strongestArea: 'Relational Database Queries & API Endpoints (88%)',
-      opportunity: 'Cloud Infrastructure & Containerization (+20% boost)',
-      nextSkill: 'Docker Multi-Stage Builds & Compose',
-    },
-    'Full Stack Engineer': {
-      resumeScore: 71,
-      jobMatches: 9,
-      skillsMatched: 20,
-      skillsMissing: 11,
-      careerReadiness: 72,
-      matchedList: ['React', 'Python', 'MySQL', 'JavaScript', 'HTML/CSS', 'Postman'],
-      missingList: ['Docker', 'System Design Patterns', 'CI/CD Pipelines (GitHub Actions)', 'GraphQL'],
-      roadmapSummary: 'Implement automated CI/CD deployment pipelines and study scalable system design architectures.',
-      strongestArea: 'Full-Stack Integration & Database Schema Design (86%)',
-      opportunity: 'DevOps & Automated Testing Pipelines (+18% boost)',
-      nextSkill: 'System Design Patterns & Caching',
+      title: 'Python Backend Engineer',
+      candidateName: 'David Kumar',
+      resumeScore: 81,
+      atsCompliance: 'Sample Quality: 81/100',
+      matchScore: 75,
+      skillOverlapPct: 76,
+      cosineSimilarityPct: 72,
+      readinessIndex: 79,
+      verifiedSkills: ['Python', 'Flask', 'SQL / MySQL', 'Database Schema Design', 'RESTful Endpoints', 'Postman'],
+      missingSkills: ['Docker Containerization', 'AWS EC2 / S3', 'Celery Background Tasks', 'PyTest Automation'],
+      strongestDomain: 'Relational Database Optimization & API Endpoints (High Affinity)',
+      priorityRemediation: 'Deploy containerized services with automated unit test suites (+14% match boost)',
+      recommendedStep: 'Complete Milestone Phase 1: Microservice Dockerization & PyTest CI',
     },
   };
 
-  const activeData = demoPresets[selectedRole];
+  const active = demoPresets[selectedRole];
 
   return (
-    <section id="demo" className="landing-section-block bg-white relative-overflow">
+    <section id="analytics" className="landing-section-block bg-white relative-overflow">
       <div className="section-container">
+        {/* Section Header */}
         <div className="section-title-wrap text-center">
           <div className="inline-badge-pill">
-            <Sparkles size={14} className="text-teal" />
-            <span>INTERACTIVE DASHBOARD SHOWCASE</span>
+            <Sparkles size={13} className="text-primary" />
+            <span>INTERACTIVE DEMO CONSOLE</span>
           </div>
-          <h2 className="section-main-heading">See CareerSense AI in Action</h2>
+          <h2 className="section-main-heading">Analytical Precision Dashboard</h2>
           <p className="section-sub-heading">
-            Experience our candidate intelligence dashboard interface before creating an account.
+            Sample output illustrating explainable 70/30 matching, differential skill matrix isolation, and milestone readiness.
           </p>
         </div>
 
-        {/* Role Selector Tabs (Requirement 23) */}
-        <div className="demo-role-tabs-row">
+        {/* Role Selector Tabs */}
+        <div className="analytics-role-tabs-row" role="tablist" aria-label="Demo Role Presets">
           {Object.keys(demoPresets).map((role) => (
             <button
               key={role}
               type="button"
-              className={`demo-tab-btn ${selectedRole === role ? 'active' : ''}`}
+              role="tab"
+              aria-selected={selectedRole === role}
+              className={`analytics-tab-btn ${selectedRole === role ? 'tab-active' : ''}`}
               onClick={() => setSelectedRole(role)}
             >
-              <Briefcase size={14} className="mr-1" />
-              {role}
+              <Briefcase size={14} />
+              <span>{role}</span>
             </button>
           ))}
         </div>
 
-        {/* Interactive Dashboard Mockup Card */}
-        <motion.div
-          className="demo-dashboard-mockup"
-          key={selectedRole}
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          {/* Top Demo Bar Labeled INTERACTIVE DEMO */}
-          <div className="mockup-window-header">
-            <div className="window-dots-group">
-              <span className="dot dot-red"></span>
-              <span className="dot dot-yellow"></span>
-              <span className="dot dot-green"></span>
+        {/* Precision Dashboard Mockup Container */}
+        <div className="precision-dashboard-window">
+          {/* Window Chrome Header Bar */}
+          <div className="precision-window-header">
+            <div className="window-dots-wrap">
+              <span className="dot dot-red" />
+              <span className="dot dot-yellow" />
+              <span className="dot dot-green" />
             </div>
-            <div className="mockup-address-pill">
-              <Sparkles size={12} className="text-primary" />
-              <span>careersense.ai/dashboard/overview?role={selectedRole.toLowerCase().replace(/ /g, '-')}</span>
+            <div className="window-address-pill">
+              <span>careersense.ai / preview / sample-assessment</span>
             </div>
-            <div className="status-live-indicator">
-              <span className="live-pulse"></span>
-              <span className="demo-badge-txt">INTERACTIVE DEMO</span>
+            <div className="window-algorithm-badge">
+              <span>SIMULATED ASSESSMENT</span>
             </div>
           </div>
 
-          {/* Exact 5 Metrics from Requirement 23 */}
-          <div className="demo-metrics-grid">
-            <div className="demo-metric-pill">
-              <span className="demo-m-label">Resume Score</span>
-              <span className="demo-m-val text-primary">{activeData.resumeScore}%</span>
-            </div>
-            <div className="demo-metric-pill">
-              <span className="demo-m-label">Job Matches</span>
-              <span className="demo-m-val text-emerald">{activeData.jobMatches} Matches</span>
-            </div>
-            <div className="demo-metric-pill">
-              <span className="demo-m-label">Skills Matched</span>
-              <span className="demo-m-val text-emerald">{activeData.skillsMatched} Skills</span>
-            </div>
-            <div className="demo-metric-pill">
-              <span className="demo-m-label">Skills Missing</span>
-              <span className="demo-m-val text-amber">{activeData.skillsMissing} Gaps</span>
-            </div>
-            <div className="demo-metric-pill">
-              <span className="demo-m-label">Career Readiness</span>
-              <span className="demo-m-val text-purple">{activeData.careerReadiness}% Ready</span>
-            </div>
-          </div>
-
-          {/* AI Insight Cards Strip */}
-          <div className="demo-ai-insights-strip">
-            <div className="insight-card-item">
-              <div className="insight-card-top">
-                <ShieldCheck size={16} className="text-emerald" />
-                <span className="insight-cat">STRONGEST AREA</span>
+          {/* Candidate Profile Summary Strip */}
+          <div className="precision-profile-banner">
+            <div className="profile-identity-group">
+              <div className="profile-avatar-box">
+                {active.candidateName.split(' ').map((n) => n[0]).join('')}
               </div>
-              <strong className="insight-val">{activeData.strongestArea}</strong>
-            </div>
-
-            <div className="insight-card-item">
-              <div className="insight-card-top">
-                <TrendingUp size={16} className="text-primary" />
-                <span className="insight-cat">BIGGEST OPPORTUNITY</span>
-              </div>
-              <strong className="insight-val">{activeData.opportunity}</strong>
-            </div>
-
-            <div className="insight-card-item">
-              <div className="insight-card-top">
-                <Lightbulb size={16} className="text-amber" />
-                <span className="insight-cat">RECOMMENDED NEXT SKILL</span>
-              </div>
-              <strong className="insight-val">{activeData.nextSkill}</strong>
-            </div>
-
-            <div className="insight-card-item">
-              <div className="insight-card-top">
-                <Award size={16} className="text-purple" />
-                <span className="insight-cat">CAREER READINESS</span>
-              </div>
-              <strong className="insight-val">{activeData.careerReadiness}% Placement Prepared</strong>
-            </div>
-          </div>
-
-          {/* Dual Preview Cards */}
-          <div className="demo-dual-split">
-            <div className="demo-preview-box">
-              <div className="demo-box-head">
-                <CheckCircle2 size={16} className="text-emerald" />
-                <strong>Matched Core Proficiencies ({activeData.matchedList.length})</strong>
-              </div>
-              <div className="demo-chips-flex">
-                {activeData.matchedList.map((s) => (
-                  <span key={s} className="demo-chip chip-green">✓ {s}</span>
-                ))}
+              <div>
+                <div className="profile-name-row">
+                  <h3 className="profile-display-name">{active.candidateName}</h3>
+                  <span className="profile-verified-tag">
+                    Sample Candidate (Demo)
+                  </span>
+                </div>
+                <span className="profile-target-role">
+                  Target Requisition: <strong>{active.title}</strong>
+                </span>
               </div>
             </div>
 
-            <div className="demo-preview-box">
-              <div className="demo-box-head">
-                <AlertCircle size={16} className="text-amber" />
-                <strong>Identified Missing Skills &amp; Gaps ({activeData.missingList.length})</strong>
+            <div className="profile-quick-stats">
+              <div className="quick-stat-badge">
+                <FileCheck2 size={14} className="text-primary" />
+                <span>{active.atsCompliance}</span>
               </div>
-              <div className="demo-chips-flex">
-                {activeData.missingList.map((s) => (
-                  <span key={s} className="demo-chip chip-amber">+ {s}</span>
-                ))}
+              <div className="quick-stat-badge">
+                <Cpu size={14} className="text-teal" />
+                <span>Weighted Matching Model</span>
               </div>
             </div>
           </div>
 
-          {/* Recommended Roadmap Callout */}
-          <div className="demo-roadmap-callout">
-            <div className="callout-icon-box">
-              <Compass size={18} className="text-purple" />
+          {/* Dashboard Two-Column Grid */}
+          <div className="precision-grid-stage">
+            {/* Left Column: Quantitative Match Breakdown */}
+            <div className="precision-column-left">
+              {/* ATS Resume Score Card */}
+              <div className="precision-card ats-score-card">
+                <div className="precision-card-header">
+                  <span className="precision-card-label">SAMPLE ATS AUDIT SCORE</span>
+                  <span className="precision-pill-green">Quality Score</span>
+                </div>
+                <div className="ats-score-display">
+                  <div className="ats-score-number">{active.resumeScore}</div>
+                  <div className="ats-score-meta">
+                    <span className="ats-score-max">/ 100 Sample Score</span>
+                    <p className="ats-score-desc">
+                      Formatting structure, section boundaries, and verified skill density.
+                    </p>
+                  </div>
+                </div>
+                <div className="ats-progress-bar-track">
+                  <div className="ats-progress-bar-fill" style={{ width: `${active.resumeScore}%` }} />
+                </div>
+              </div>
+
+              {/* Match Confidence Card */}
+              <div className="precision-card math-fit-card">
+                <div className="precision-card-header">
+                  <span className="precision-card-label">MATCH CONFIDENCE BREAKDOWN</span>
+                  <span className="precision-score-badge">{active.matchScore}% Sample Fit</span>
+                </div>
+
+                <div className="math-fit-breakdown">
+                  {/* Skill Overlap (70% Weight) */}
+                  <div className="math-component-row">
+                    <div className="math-row-label">
+                      <strong>Skill Coverage (70% Weight)</strong>
+                      <span>Direct entity match ratio against required tech</span>
+                    </div>
+                    <div className="math-row-val text-primary">{active.skillOverlapPct}%</div>
+                  </div>
+                  <div className="mini-progress-track">
+                    <div className="mini-progress-fill bg-primary" style={{ width: `${active.skillOverlapPct}%` }} />
+                  </div>
+
+                  {/* TF-IDF Cosine Similarity (30% Weight) */}
+                  <div className="math-component-row">
+                    <div className="math-row-label">
+                      <strong>TF-IDF Cosine Similarity (30% Weight)</strong>
+                      <span>Semantic vector space angle between resume &amp; JD</span>
+                    </div>
+                    <div className="math-row-val text-teal">{active.cosineSimilarityPct}%</div>
+                  </div>
+                  <div className="mini-progress-track">
+                    <div className="mini-progress-fill bg-teal" style={{ width: `${active.cosineSimilarityPct}%` }} />
+                  </div>
+                </div>
+
+                <div className="math-equation-banner">
+                  <code>Score = (0.70 × {active.skillOverlapPct}%) + (0.30 × {active.cosineSimilarityPct}%) = {active.matchScore}%</code>
+                </div>
+              </div>
+
+              {/* Career Readiness Index */}
+              <div className="precision-card readiness-card">
+                <div className="precision-card-header">
+                  <span className="precision-card-label">READINESS ASSESSMENT</span>
+                  <span className="precision-pill-emerald">{active.readinessIndex}% Readiness</span>
+                </div>
+                <p className="readiness-summary-p">
+                  Candidate meets foundational hiring benchmarks for junior/associate tier positions. Completing recommended milestones unlocks senior candidacy.
+                </p>
+              </div>
             </div>
-            <div>
-              <strong className="callout-title">Synthesized Milestone Roadmap for {selectedRole}:</strong>
-              <p className="callout-text">{activeData.roadmapSummary}</p>
+
+            {/* Right Column: Skill Matrix & Actionable Roadmap */}
+            <div className="precision-column-right">
+              {/* Skill Coverage Matrix Card */}
+              <div className="precision-card skill-matrix-card">
+                <div className="precision-card-header">
+                  <span className="precision-card-label">DIFFERENTIAL SKILL MATRIX</span>
+                  <span className="precision-count-tag">
+                    {active.verifiedSkills.length} Matched • {active.missingSkills.length} Gaps
+                  </span>
+                </div>
+
+                {/* Verified Skills */}
+                <div className="matrix-sub-block">
+                  <span className="matrix-sub-title text-emerald">
+                    <CheckCircle2 size={13} /> Extracted Proficiencies ({active.verifiedSkills.length})
+                  </span>
+                  <div className="matrix-chips-cluster">
+                    {active.verifiedSkills.map((sk) => (
+                      <span key={sk} className="skill-chip chip-verified">
+                        ✓ {sk}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Missing Skills */}
+                <div className="matrix-sub-block">
+                  <span className="matrix-sub-title text-amber">
+                    <AlertCircle size={13} /> Prerequisite Skill Gaps ({active.missingSkills.length})
+                  </span>
+                  <div className="matrix-chips-cluster">
+                    {active.missingSkills.map((sk) => (
+                      <span key={sk} className="skill-chip chip-gap">
+                        + {sk}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Strategic Insights Card */}
+              <div className="precision-card insights-card">
+                <div className="precision-card-header">
+                  <span className="precision-card-label">STRATEGIC CAREER INSIGHTS</span>
+                </div>
+
+                <div className="insight-callout callout-strength">
+                  <div className="callout-icon-wrap bg-primary-light text-primary">
+                    <Award size={16} />
+                  </div>
+                  <div className="callout-text">
+                    <strong>Strongest Competency Domain</strong>
+                    <span>{active.strongestDomain}</span>
+                  </div>
+                </div>
+
+                <div className="insight-callout callout-opportunity">
+                  <div className="callout-icon-wrap bg-amber-light text-amber">
+                    <TrendingUp size={16} />
+                  </div>
+                  <div className="callout-text">
+                    <strong>Highest ROI Skill Upgrade</strong>
+                    <span>{active.priorityRemediation}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actionable Next Step Card */}
+              <div className="precision-card next-action-card">
+                <div className="next-action-header">
+                  <div className="action-step-chip">RECOMMENDED MILESTONE</div>
+                  <Link to="/analyze" className="action-explore-link">
+                    Start Real Analysis <ArrowRight size={12} />
+                  </Link>
+                </div>
+                <h4 className="next-action-title">{active.recommendedStep}</h4>
+                <p className="next-action-desc">
+                  Estimated 2-week progression including container setup, microservice deployment, and mock interview practice.
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Action Row */}
-          <div className="demo-cta-row">
-            <div className="demo-caption">
-              <span>* Interactive Demo Preview. Ready to analyze your actual resume and live job specifications?</span>
+          {/* Bottom Console Action Footer */}
+          <div className="precision-window-footer">
+            <div className="console-footer-note">
+              <span>Ready to test your real resume against industry job postings?</span>
             </div>
-            <Button
-              variant="primary"
-              size="md"
-              icon={ArrowRight}
-              onClick={() => navigate('/analyze')}
-            >
-              Analyze Your Resume Now →
-            </Button>
+            <div className="console-footer-actions">
+              <Button
+                variant="primary"
+                size="md"
+                onClick={() => navigate('/analyze')}
+                icon={ArrowRight}
+                iconPosition="right"
+              >
+                Analyze My Resume Free
+              </Button>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

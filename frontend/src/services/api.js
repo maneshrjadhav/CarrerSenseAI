@@ -140,48 +140,6 @@ export async function testDatabaseConnection() {
   return apiRequest('/db-test', { method: 'GET' });
 }
 
-// Dashboard mock / placeholder API ready for MySQL backend integration
-export async function getDashboardData() {
-  return {
-    metrics: {
-      resumeScore: 78,
-      jobMatches: 12,
-      skillsMatched: 24,
-      skillsToImprove: 7,
-    },
-    careerMatch: {
-      overall: 78,
-      status: 'GOOD MATCH',
-      tfidfSimilarity: 74,
-      skillMatch: 82,
-      experience: 74,
-      education: 90,
-    },
-    resumeStatus: {
-      filename: 'Resume_Manesh_2026.pdf',
-      analyzed: true,
-      pdfParsed: true,
-      nlpReady: true,
-    },
-    recentMatches: [
-      { id: 1, title: 'Frontend Developer', company: 'TechNova Solutions', match: 87, status: 'High Match' },
-      { id: 2, title: 'Python Developer', company: 'DataCore Analytics', match: 78, status: 'Good Match' },
-      { id: 3, title: 'Full Stack Developer', company: 'Nexus Systems', match: 71, status: 'Good Match' },
-      { id: 4, title: 'Java Developer', company: 'Apex Enterprise', match: 62, status: 'Moderate Match' },
-    ],
-    skills: {
-      matched: ['Python', 'React', 'JavaScript', 'HTML', 'CSS', 'Git', 'SQL', 'MongoDB'],
-      missing: ['Docker', 'AWS', 'TypeScript', 'System Design'],
-    },
-    interview: {
-      readiness: 72,
-      technicalQuestions: 16,
-      hrQuestions: 8,
-      totalQuestions: 24,
-    },
-  };
-}
-
 export default {
   BASE_URL: API_BASE_URL,
   request: apiRequest,
@@ -194,7 +152,6 @@ export default {
   login: loginUser,
   logout: logoutUser,
   getCurrentUser,
-  getDashboardData,
   checkBackendHealth,
   testDatabaseConnection,
 };

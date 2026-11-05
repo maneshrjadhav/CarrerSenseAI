@@ -5,6 +5,7 @@ CareerSense AI - Final Year Engineering Project
 
 import os
 import uuid
+import logging
 from flask import Blueprint, request, jsonify, current_app, send_file
 from werkzeug.utils import secure_filename
 from extensions import db
@@ -12,6 +13,8 @@ from models.resume import Resume
 from models.resume_intelligence import (
     ResumeSection, ResumeSkill, ResumeAnalysis, ResumeSuggestion
 )
+from models.analysis import Analysis
+from models.skill import AnalysisSkill, SkillGap
 from utils.auth_helper import token_required, get_authenticated_user_id
 from services.resume_parser import validate_and_extract_pdf, PDFParsingError, extract_candidate_metadata
 from services.resume_quality_service import analyze_resume_quality
@@ -23,12 +26,25 @@ from services.resume_builder_service import (
     build_initial_targeted_resume, update_targeted_resume_draft, generate_targeted_resume_pdf
 )
 
+logger = logging.getLogger(__name__)
+
 resume_bp = Blueprint('resume', __name__)
 
 ALLOWED_EXTENSIONS = {'pdf'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def _safe_remove_file(file_path):
+    """Safely remove a file, suppressing Windows file-lock errors after garbage collection."""
+    if not file_path or not os.path.exists(file_path):
+        return
+    import gc
+    gc.collect()
+    try:
+        os.remove(file_path)
+    except Exception as remove_err:
+        logger.warning(f"Could not immediately remove {file_path}: {remove_err}")
 
 @resume_bp.route('/upload', methods=['POST'])
 @token_required
@@ -78,16 +94,14 @@ def upload_resume(current_user):
     # Check file size (Max 10 MB)
     file_size = os.path.getsize(saved_path)
     if file_size > 10 * 1024 * 1024:
-        if os.path.exists(saved_path):
-            os.remove(saved_path)
+        _safe_remove_file(saved_path)
         return jsonify({
             "success": False,
             "message": "Resume file is too large. Maximum size is 10 MB."
         }), 413
 
     if file_size == 0:
-        if os.path.exists(saved_path):
-            os.remove(saved_path)
+        _safe_remove_file(saved_path)
         return jsonify({
             "success": False,
             "message": "The uploaded file is empty (0 bytes)."
@@ -97,21 +111,19 @@ def upload_resume(current_user):
     try:
         extract_result = validate_and_extract_pdf(saved_path)
     except PDFParsingError as pe:
-        if os.path.exists(saved_path):
-            os.remove(saved_path)
+        _safe_remove_file(saved_path)
         err_msg = str(pe)
-        if "readable text" in err_msg.lower():
+        if "readable text" in err_msg.lower() or "ocr" in err_msg.lower() or "scanned" in err_msg.lower():
             return jsonify({
                 "success": False,
-                "message": "We couldn't extract readable text from this PDF. Please ensure it is a text-based resume."
+                "message": err_msg
             }), 422
         return jsonify({
             "success": False,
             "message": err_msg
         }), 400
     except Exception as ge:
-        if os.path.exists(saved_path):
-            os.remove(saved_path)
+        _safe_remove_file(saved_path)
         return jsonify({
             "success": False,
             "message": "Something went wrong while analyzing your resume. Please try again."
@@ -135,6 +147,11 @@ def upload_resume(current_user):
         if meta.get('phone') and not current_user.phone:
             current_user.phone = meta['phone']
             db.session.commit()
+
+        logger.info(
+            "[Resume Route] Resume #%d uploaded by user #%d - '%s', %d bytes, %d extracted chars",
+            resume_record.id, current_user.id, original_name, file_size, len(extract_result['raw_text'])
+        )
 
         return jsonify({
             "success": True,
@@ -288,6 +305,10 @@ def analyze_resume(current_user):
             "success": True,
             "resume_id": resume.id,
             "status": "completed",
+            "candidate_name": cand_name,
+            "quality_score": quality_result['quality_score'],
+            "total_skills_detected": len(quality_result['skills']),
+            "skills": [sk['skill_name'] for sk in quality_result['skills'][:15]],
             "message": "Resume intelligence analysis completed successfully."
         }), 200
 
@@ -340,6 +361,44 @@ def get_resume_analysis(current_user, resume_id):
     strengths = [s.to_dict() for s in suggestions if s.type == 'strength']
     improvements = [s.to_dict() for s in suggestions if s.type == 'improvement']
 
+    # Retrieve latest verified job match analysis for this resume & user (if any)
+    latest_job_match = db.session.query(Analysis).filter_by(
+        resume_id=resume_id,
+        user_id=current_user.id
+    ).order_by(Analysis.created_at.desc()).first()
+
+    job_match_data = None
+    if latest_job_match:
+        matched_skills = [
+            s.skill_name for s in latest_job_match.skills if s.match_status == 'matched'
+        ]
+        missing_skills = [
+            s.skill_name for s in latest_job_match.skills if s.match_status in ('missing', 'partial')
+        ]
+        job_improvements = [
+            {
+                "skill": g.skill_name,
+                "priority": g.priority,
+                "recommendation": g.recommendation or f"Practice {g.skill_name} fundamentals and integrate into sample project.",
+                "duration": g.estimated_learning_duration or "2-3 weeks"
+            }
+            for g in latest_job_match.skill_gaps
+        ]
+        job_match_data = {
+            "id": latest_job_match.id,
+            "analysis_id": latest_job_match.id,
+            "target_role": latest_job_match.target_role,
+            "match_score": round(latest_job_match.match_score, 1),
+            "skill_coverage": round(latest_job_match.skill_coverage, 1),
+            "semantic_similarity": round(latest_job_match.semantic_similarity, 1),
+            "matched_skills": matched_skills,
+            "missing_skills": missing_skills,
+            "matched_skills_count": latest_job_match.matched_skills_count or len(matched_skills),
+            "missing_skills_count": latest_job_match.missing_skills_count or len(missing_skills),
+            "recommended_improvements": job_improvements,
+            "created_at": latest_job_match.created_at.isoformat() if latest_job_match.created_at else None
+        }
+
     return jsonify({
         "success": True,
         "resume": {
@@ -366,7 +425,8 @@ def get_resume_analysis(current_user, resume_id):
         "skills_by_category": skills_by_category,
         "sections": [sec.to_dict() for sec in sections],
         "strengths": strengths,
-        "suggestions": improvements
+        "suggestions": improvements,
+        "job_match": job_match_data
     }), 200
 
 

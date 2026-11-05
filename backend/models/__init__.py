@@ -13,6 +13,7 @@ from models.interview import InterviewSession, InterviewQuestion
 from models.subscription import SubscriptionPlan, UserSubscription, Payment
 from models.targeted_resume import TargetedResume
 from models.payment_request import PaymentSettings, PaymentRequest, PaymentAuditLog
+from models.password_reset_otp import PasswordResetOTP
 
 Base = db.Model
 
@@ -40,5 +41,6 @@ __all__ = [
     'TargetedResume',
     'PaymentSettings',
     'PaymentRequest',
-    'PaymentAuditLog'
+    'PaymentAuditLog',
+    'PasswordResetOTP'
 ]

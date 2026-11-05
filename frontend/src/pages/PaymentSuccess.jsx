@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { CheckCircle2 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import subscriptionService from '../services/subscriptionService';
 
@@ -59,18 +60,17 @@ export default function PaymentSuccess() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '2.5rem',
               margin: '0 auto 1.5rem auto',
             }}
           >
-            ✓
+            <CheckCircle2 size={40} />
           </div>
 
           <h1 style={{ fontSize: '1.8rem', fontWeight: 800, margin: '0 0 0.5rem 0' }}>
             Payment Successful!
           </h1>
           <p style={{ color: 'var(--text-muted, #64748b)', fontSize: '0.95rem', margin: '0 0 2rem 0' }}>
-            Your transaction has been cryptographically verified and your premium access is activated immediately.
+            Your transaction has been cryptographically verified and your paid access is activated.
           </p>
 
           {/* Receipt Summary Card */}

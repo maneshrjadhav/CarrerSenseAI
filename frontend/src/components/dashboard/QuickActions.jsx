@@ -6,10 +6,11 @@ import {
   Layers,
   Compass,
   HelpCircle,
+  FileCheck2,
   ArrowRight,
 } from 'lucide-react';
 
-export default function QuickActions() {
+export default function QuickActions({ latestAnalysisId = null }) {
   const navigate = useNavigate();
 
   const actions = [
@@ -18,7 +19,7 @@ export default function QuickActions() {
       desc: 'Upload PDF to extract and index your career history.',
       icon: UploadCloud,
       route: '/resume-analyzer',
-      badge: 'Step 5 Ready',
+      badge: 'PDF Intake',
     },
     {
       title: 'Analyze Job Description',
@@ -26,6 +27,13 @@ export default function QuickActions() {
       icon: Briefcase,
       route: '/job-match',
       badge: 'TF-IDF',
+    },
+    {
+      title: 'View ATS Report',
+      desc: 'Open the JD-based ATS report for your latest job match.',
+      icon: FileCheck2,
+      route: latestAnalysisId ? `/job-match-result/${latestAnalysisId}` : '/job-match',
+      badge: 'ATS',
     },
     {
       title: 'View Skill Gaps',

@@ -142,6 +142,113 @@ export const authService = {
     return data;
   },
 
+  async forgotPassword(email) {
+    let res;
+    try {
+      res = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+      });
+    } catch (netErr) {
+      const err = new Error('Unable to connect to the server. Please check your network connection.');
+      err.status = 0;
+      throw err;
+    }
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const err = new Error(data.message || 'Failed to request password reset code.');
+      err.status = res.status;
+      err.data = data;
+      throw err;
+    }
+
+    return data;
+  },
+
+  async verifyOtp(email, otp) {
+    let res;
+    try {
+      res = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          otp: otp.trim(),
+        }),
+      });
+    } catch (netErr) {
+      const err = new Error('Unable to connect to the server. Please check your network connection.');
+      err.status = 0;
+      throw err;
+    }
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const err = new Error(data.message || 'Invalid or expired verification code.');
+      err.status = res.status;
+      err.data = data;
+      throw err;
+    }
+
+    return data;
+  },
+
+  async resendOtp(email) {
+    let res;
+    try {
+      res = await fetch(`${API_BASE_URL}/auth/resend-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+      });
+    } catch (netErr) {
+      const err = new Error('Unable to connect to the server. Please check your network connection.');
+      err.status = 0;
+      throw err;
+    }
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const err = new Error(data.message || 'Failed to resend verification code.');
+      err.status = res.status;
+      err.data = data;
+      throw err;
+    }
+
+    return data;
+  },
+
+  async resetPassword({ resetToken, newPassword, confirmPassword }) {
+    let res;
+    try {
+      res = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reset_token: resetToken,
+          new_password: newPassword,
+          confirm_password: confirmPassword,
+        }),
+      });
+    } catch (netErr) {
+      const err = new Error('Unable to connect to the server. Please check your network connection.');
+      err.status = 0;
+      throw err;
+    }
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const err = new Error(data.message || 'Failed to reset password.');
+      err.status = res.status;
+      err.data = data;
+      throw err;
+    }
+
+    return data;
+  },
+
   async getCurrentUser() {
     const token = this.getToken();
     if (!token) return null;

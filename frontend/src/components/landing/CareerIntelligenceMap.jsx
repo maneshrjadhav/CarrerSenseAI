@@ -9,6 +9,8 @@ import {
   Sparkles,
   ArrowRight,
   Info,
+  Check,
+  ArrowUpRight,
 } from 'lucide-react';
 
 export default function CareerIntelligenceMap() {
@@ -205,9 +207,15 @@ export default function CareerIntelligenceMap() {
                   Ready for Junior/Associate Placement in Full-Stack &amp; Python Roles
                 </p>
                 <div className="readiness-mini-breakdown">
-                  <span className="mini-stat-bullet">✓ Strong Base Syntax</span>
-                  <span className="mini-stat-bullet">✓ Proven Web Frameworks</span>
-                  <span className="mini-stat-bullet">▲ In-Progress Cloud Setup</span>
+                  <span className="mini-stat-bullet" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <Check size={12} className="text-emerald" /> Strong Base Syntax
+                  </span>
+                  <span className="mini-stat-bullet" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <Check size={12} className="text-emerald" /> Proven Web Frameworks
+                  </span>
+                  <span className="mini-stat-bullet" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <ArrowUpRight size={12} className="text-amber" /> In-Progress Cloud Setup
+                  </span>
                 </div>
               </motion.div>
             </div>

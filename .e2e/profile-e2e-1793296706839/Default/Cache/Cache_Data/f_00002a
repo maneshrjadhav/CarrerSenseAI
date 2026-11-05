@@ -1,0 +1,633 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/components/landing/DemoPreview.jsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=e994717c"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+let prevRefreshReg;
+let prevRefreshSig;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  prevRefreshReg = window.$RefreshReg$;
+  prevRefreshSig = window.$RefreshSig$;
+  window.$RefreshReg$ = RefreshRuntime.getRefreshReg("D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx");
+  window.$RefreshSig$ = RefreshRuntime.createSignatureFunctionForTransform;
+}
+var _s = $RefreshSig$();
+import __vite__cjsImport3_react from "/node_modules/.vite/deps/react.js?v=e994717c"; const React = __vite__cjsImport3_react.__esModule ? __vite__cjsImport3_react.default : __vite__cjsImport3_react; const useState = __vite__cjsImport3_react["useState"];
+import { useNavigate } from "/node_modules/.vite/deps/react-router-dom.js?v=e994717c";
+import { motion } from "/node_modules/.vite/deps/framer-motion.js?v=e994717c";
+import {
+  Sparkles,
+  ArrowRight,
+  TrendingUp,
+  CheckCircle2,
+  AlertCircle,
+  Briefcase,
+  Compass,
+  Lightbulb,
+  Award,
+  ShieldCheck,
+  Check
+} from "/node_modules/.vite/deps/lucide-react.js?v=e994717c";
+import Button from "/src/components/common/Button.jsx";
+export default function DemoPreview() {
+  _s();
+  const navigate = useNavigate();
+  const [selectedRole, setSelectedRole] = useState("Frontend Developer");
+  const demoPresets = {
+    "Frontend Developer": {
+      resumeScore: 78,
+      jobMatches: 14,
+      skillsMatched: 24,
+      skillsMissing: 7,
+      careerReadiness: 82,
+      matchedList: ["React.js", "JavaScript (ES6+)", "HTML5", "CSS3/Tailwind", "Git & GitHub", "REST APIs"],
+      missingList: ["TypeScript", "Next.js SSR", "Webpack/Vite Build Optimization"],
+      roadmapSummary: "Master TypeScript typing, followed by Next.js App Router and production bundle optimization.",
+      strongestArea: "Component Architecture & Responsive UI (94%)",
+      opportunity: "Modern Full-Stack SSR with Next.js (+15% boost)",
+      nextSkill: "TypeScript Type Systems & Generics"
+    },
+    "Python Backend Engineer": {
+      resumeScore: 74,
+      jobMatches: 11,
+      skillsMatched: 21,
+      skillsMissing: 9,
+      careerReadiness: 76,
+      matchedList: ["Python", "Flask", "SQL / MySQL", "RESTful API Design", "Git Version Control"],
+      missingList: ["Docker Containerization", "AWS Cloud (EC2/RDS)", "Redis Caching", "Celery Async Workers"],
+      roadmapSummary: "Containerize Flask services with Docker, set up Redis caching layers, and deploy to AWS EC2.",
+      strongestArea: "Relational Database Queries & API Endpoints (88%)",
+      opportunity: "Cloud Infrastructure & Containerization (+20% boost)",
+      nextSkill: "Docker Multi-Stage Builds & Compose"
+    },
+    "Full Stack Engineer": {
+      resumeScore: 71,
+      jobMatches: 9,
+      skillsMatched: 20,
+      skillsMissing: 11,
+      careerReadiness: 72,
+      matchedList: ["React", "Python", "MySQL", "JavaScript", "HTML/CSS", "Postman"],
+      missingList: ["Docker", "System Design Patterns", "CI/CD Pipelines (GitHub Actions)", "GraphQL"],
+      roadmapSummary: "Implement automated CI/CD deployment pipelines and study scalable system design architectures.",
+      strongestArea: "Full-Stack Integration & Database Schema Design (86%)",
+      opportunity: "DevOps & Automated Testing Pipelines (+18% boost)",
+      nextSkill: "System Design Patterns & Caching"
+    }
+  };
+  const activeData = demoPresets[selectedRole];
+  return /* @__PURE__ */ jsxDEV("section", { id: "demo", className: "landing-section-block bg-white relative-overflow", children: /* @__PURE__ */ jsxDEV("div", { className: "section-container", children: [
+    /* @__PURE__ */ jsxDEV("div", { className: "section-title-wrap text-center", children: [
+      /* @__PURE__ */ jsxDEV("div", { className: "inline-badge-pill", children: [
+        /* @__PURE__ */ jsxDEV(Sparkles, { size: 14, className: "text-teal" }, void 0, false, {
+          fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+          lineNumber: 92,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV("span", { children: "INTERACTIVE DASHBOARD SHOWCASE" }, void 0, false, {
+          fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+          lineNumber: 93,
+          columnNumber: 13
+        }, this)
+      ] }, void 0, true, {
+        fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+        lineNumber: 91,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV("h2", { className: "section-main-heading", children: "See CareerSense AI in Action" }, void 0, false, {
+        fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+        lineNumber: 95,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV("p", { className: "section-sub-heading", children: "Experience our candidate intelligence dashboard interface before creating an account." }, void 0, false, {
+        fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+        lineNumber: 96,
+        columnNumber: 11
+      }, this)
+    ] }, void 0, true, {
+      fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+      lineNumber: 90,
+      columnNumber: 9
+    }, this),
+    /* @__PURE__ */ jsxDEV("div", { className: "demo-role-tabs-row", children: Object.keys(demoPresets).map(
+      (role) => /* @__PURE__ */ jsxDEV(
+        "button",
+        {
+          type: "button",
+          className: `demo-tab-btn ${selectedRole === role ? "active" : ""}`,
+          onClick: () => setSelectedRole(role),
+          children: [
+            /* @__PURE__ */ jsxDEV(Briefcase, { size: 14, className: "mr-1" }, void 0, false, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 110,
+              columnNumber: 15
+            }, this),
+            role
+          ]
+        },
+        role,
+        true,
+        {
+          fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+          lineNumber: 104,
+          columnNumber: 11
+        },
+        this
+      )
+    ) }, void 0, false, {
+      fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+      lineNumber: 102,
+      columnNumber: 9
+    }, this),
+    /* @__PURE__ */ jsxDEV(
+      motion.div,
+      {
+        className: "demo-dashboard-mockup",
+        initial: { opacity: 0, y: 14 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.3 },
+        children: [
+          /* @__PURE__ */ jsxDEV("div", { className: "mockup-window-header", children: [
+            /* @__PURE__ */ jsxDEV("div", { className: "window-dots-group", children: [
+              /* @__PURE__ */ jsxDEV("span", { className: "dot dot-red" }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 127,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("span", { className: "dot dot-yellow" }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 128,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("span", { className: "dot dot-green" }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 129,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 126,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "mockup-address-pill", children: [
+              /* @__PURE__ */ jsxDEV(Sparkles, { size: 12, className: "text-primary" }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 132,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("span", { children: [
+                "careersense.ai/dashboard/overview?role=",
+                selectedRole.toLowerCase().replace(/ /g, "-")
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 133,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 131,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "status-live-indicator", children: [
+              /* @__PURE__ */ jsxDEV("span", { className: "live-pulse" }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 136,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("span", { className: "demo-badge-txt", children: "INTERACTIVE DEMO" }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 137,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 135,
+              columnNumber: 13
+            }, this)
+          ] }, void 0, true, {
+            fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+            lineNumber: 125,
+            columnNumber: 11
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { className: "demo-metrics-grid", children: [
+            /* @__PURE__ */ jsxDEV("div", { className: "demo-metric-pill", children: [
+              /* @__PURE__ */ jsxDEV("span", { className: "demo-m-label", children: "Resume Score" }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 144,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("span", { className: "demo-m-val text-primary", children: [
+                activeData.resumeScore,
+                "%"
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 145,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 143,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "demo-metric-pill", children: [
+              /* @__PURE__ */ jsxDEV("span", { className: "demo-m-label", children: "Job Matches" }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 148,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("span", { className: "demo-m-val text-emerald", children: [
+                activeData.jobMatches,
+                " Matches"
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 149,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 147,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "demo-metric-pill", children: [
+              /* @__PURE__ */ jsxDEV("span", { className: "demo-m-label", children: "Skills Matched" }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 152,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("span", { className: "demo-m-val text-emerald", children: [
+                activeData.skillsMatched,
+                " Skills"
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 153,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 151,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "demo-metric-pill", children: [
+              /* @__PURE__ */ jsxDEV("span", { className: "demo-m-label", children: "Skills Missing" }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 156,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("span", { className: "demo-m-val text-amber", children: [
+                activeData.skillsMissing,
+                " Gaps"
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 157,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 155,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "demo-metric-pill", children: [
+              /* @__PURE__ */ jsxDEV("span", { className: "demo-m-label", children: "Career Readiness" }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 160,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("span", { className: "demo-m-val text-purple", children: [
+                activeData.careerReadiness,
+                "% Ready"
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 161,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 159,
+              columnNumber: 13
+            }, this)
+          ] }, void 0, true, {
+            fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+            lineNumber: 142,
+            columnNumber: 11
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { className: "demo-ai-insights-strip", children: [
+            /* @__PURE__ */ jsxDEV("div", { className: "insight-card-item", children: [
+              /* @__PURE__ */ jsxDEV("div", { className: "insight-card-top", children: [
+                /* @__PURE__ */ jsxDEV(ShieldCheck, { size: 16, className: "text-emerald" }, void 0, false, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 169,
+                  columnNumber: 17
+                }, this),
+                /* @__PURE__ */ jsxDEV("span", { className: "insight-cat", children: "STRONGEST AREA" }, void 0, false, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 170,
+                  columnNumber: 17
+                }, this)
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 168,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("strong", { className: "insight-val", children: activeData.strongestArea }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 172,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 167,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "insight-card-item", children: [
+              /* @__PURE__ */ jsxDEV("div", { className: "insight-card-top", children: [
+                /* @__PURE__ */ jsxDEV(TrendingUp, { size: 16, className: "text-primary" }, void 0, false, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 177,
+                  columnNumber: 17
+                }, this),
+                /* @__PURE__ */ jsxDEV("span", { className: "insight-cat", children: "BIGGEST OPPORTUNITY" }, void 0, false, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 178,
+                  columnNumber: 17
+                }, this)
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 176,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("strong", { className: "insight-val", children: activeData.opportunity }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 180,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 175,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "insight-card-item", children: [
+              /* @__PURE__ */ jsxDEV("div", { className: "insight-card-top", children: [
+                /* @__PURE__ */ jsxDEV(Lightbulb, { size: 16, className: "text-amber" }, void 0, false, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 185,
+                  columnNumber: 17
+                }, this),
+                /* @__PURE__ */ jsxDEV("span", { className: "insight-cat", children: "RECOMMENDED NEXT SKILL" }, void 0, false, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 186,
+                  columnNumber: 17
+                }, this)
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 184,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("strong", { className: "insight-val", children: activeData.nextSkill }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 188,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 183,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "insight-card-item", children: [
+              /* @__PURE__ */ jsxDEV("div", { className: "insight-card-top", children: [
+                /* @__PURE__ */ jsxDEV(Award, { size: 16, className: "text-purple" }, void 0, false, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 193,
+                  columnNumber: 17
+                }, this),
+                /* @__PURE__ */ jsxDEV("span", { className: "insight-cat", children: "CAREER READINESS" }, void 0, false, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 194,
+                  columnNumber: 17
+                }, this)
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 192,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("strong", { className: "insight-val", children: [
+                activeData.careerReadiness,
+                "% Placement Prepared"
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 196,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 191,
+              columnNumber: 13
+            }, this)
+          ] }, void 0, true, {
+            fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+            lineNumber: 166,
+            columnNumber: 11
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { className: "demo-dual-split", children: [
+            /* @__PURE__ */ jsxDEV("div", { className: "demo-preview-box", children: [
+              /* @__PURE__ */ jsxDEV("div", { className: "demo-box-head", children: [
+                /* @__PURE__ */ jsxDEV(CheckCircle2, { size: 16, className: "text-emerald" }, void 0, false, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 204,
+                  columnNumber: 17
+                }, this),
+                /* @__PURE__ */ jsxDEV("strong", { children: [
+                  "Matched Core Proficiencies (",
+                  activeData.matchedList.length,
+                  ")"
+                ] }, void 0, true, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 205,
+                  columnNumber: 17
+                }, this)
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 203,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("div", { className: "demo-chips-flex", children: activeData.matchedList.map(
+                (s) => /* @__PURE__ */ jsxDEV("span", { className: "demo-chip chip-green", style: { display: "inline-flex", alignItems: "center", gap: "4px" }, children: [
+                  /* @__PURE__ */ jsxDEV(Check, { size: 11 }, void 0, false, {
+                    fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                    lineNumber: 210,
+                    columnNumber: 21
+                  }, this),
+                  " ",
+                  s
+                ] }, s, true, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 209,
+                  columnNumber: 17
+                }, this)
+              ) }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 207,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 202,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "demo-preview-box", children: [
+              /* @__PURE__ */ jsxDEV("div", { className: "demo-box-head", children: [
+                /* @__PURE__ */ jsxDEV(AlertCircle, { size: 16, className: "text-amber" }, void 0, false, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 218,
+                  columnNumber: 17
+                }, this),
+                /* @__PURE__ */ jsxDEV("strong", { children: [
+                  "Identified Missing Skills & Gaps (",
+                  activeData.missingList.length,
+                  ")"
+                ] }, void 0, true, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 219,
+                  columnNumber: 17
+                }, this)
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 217,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("div", { className: "demo-chips-flex", children: activeData.missingList.map(
+                (s) => /* @__PURE__ */ jsxDEV("span", { className: "demo-chip chip-amber", children: [
+                  "+ ",
+                  s
+                ] }, s, true, {
+                  fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                  lineNumber: 223,
+                  columnNumber: 17
+                }, this)
+              ) }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 221,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 216,
+              columnNumber: 13
+            }, this)
+          ] }, void 0, true, {
+            fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+            lineNumber: 201,
+            columnNumber: 11
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { className: "demo-roadmap-callout", children: [
+            /* @__PURE__ */ jsxDEV("div", { className: "callout-icon-box", children: /* @__PURE__ */ jsxDEV(Compass, { size: 18, className: "text-purple" }, void 0, false, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 232,
+              columnNumber: 15
+            }, this) }, void 0, false, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 231,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { children: [
+              /* @__PURE__ */ jsxDEV("strong", { className: "callout-title", children: [
+                "Synthesized Milestone Roadmap for ",
+                selectedRole,
+                ":"
+              ] }, void 0, true, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 235,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("p", { className: "callout-text", children: activeData.roadmapSummary }, void 0, false, {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 236,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 234,
+              columnNumber: 13
+            }, this)
+          ] }, void 0, true, {
+            fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+            lineNumber: 230,
+            columnNumber: 11
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { className: "demo-cta-row", children: [
+            /* @__PURE__ */ jsxDEV("div", { className: "demo-caption", children: /* @__PURE__ */ jsxDEV("span", { children: "* Interactive Demo Preview. Ready to analyze your actual resume and live job specifications?" }, void 0, false, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 243,
+              columnNumber: 15
+            }, this) }, void 0, false, {
+              fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+              lineNumber: 242,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV(
+              Button,
+              {
+                variant: "primary",
+                size: "md",
+                icon: ArrowRight,
+                onClick: () => navigate("/analyze"),
+                children: "Analyze Your Resume Now →"
+              },
+              void 0,
+              false,
+              {
+                fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+                lineNumber: 245,
+                columnNumber: 13
+              },
+              this
+            )
+          ] }, void 0, true, {
+            fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+            lineNumber: 241,
+            columnNumber: 11
+          }, this)
+        ]
+      },
+      selectedRole,
+      true,
+      {
+        fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+        lineNumber: 117,
+        columnNumber: 9
+      },
+      this
+    )
+  ] }, void 0, true, {
+    fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+    lineNumber: 89,
+    columnNumber: 7
+  }, this) }, void 0, false, {
+    fileName: "D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx",
+    lineNumber: 88,
+    columnNumber: 5
+  }, this);
+}
+_s(DemoPreview, "wxYWwFkGI3zRlSWwx3jgUvG+bKg=", false, function() {
+  return [useNavigate];
+});
+_c = DemoPreview;
+var _c;
+$RefreshReg$(_c, "DemoPreview");
+if (import.meta.hot && !inWebWorker) {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+if (import.meta.hot && !inWebWorker) {
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("D:/CareerSenseAI/frontend/src/components/landing/DemoPreview.jsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+
+//# sourceMappingURL=data:application/json;base64,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QUF1RDtBQUFBLGlCQUZ6RDtBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUdBO0FBQUEsZUFQRjtBQUFBO0FBQUE7QUFBQTtBQUFBLGlCQVFBO0FBQUEsVUFHQSx1QkFBQyxTQUFJLFdBQVUsZ0JBQ2I7QUFBQSxtQ0FBQyxTQUFJLFdBQVUsZ0JBQ2IsaUNBQUMsVUFBSyw0R0FBTjtBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUFrRyxLQURwRztBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUVBO0FBQUEsWUFDQTtBQUFBLGNBQUM7QUFBQTtBQUFBLGdCQUNDLFNBQVE7QUFBQSxnQkFDUixNQUFLO0FBQUEsZ0JBQ0wsTUFBTXhCO0FBQUFBLGdCQUNOLFNBQVMsTUFBTWEsU0FBUyxVQUFVO0FBQUEsZ0JBQUU7QUFBQTtBQUFBLGNBSnRDO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxZQU9BO0FBQUEsZUFYRjtBQUFBO0FBQUE7QUFBQTtBQUFBLGlCQVlBO0FBQUE7QUFBQTtBQUFBLE1BdElLQztBQUFBQSxNQUZQO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsSUF5SUE7QUFBQSxPQXJLRjtBQUFBO0FBQUE7QUFBQTtBQUFBLFNBc0tBLEtBdktGO0FBQUE7QUFBQTtBQUFBO0FBQUEsU0F3S0E7QUFFSjtBQUFDRixHQTVOdUJELGFBQVc7QUFBQSxVQUNoQmQsV0FBVztBQUFBO0FBQUEsS0FETmM7QUFBVyxJQUFBZ0M7QUFBQSxhQUFBQSxJQUFBIiwibmFtZXMiOlsiUmVhY3QiLCJ1c2VTdGF0ZSIsInVzZU5hdmlnYXRlIiwibW90aW9uIiwiU3BhcmtsZXMiLCJBcnJvd1JpZ2h0IiwiVHJlbmRpbmdVcCIsIkNoZWNrQ2lyY2xlMiIsIkFsZXJ0Q2lyY2xlIiwiQnJpZWZjYXNlIiwiQ29tcGFzcyIsIkxpZ2h0YnVsYiIsIkF3YXJkIiwiU2hpZWxkQ2hlY2siLCJDaGVjayIsIkJ1dHRvbiIsIkRlbW9QcmV2aWV3IiwiX3MiLCJuYXZpZ2F0ZSIsInNlbGVjdGVkUm9sZSIsInNldFNlbGVjdGVkUm9sZSIsImRlbW9QcmVzZXRzIiwicmVzdW1lU2NvcmUiLCJqb2JNYXRjaGVzIiwic2tpbGxzTWF0Y2hlZCIsInNraWxsc01pc3NpbmciLCJjYXJlZXJSZWFkaW5lc3MiLCJtYXRjaGVkTGlzdCIsIm1pc3NpbmdMaXN0Iiwicm9hZG1hcFN1bW1hcnkiLCJzdHJvbmdlc3RBcmVhIiwib3Bwb3J0dW5pdHkiLCJuZXh0U2tpbGwiLCJhY3RpdmVEYXRhIiwiT2JqZWN0Iiwia2V5cyIsIm1hcCIsInJvbGUiLCJvcGFjaXR5IiwieSIsImR1cmF0aW9uIiwidG9Mb3dlckNhc2UiLCJyZXBsYWNlIiwibGVuZ3RoIiwicyIsImRpc3BsYXkiLCJhbGlnbkl0ZW1zIiwiZ2FwIiwiX2MiXSwiaWdub3JlTGlzdCI6W10sInNvdXJjZXMiOlsiRGVtb1ByZXZpZXcuanN4Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBSZWFjdCwgeyB1c2VTdGF0ZSB9IGZyb20gJ3JlYWN0JztcbmltcG9ydCB7IHVzZU5hdmlnYXRlIH0gZnJvbSAncmVhY3Qtcm91dGVyLWRvbSc7XG5pbXBvcnQgeyBtb3Rpb24gfSBmcm9tICdmcmFtZXItbW90aW9uJztcbmltcG9ydCB7XG4gIFNwYXJrbGVzLFxuICBBcnJvd1JpZ2h0LFxuICBUcmVuZGluZ1VwLFxuICBDaGVja0NpcmNsZTIsXG4gIEFsZXJ0Q2lyY2xlLFxuICBCcmllZmNhc2UsXG4gIENvbXBhc3MsXG4gIExpZ2h0YnVsYixcbiAgQXdhcmQsXG4gIFNoaWVsZENoZWNrLFxuICBDaGVjayxcbn0gZnJvbSAnbHVjaWRlLXJlYWN0JztcbmltcG9ydCBCdXR0b24gZnJvbSAnLi4vY29tbW9uL0J1dHRvbic7XG5cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIERlbW9QcmV2aWV3KCkge1xuICBjb25zdCBuYXZpZ2F0ZSA9IHVzZU5hdmlnYXRlKCk7XG4gIGNvbnN0IFtzZWxlY3RlZFJvbGUsIHNldFNlbGVjdGVkUm9sZV0gPSB1c2VTdGF0ZSgnRnJvbnRlbmQgRGV2ZWxvcGVyJyk7XG5cbiAgLy8gRXhhY3QgMyB0YWJzICYgbWV0cmljcyBmcm9tIFJlcXVpcmVtZW50IDIzXG4gIGNvbnN0IGRlbW9QcmVzZXRzID0ge1xuICAgICdGcm9udGVuZCBEZXZlbG9wZXInOiB7XG4gICAgICByZXN1bWVTY29yZTogNzgsXG4gICAgICBqb2JNYXRjaGVzOiAxNCxcbiAgICAgIHNraWxsc01hdGNoZWQ6IDI0LFxuICAgICAgc2tpbGxzTWlzc2luZzogNyxcbiAgICAgIGNhcmVlclJlYWRpbmVzczogODIsXG4gICAgICBtYXRjaGVkTGlzdDogWydSZWFjdC5qcycsICdKYXZhU2NyaXB0IChFUzYrKScsICdIVE1MNScsICdDU1MzL1RhaWx3aW5kJywgJ0dpdCAmIEdpdEh1YicsICdSRVNUIEFQSXMnXSxcbiAgICAgIG1pc3NpbmdMaXN0OiBbJ1R5cGVTY3JpcHQnLCAnTmV4dC5qcyBTU1InLCAnV2VicGFjay9WaXRlIEJ1aWxkIE9wdGltaXphdGlvbiddLFxuICAgICAgcm9hZG1hcFN1bW1hcnk6ICdNYXN0ZXIgVHlwZVNjcmlwdCB0eXBpbmcsIGZvbGxvd2VkIGJ5IE5leHQuanMgQXBwIFJvdXRlciBhbmQgcHJvZHVjdGlvbiBidW5kbGUgb3B0aW1pemF0aW9uLicsXG4gICAgICBzdHJvbmdlc3RBcmVhOiAnQ29tcG9uZW50IEFyY2hpdGVjdHVyZSAmIFJlc3BvbnNpdmUgVUkgKDk0JSknLFxuICAgICAgb3Bwb3J0dW5pdHk6ICdNb2Rlcm4gRnVsbC1TdGFjayBTU1Igd2l0aCBOZXh0LmpzICgrMTUlIGJvb3N0KScsXG4gICAgICBuZXh0U2tpbGw6ICdUeXBlU2NyaXB0IFR5cGUgU3lzdGVtcyAmIEdlbmVyaWNzJyxcbiAgICB9LFxuICAgICdQeXRob24gQmFja2VuZCBFbmdpbmVlcic6IHtcbiAgICAgIHJlc3VtZVNjb3JlOiA3NCxcbiAgICAgIGpvYk1hdGNoZXM6IDExLFxuICAgICAgc2tpbGxzTWF0Y2hlZDogMjEsXG4gICAgICBza2lsbHNNaXNzaW5nOiA5LFxuICAgICAgY2FyZWVyUmVhZGluZXNzOiA3NixcbiAgICAgIG1hdGNoZWRMaXN0OiBbJ1B5dGhvbicsICdGbGFzaycsICdTUUwgLyBNeVNRTCcsICdSRVNUZnVsIEFQSSBEZXNpZ24nLCAnR2l0IFZlcnNpb24gQ29udHJvbCddLFxuICAgICAgbWlzc2luZ0xpc3Q6IFsnRG9ja2VyIENvbnRhaW5lcml6YXRpb24nLCAnQVdTIENsb3VkIChFQzIvUkRTKScsICdSZWRpcyBDYWNoaW5nJywgJ0NlbGVyeSBBc3luYyBXb3JrZXJzJ10sXG4gICAgICByb2FkbWFwU3VtbWFyeTogJ0NvbnRhaW5lcml6ZSBGbGFzayBzZXJ2aWNlcyB3aXRoIERvY2tlciwgc2V0IHVwIFJlZGlzIGNhY2hpbmcgbGF5ZXJzLCBhbmQgZGVwbG95IHRvIEFXUyBFQzIuJyxcbiAgICAgIHN0cm9uZ2VzdEFyZWE6ICdSZWxhdGlvbmFsIERhdGFiYXNlIFF1ZXJpZXMgJiBBUEkgRW5kcG9pbnRzICg4OCUpJyxcbiAgICAgIG9wcG9ydHVuaXR5OiAnQ2xvdWQgSW5mcmFzdHJ1Y3R1cmUgJiBDb250YWluZXJpemF0aW9uICgrMjAlIGJvb3N0KScsXG4gICAgICBuZXh0U2tpbGw6ICdEb2NrZXIgTXVsdGktU3RhZ2UgQnVpbGRzICYgQ29tcG9zZScsXG4gICAgfSxcbiAgICAnRnVsbCBTdGFjayBFbmdpbmVlcic6IHtcbiAgICAgIHJlc3VtZVNjb3JlOiA3MSxcbiAgICAgIGpvYk1hdGNoZXM6IDksXG4gICAgICBza2lsbHNNYXRjaGVkOiAyMCxcbiAgICAgIHNraWxsc01pc3Npbmc6IDExLFxuICAgICAgY2FyZWVyUmVhZGluZXNzOiA3MixcbiAgICAgIG1hdGNoZWRMaXN0OiBbJ1JlYWN0JywgJ1B5dGhvbicsICdNeVNRTCcsICdKYXZhU2NyaXB0JywgJ0hUTUwvQ1NTJywgJ1Bvc3RtYW4nXSxcbiAgICAgIG1pc3NpbmdMaXN0OiBbJ0RvY2tlcicsICdTeXN0ZW0gRGVzaWduIFBhdHRlcm5zJywgJ0NJL0NEIFBpcGVsaW5lcyAoR2l0SHViIEFjdGlvbnMpJywgJ0dyYXBoUUwnXSxcbiAgICAgIHJvYWRtYXBTdW1tYXJ5OiAnSW1wbGVtZW50IGF1dG9tYXRlZCBDSS9DRCBkZXBsb3ltZW50IHBpcGVsaW5lcyBhbmQgc3R1ZHkgc2NhbGFibGUgc3lzdGVtIGRlc2lnbiBhcmNoaXRlY3R1cmVzLicsXG4gICAgICBzdHJvbmdlc3RBcmVhOiAnRnVsbC1TdGFjayBJbnRlZ3JhdGlvbiAmIERhdGFiYXNlIFNjaGVtYSBEZXNpZ24gKDg2JSknLFxuICAgICAgb3Bwb3J0dW5pdHk6ICdEZXZPcHMgJiBBdXRvbWF0ZWQgVGVzdGluZyBQaXBlbGluZXMgKCsxOCUgYm9vc3QpJyxcbiAgICAgIG5leHRTa2lsbDogJ1N5c3RlbSBEZXNpZ24gUGF0dGVybnMgJiBDYWNoaW5nJyxcbiAgICB9LFxuICB9O1xuXG4gIGNvbnN0IGFjdGl2ZURhdGEgPSBkZW1vUHJlc2V0c1tzZWxlY3RlZFJvbGVdO1xuXG4gIHJldHVybiAoXG4gICAgPHNlY3Rpb24gaWQ9XCJkZW1vXCIgY2xhc3NOYW1lPVwibGFuZGluZy1zZWN0aW9uLWJsb2NrIGJnLXdoaXRlIHJlbGF0aXZlLW92ZXJmbG93XCI+XG4gICAgICA8ZGl2IGNsYXNzTmFtZT1cInNlY3Rpb24tY29udGFpbmVyXCI+XG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwic2VjdGlvbi10aXRsZS13cmFwIHRleHQtY2VudGVyXCI+XG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJpbmxpbmUtYmFkZ2UtcGlsbFwiPlxuICAgICAgICAgICAgPFNwYXJrbGVzIHNpemU9ezE0fSBjbGFzc05hbWU9XCJ0ZXh0LXRlYWxcIiAvPlxuICAgICAgICAgICAgPHNwYW4+SU5URVJBQ1RJVkUgREFTSEJPQVJEIFNIT1dDQVNFPC9zcGFuPlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgIDxoMiBjbGFzc05hbWU9XCJzZWN0aW9uLW1haW4taGVhZGluZ1wiPlNlZSBDYXJlZXJTZW5zZSBBSSBpbiBBY3Rpb248L2gyPlxuICAgICAgICAgIDxwIGNsYXNzTmFtZT1cInNlY3Rpb24tc3ViLWhlYWRpbmdcIj5cbiAgICAgICAgICAgIEV4cGVyaWVuY2Ugb3VyIGNhbmRpZGF0ZSBpbnRlbGxpZ2VuY2UgZGFzaGJvYXJkIGludGVyZmFjZSBiZWZvcmUgY3JlYXRpbmcgYW4gYWNjb3VudC5cbiAgICAgICAgICA8L3A+XG4gICAgICAgIDwvZGl2PlxuXG4gICAgICAgIHsvKiBSb2xlIFNlbGVjdG9yIFRhYnMgKFJlcXVpcmVtZW50IDIzKSAqL31cbiAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJkZW1vLXJvbGUtdGFicy1yb3dcIj5cbiAgICAgICAgICB7T2JqZWN0LmtleXMoZGVtb1ByZXNldHMpLm1hcCgocm9sZSkgPT4gKFxuICAgICAgICAgICAgPGJ1dHRvblxuICAgICAgICAgICAgICBrZXk9e3JvbGV9XG4gICAgICAgICAgICAgIHR5cGU9XCJidXR0b25cIlxuICAgICAgICAgICAgICBjbGFzc05hbWU9e2BkZW1vLXRhYi1idG4gJHtzZWxlY3RlZFJvbGUgPT09IHJvbGUgPyAnYWN0aXZlJyA6ICcnfWB9XG4gICAgICAgICAgICAgIG9uQ2xpY2s9eygpID0+IHNldFNlbGVjdGVkUm9sZShyb2xlKX1cbiAgICAgICAgICAgID5cbiAgICAgICAgICAgICAgPEJyaWVmY2FzZSBzaXplPXsxNH0gY2xhc3NOYW1lPVwibXItMVwiIC8+XG4gICAgICAgICAgICAgIHtyb2xlfVxuICAgICAgICAgICAgPC9idXR0b24+XG4gICAgICAgICAgKSl9XG4gICAgICAgIDwvZGl2PlxuXG4gICAgICAgIHsvKiBJbnRlcmFjdGl2ZSBEYXNoYm9hcmQgTW9ja3VwIENhcmQgKi99XG4gICAgICAgIDxtb3Rpb24uZGl2XG4gICAgICAgICAgY2xhc3NOYW1lPVwiZGVtby1kYXNoYm9hcmQtbW9ja3VwXCJcbiAgICAgICAgICBrZXk9e3NlbGVjdGVkUm9sZX1cbiAgICAgICAgICBpbml0aWFsPXt7IG9wYWNpdHk6IDAsIHk6IDE0IH19XG4gICAgICAgICAgYW5pbWF0ZT17eyBvcGFjaXR5OiAxLCB5OiAwIH19XG4gICAgICAgICAgdHJhbnNpdGlvbj17eyBkdXJhdGlvbjogMC4zIH19XG4gICAgICAgID5cbiAgICAgICAgICB7LyogVG9wIERlbW8gQmFyIExhYmVsZWQgSU5URVJBQ1RJVkUgREVNTyAqL31cbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cIm1vY2t1cC13aW5kb3ctaGVhZGVyXCI+XG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cIndpbmRvdy1kb3RzLWdyb3VwXCI+XG4gICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cImRvdCBkb3QtcmVkXCI+PC9zcGFuPlxuICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJkb3QgZG90LXllbGxvd1wiPjwvc3Bhbj5cbiAgICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwiZG90IGRvdC1ncmVlblwiPjwvc3Bhbj5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJtb2NrdXAtYWRkcmVzcy1waWxsXCI+XG4gICAgICAgICAgICAgIDxTcGFya2xlcyBzaXplPXsxMn0gY2xhc3NOYW1lPVwidGV4dC1wcmltYXJ5XCIgLz5cbiAgICAgICAgICAgICAgPHNwYW4+Y2FyZWVyc2Vuc2UuYWkvZGFzaGJvYXJkL292ZXJ2aWV3P3JvbGU9e3NlbGVjdGVkUm9sZS50b0xvd2VyQ2FzZSgpLnJlcGxhY2UoLyAvZywgJy0nKX08L3NwYW4+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwic3RhdHVzLWxpdmUtaW5kaWNhdG9yXCI+XG4gICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cImxpdmUtcHVsc2VcIj48L3NwYW4+XG4gICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cImRlbW8tYmFkZ2UtdHh0XCI+SU5URVJBQ1RJVkUgREVNTzwvc3Bhbj5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgIDwvZGl2PlxuXG4gICAgICAgICAgey8qIEV4YWN0IDUgTWV0cmljcyBmcm9tIFJlcXVpcmVtZW50IDIzICovfVxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZGVtby1tZXRyaWNzLWdyaWRcIj5cbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZGVtby1tZXRyaWMtcGlsbFwiPlxuICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJkZW1vLW0tbGFiZWxcIj5SZXN1bWUgU2NvcmU8L3NwYW4+XG4gICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cImRlbW8tbS12YWwgdGV4dC1wcmltYXJ5XCI+e2FjdGl2ZURhdGEucmVzdW1lU2NvcmV9JTwvc3Bhbj5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJkZW1vLW1ldHJpYy1waWxsXCI+XG4gICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cImRlbW8tbS1sYWJlbFwiPkpvYiBNYXRjaGVzPC9zcGFuPlxuICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJkZW1vLW0tdmFsIHRleHQtZW1lcmFsZFwiPnthY3RpdmVEYXRhLmpvYk1hdGNoZXN9IE1hdGNoZXM8L3NwYW4+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZGVtby1tZXRyaWMtcGlsbFwiPlxuICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJkZW1vLW0tbGFiZWxcIj5Ta2lsbHMgTWF0Y2hlZDwvc3Bhbj5cbiAgICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwiZGVtby1tLXZhbCB0ZXh0LWVtZXJhbGRcIj57YWN0aXZlRGF0YS5za2lsbHNNYXRjaGVkfSBTa2lsbHM8L3NwYW4+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZGVtby1tZXRyaWMtcGlsbFwiPlxuICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJkZW1vLW0tbGFiZWxcIj5Ta2lsbHMgTWlzc2luZzwvc3Bhbj5cbiAgICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwiZGVtby1tLXZhbCB0ZXh0LWFtYmVyXCI+e2FjdGl2ZURhdGEuc2tpbGxzTWlzc2luZ30gR2Fwczwvc3Bhbj5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJkZW1vLW1ldHJpYy1waWxsXCI+XG4gICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cImRlbW8tbS1sYWJlbFwiPkNhcmVlciBSZWFkaW5lc3M8L3NwYW4+XG4gICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cImRlbW8tbS12YWwgdGV4dC1wdXJwbGVcIj57YWN0aXZlRGF0YS5jYXJlZXJSZWFkaW5lc3N9JSBSZWFkeTwvc3Bhbj5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgIDwvZGl2PlxuXG4gICAgICAgICAgey8qIEFJIEluc2lnaHQgQ2FyZHMgU3RyaXAgKi99XG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJkZW1vLWFpLWluc2lnaHRzLXN0cmlwXCI+XG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImluc2lnaHQtY2FyZC1pdGVtXCI+XG4gICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiaW5zaWdodC1jYXJkLXRvcFwiPlxuICAgICAgICAgICAgICAgIDxTaGllbGRDaGVjayBzaXplPXsxNn0gY2xhc3NOYW1lPVwidGV4dC1lbWVyYWxkXCIgLz5cbiAgICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJpbnNpZ2h0LWNhdFwiPlNUUk9OR0VTVCBBUkVBPC9zcGFuPlxuICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgPHN0cm9uZyBjbGFzc05hbWU9XCJpbnNpZ2h0LXZhbFwiPnthY3RpdmVEYXRhLnN0cm9uZ2VzdEFyZWF9PC9zdHJvbmc+XG4gICAgICAgICAgICA8L2Rpdj5cblxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJpbnNpZ2h0LWNhcmQtaXRlbVwiPlxuICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImluc2lnaHQtY2FyZC10b3BcIj5cbiAgICAgICAgICAgICAgICA8VHJlbmRpbmdVcCBzaXplPXsxNn0gY2xhc3NOYW1lPVwidGV4dC1wcmltYXJ5XCIgLz5cbiAgICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJpbnNpZ2h0LWNhdFwiPkJJR0dFU1QgT1BQT1JUVU5JVFk8L3NwYW4+XG4gICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICA8c3Ryb25nIGNsYXNzTmFtZT1cImluc2lnaHQtdmFsXCI+e2FjdGl2ZURhdGEub3Bwb3J0dW5pdHl9PC9zdHJvbmc+XG4gICAgICAgICAgICA8L2Rpdj5cblxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJpbnNpZ2h0LWNhcmQtaXRlbVwiPlxuICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImluc2lnaHQtY2FyZC10b3BcIj5cbiAgICAgICAgICAgICAgICA8TGlnaHRidWxiIHNpemU9ezE2fSBjbGFzc05hbWU9XCJ0ZXh0LWFtYmVyXCIgLz5cbiAgICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJpbnNpZ2h0LWNhdFwiPlJFQ09NTUVOREVEIE5FWFQgU0tJTEw8L3NwYW4+XG4gICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICA8c3Ryb25nIGNsYXNzTmFtZT1cImluc2lnaHQtdmFsXCI+e2FjdGl2ZURhdGEubmV4dFNraWxsfTwvc3Ryb25nPlxuICAgICAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiaW5zaWdodC1jYXJkLWl0ZW1cIj5cbiAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJpbnNpZ2h0LWNhcmQtdG9wXCI+XG4gICAgICAgICAgICAgICAgPEF3YXJkIHNpemU9ezE2fSBjbGFzc05hbWU9XCJ0ZXh0LXB1cnBsZVwiIC8+XG4gICAgICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwiaW5zaWdodC1jYXRcIj5DQVJFRVIgUkVBRElORVNTPC9zcGFuPlxuICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgPHN0cm9uZyBjbGFzc05hbWU9XCJpbnNpZ2h0LXZhbFwiPnthY3RpdmVEYXRhLmNhcmVlclJlYWRpbmVzc30lIFBsYWNlbWVudCBQcmVwYXJlZDwvc3Ryb25nPlxuICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgICB7LyogRHVhbCBQcmV2aWV3IENhcmRzICovfVxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZGVtby1kdWFsLXNwbGl0XCI+XG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImRlbW8tcHJldmlldy1ib3hcIj5cbiAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJkZW1vLWJveC1oZWFkXCI+XG4gICAgICAgICAgICAgICAgPENoZWNrQ2lyY2xlMiBzaXplPXsxNn0gY2xhc3NOYW1lPVwidGV4dC1lbWVyYWxkXCIgLz5cbiAgICAgICAgICAgICAgICA8c3Ryb25nPk1hdGNoZWQgQ29yZSBQcm9maWNpZW5jaWVzICh7YWN0aXZlRGF0YS5tYXRjaGVkTGlzdC5sZW5ndGh9KTwvc3Ryb25nPlxuICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJkZW1vLWNoaXBzLWZsZXhcIj5cbiAgICAgICAgICAgICAgICB7YWN0aXZlRGF0YS5tYXRjaGVkTGlzdC5tYXAoKHMpID0+IChcbiAgICAgICAgICAgICAgICAgIDxzcGFuIGtleT17c30gY2xhc3NOYW1lPVwiZGVtby1jaGlwIGNoaXAtZ3JlZW5cIiBzdHlsZT17eyBkaXNwbGF5OiAnaW5saW5lLWZsZXgnLCBhbGlnbkl0ZW1zOiAnY2VudGVyJywgZ2FwOiAnNHB4JyB9fT5cbiAgICAgICAgICAgICAgICAgICAgPENoZWNrIHNpemU9ezExfSAvPiB7c31cbiAgICAgICAgICAgICAgICAgIDwvc3Bhbj5cbiAgICAgICAgICAgICAgICApKX1cbiAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8L2Rpdj5cblxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJkZW1vLXByZXZpZXctYm94XCI+XG4gICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZGVtby1ib3gtaGVhZFwiPlxuICAgICAgICAgICAgICAgIDxBbGVydENpcmNsZSBzaXplPXsxNn0gY2xhc3NOYW1lPVwidGV4dC1hbWJlclwiIC8+XG4gICAgICAgICAgICAgICAgPHN0cm9uZz5JZGVudGlmaWVkIE1pc3NpbmcgU2tpbGxzICZhbXA7IEdhcHMgKHthY3RpdmVEYXRhLm1pc3NpbmdMaXN0Lmxlbmd0aH0pPC9zdHJvbmc+XG4gICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImRlbW8tY2hpcHMtZmxleFwiPlxuICAgICAgICAgICAgICAgIHthY3RpdmVEYXRhLm1pc3NpbmdMaXN0Lm1hcCgocykgPT4gKFxuICAgICAgICAgICAgICAgICAgPHNwYW4ga2V5PXtzfSBjbGFzc05hbWU9XCJkZW1vLWNoaXAgY2hpcC1hbWJlclwiPisge3N9PC9zcGFuPlxuICAgICAgICAgICAgICAgICkpfVxuICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgIDwvZGl2PlxuXG4gICAgICAgICAgey8qIFJlY29tbWVuZGVkIFJvYWRtYXAgQ2FsbG91dCAqL31cbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImRlbW8tcm9hZG1hcC1jYWxsb3V0XCI+XG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImNhbGxvdXQtaWNvbi1ib3hcIj5cbiAgICAgICAgICAgICAgPENvbXBhc3Mgc2l6ZT17MTh9IGNsYXNzTmFtZT1cInRleHQtcHVycGxlXCIgLz5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgPGRpdj5cbiAgICAgICAgICAgICAgPHN0cm9uZyBjbGFzc05hbWU9XCJjYWxsb3V0LXRpdGxlXCI+U3ludGhlc2l6ZWQgTWlsZXN0b25lIFJvYWRtYXAgZm9yIHtzZWxlY3RlZFJvbGV9Ojwvc3Ryb25nPlxuICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJjYWxsb3V0LXRleHRcIj57YWN0aXZlRGF0YS5yb2FkbWFwU3VtbWFyeX08L3A+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICA8L2Rpdj5cblxuICAgICAgICAgIHsvKiBBY3Rpb24gUm93ICovfVxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZGVtby1jdGEtcm93XCI+XG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImRlbW8tY2FwdGlvblwiPlxuICAgICAgICAgICAgICA8c3Bhbj4qIEludGVyYWN0aXZlIERlbW8gUHJldmlldy4gUmVhZHkgdG8gYW5hbHl6ZSB5b3VyIGFjdHVhbCByZXN1bWUgYW5kIGxpdmUgam9iIHNwZWNpZmljYXRpb25zPzwvc3Bhbj5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgPEJ1dHRvblxuICAgICAgICAgICAgICB2YXJpYW50PVwicHJpbWFyeVwiXG4gICAgICAgICAgICAgIHNpemU9XCJtZFwiXG4gICAgICAgICAgICAgIGljb249e0Fycm93UmlnaHR9XG4gICAgICAgICAgICAgIG9uQ2xpY2s9eygpID0+IG5hdmlnYXRlKCcvYW5hbHl6ZScpfVxuICAgICAgICAgICAgPlxuICAgICAgICAgICAgICBBbmFseXplIFlvdXIgUmVzdW1lIE5vdyDihpJcbiAgICAgICAgICAgIDwvQnV0dG9uPlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L21vdGlvbi5kaXY+XG4gICAgICA8L2Rpdj5cbiAgICA8L3NlY3Rpb24+XG4gICk7XG59XG4iXSwiZmlsZSI6IkQ6L0NhcmVlclNlbnNlQUkvZnJvbnRlbmQvc3JjL2NvbXBvbmVudHMvbGFuZGluZy9EZW1vUHJldmlldy5qc3gifQ==

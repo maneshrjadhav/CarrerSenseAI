@@ -28,8 +28,8 @@ export default function Settings() {
       </div>
 
       {saved && (
-        <div className="auth-alert-success mb-4">
-          ✓ Settings preferences saved successfully!
+        <div className="auth-alert-success mb-4" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Check size={16} /> Settings preferences saved successfully!
         </div>
       )}
 

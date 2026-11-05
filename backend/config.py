@@ -14,9 +14,9 @@ class Config:
     PORT = int(os.getenv('PORT', 5000))
     FLASK_ENV = os.getenv('FLASK_ENV', 'development')
 
-    # Match Scoring Weights (Configurable)
-    SKILL_COVERAGE_WEIGHT = float(os.getenv('SKILL_COVERAGE_WEIGHT', '0.60'))
-    SEMANTIC_SIMILARITY_WEIGHT = float(os.getenv('SEMANTIC_SIMILARITY_WEIGHT', '0.40'))
+    # Match Scoring Weights (Configurable: 70% Skill Score + 30% TF-IDF Cosine Similarity)
+    SKILL_COVERAGE_WEIGHT = float(os.getenv('SKILL_COVERAGE_WEIGHT', '0.70'))
+    SEMANTIC_SIMILARITY_WEIGHT = float(os.getenv('SEMANTIC_SIMILARITY_WEIGHT', '0.30'))
 
     # Interview Readiness Thresholds (Configurable)
     INTERVIEW_READINESS_THRESHOLD = float(os.getenv('INTERVIEW_READINESS_THRESHOLD', '80.0'))
@@ -31,6 +31,20 @@ class Config:
     # JWT Authentication
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'careersense_ai_jwt_secret_super_secure_key_2026')
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=7)
+
+    # SMTP Email Configuration (Customizable via environment variables)
+    MAIL_SERVER = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
+    MAIL_PORT = int(os.getenv('MAIL_PORT', 587))
+    MAIL_USE_TLS = os.getenv('MAIL_USE_TLS', 'true').lower() in ['true', '1', 'yes']
+    MAIL_USE_SSL = os.getenv('MAIL_USE_SSL', 'false').lower() in ['true', '1', 'yes']
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME', '')
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', '')
+    MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER', 'CareerSense AI <noreply@careersense.ai>')
+
+    # Password Reset & OTP Policy
+    OTP_EXPIRY_MINUTES = int(os.getenv('OTP_EXPIRY_MINUTES', 5))
+    OTP_RESEND_COOLDOWN_SECONDS = int(os.getenv('OTP_RESEND_COOLDOWN_SECONDS', 60))
+    OTP_MAX_ATTEMPTS = int(os.getenv('OTP_MAX_ATTEMPTS', 5))
 
     # MySQL connection parameters
     MYSQL_HOST = os.getenv('MYSQL_HOST', 'localhost')

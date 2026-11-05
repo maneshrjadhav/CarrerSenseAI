@@ -36,11 +36,17 @@ export const subscriptionService = {
 
   /**
    * Check access entitlement for a specific feature (skill_gap, career_roadmap, interview_prep, ats_report)
+   * All features are 100% free and unlocked for all registered users.
    */
   async checkFeatureAccess(featureName) {
-    return await apiRequest(`/subscription/check-access/${featureName}`, {
-      method: 'GET',
-    });
+    try {
+      const res = await apiRequest(`/subscription/check-access/${featureName}`, {
+        method: 'GET',
+      });
+      return res || { success: true, allowed: true, reason: 'free_access' };
+    } catch {
+      return { success: true, allowed: true, reason: 'free_access' };
+    }
   },
 
   /**

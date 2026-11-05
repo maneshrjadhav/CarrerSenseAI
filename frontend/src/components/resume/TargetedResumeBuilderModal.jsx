@@ -15,7 +15,8 @@ import {
   TrendingUp,
   Cpu,
   Plus,
-  Trash2
+  Trash2,
+  Zap
 } from 'lucide-react';
 import Button from '../common/Button';
 import Badge from '../common/Badge';
@@ -436,10 +437,13 @@ export default function TargetedResumeBuilderModal({
                           padding: '3px 8px',
                           borderRadius: '6px',
                           fontSize: '0.75rem',
-                          fontWeight: 600
+                          fontWeight: 600,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '3px'
                         }}
                       >
-                        ⚡ {sk}
+                        <Zap size={11} /> {sk}
                       </span>
                     ))}
                   </div>

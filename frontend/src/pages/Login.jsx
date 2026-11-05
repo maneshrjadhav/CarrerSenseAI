@@ -84,7 +84,7 @@ export default function Login() {
     setSubmitting(true);
     try {
       await login(email.trim(), password, captchaInput.trim(), captchaToken, rememberMe);
-      // Navigate to dashboard
+      // Navigate to dashboard or previous route
       navigate(fromLocation, { replace: true });
     } catch (err) {
       if (err.message && err.message.toLowerCase().includes('captcha')) {
@@ -103,28 +103,28 @@ export default function Login() {
   };
 
   const formVariants = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 1 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.08,
+        staggerChildren: 0.04,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 12 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+    hidden: { opacity: 1, y: 0 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.2 } },
   };
 
   return (
     <AuthLayout
+      mode="login"
       title="Welcome Back"
-      subtitle="Sign in to continue your career journey."
-      maxWidth="480px"
+      subtitle="Sign in to continue your AI-powered career journey."
     >
       {serverError && (
-        <div className="auth-alert-error" role="alert" style={{ marginBottom: '1rem' }}>
+        <div className="auth-alert-error" role="alert">
           <AlertCircle size={16} />
           <span>{serverError}</span>
         </div>
@@ -138,16 +138,19 @@ export default function Login() {
         initial="hidden"
         animate="visible"
       >
-        {/* Email */}
+        {/* Email Address */}
         <motion.div className="form-group" variants={itemVariants}>
-          <label className="input-label" htmlFor="login-email">Email Address *</label>
+          <label className="input-label" htmlFor="login-email">
+            Email Address
+          </label>
           <div className="input-with-icon">
             <Mail size={16} className="input-icon" />
             <input
               id="login-email"
+              name="email"
               type="email"
               className={`form-input ${errors.email ? 'input-error' : ''}`}
-              placeholder="name@example.com"
+              placeholder="Enter your email address"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -165,7 +168,9 @@ export default function Login() {
         {/* Password */}
         <motion.div className="form-group" variants={itemVariants}>
           <div className="flex-between">
-            <label className="input-label" htmlFor="login-password">Password *</label>
+            <label className="input-label" htmlFor="login-password">
+              Password
+            </label>
             <Link to="/forgot-password" className="auth-link-sm">
               Forgot Password?
             </Link>
@@ -174,6 +179,7 @@ export default function Login() {
             <Lock size={16} className="input-icon" />
             <input
               id="login-password"
+              name="password"
               type={showPassword ? 'text' : 'password'}
               className={`form-input password-input ${errors.password ? 'input-error' : ''}`}
               placeholder="Enter your password"
@@ -204,11 +210,12 @@ export default function Login() {
           <label className="checkbox-label">
             <input
               type="checkbox"
+              name="rememberMe"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
               disabled={submitting}
             />
-            <span>Remember me on this device</span>
+            <span>Remember Me</span>
           </label>
         </motion.div>
 
@@ -229,7 +236,7 @@ export default function Login() {
           />
         </motion.div>
 
-        {/* Submit Button */}
+        {/* Primary Submit Button */}
         <motion.div variants={itemVariants}>
           <Button
             type="submit"
@@ -239,11 +246,19 @@ export default function Login() {
             disabled={submitting}
             className="w-full submit-cta-btn"
           >
-            {submitting ? 'Signing In...' : 'Sign In'}
+            {submitting ? 'Signing In...' : 'Sign In to CareerSense'}
           </Button>
         </motion.div>
       </motion.form>
 
+      {/* OR Divider */}
+      <div className="auth-or-divider">
+        <span className="or-line" />
+        <span className="or-text">OR</span>
+        <span className="or-line" />
+      </div>
+
+      {/* Create Account Link */}
       <div className="auth-footer-prompt">
         <span>Don't have an account?</span>
         <Link to="/register" className="auth-link">

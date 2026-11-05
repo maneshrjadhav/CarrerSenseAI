@@ -276,6 +276,13 @@ def submit_question_answer(current_user, session_id, question_id):
     if not session or session.user_id != current_user.id:
         return jsonify({"success": False, "message": "Interview session not found or forbidden."}), 404
 
+    # Enforce sequence: self-introduction must be completed before answering questions
+    if session.status == 'pending_intro' or not session.intro_completed:
+        return jsonify({
+            "success": False,
+            "message": "Please complete the self-introduction stage before answering interview questions."
+        }), 400
+
     question = db.session.query(InterviewQuestion).filter_by(id=question_id, session_id=session_id).first()
     if not question:
         return jsonify({"success": False, "message": "Question not found in this session."}), 404

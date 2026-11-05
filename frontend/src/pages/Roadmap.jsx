@@ -35,7 +35,6 @@ import jobMatchService from '../services/jobMatchService';
 import analysisService from '../services/analysisService';
 import LearningWorkspace from '../components/roadmap/LearningWorkspace';
 import { useToast } from '../context/ToastContext';
-import UpgradeModal from '../components/subscription/UpgradeModal';
 
 function ProgressRing({ progress = 0, size = 104, strokeWidth = 9 }) {
   const radius = (size - strokeWidth) / 2;
@@ -94,8 +93,6 @@ export default function Roadmap() {
   const [reanalysisResult, setReanalysisResult] = useState(null);
   const [generatingReport, setGeneratingReport] = useState(false);
   const [error, setError] = useState('');
-  const [subRequired, setSubRequired] = useState(false);
-  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
 
   // Timeline Customization States
   const [selectedWeeks, setSelectedWeeks] = useState(8);
@@ -108,6 +105,7 @@ export default function Roadmap() {
   const [expandedTasks, setExpandedTasks] = useState({});
   const [workspaceItem, setWorkspaceItem] = useState(null);
   const [timelineExpanded, setTimelineExpanded] = useState(true);
+  const [roadmapViewMode, setRoadmapViewMode] = useState('cards'); // 'cards' | 'timetable'
 
   useEffect(() => {
     let mounted = true;
@@ -148,12 +146,7 @@ export default function Roadmap() {
         }
       } catch (err) {
         if (mounted) {
-          if (err.status === 403 || err.data?.subscription_required) {
-            setSubRequired(true);
-            setError(err.message || 'Personalized Career Roadmap requires an active subscription.');
-          } else {
-            setError(err.message || 'Failed to retrieve career roadmap.');
-          }
+          setError(err.message || 'Failed to retrieve career roadmap.');
         }
       } finally {
         if (mounted) setLoading(false);
@@ -380,55 +373,6 @@ export default function Roadmap() {
     );
   }
 
-  if (subRequired) {
-    return (
-      <div className="page-container">
-        <div className="page-header">
-          <BackButton to="/dashboard" label="Back to Dashboard" className="mb-3" />
-          <h1 className="page-title">Personalized Career Roadmap</h1>
-          <p className="page-subtitle">A chronological learning milestone progression designed to bridge your skill gaps.</p>
-        </div>
-
-        <Card className="text-center py-5 mt-4" style={{ maxWidth: '680px', margin: '2rem auto' }}>
-          <div style={{ width: '64px', height: '64px', borderRadius: '50%', backgroundColor: 'rgba(37, 99, 235, 0.1)', color: 'var(--primary, #2563eb)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
-            <Compass size={32} />
-          </div>
-          <Badge variant="blue" size="md" className="mb-2">★ PREMIUM SUBSCRIPTION REQUIRED</Badge>
-          <h2 className="text-2xl font-bold text-dark mb-2">Unlock Your Career Roadmap</h2>
-          <p className="text-secondary max-w-lg mx-auto mb-6 text-sm" style={{ lineHeight: 1.6 }}>
-            Personalized Career Roadmaps, milestone checklists, weekly schedule configuration, and interactive assessment quizzes require an active CareerSense AI subscription.
-          </p>
-
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <Button
-              variant="primary"
-              size="lg"
-              icon={Sparkles}
-              onClick={() => setUpgradeModalOpen(true)}
-            >
-              Upgrade Now (From ₹83/mo) →
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => navigate('/pricing')}
-            >
-              Compare Plans
-            </Button>
-          </div>
-        </Card>
-
-        <UpgradeModal
-          isOpen={upgradeModalOpen}
-          onClose={() => setUpgradeModalOpen(false)}
-          featureName="career_roadmap"
-          reasonMessage="Personalized Career Roadmap & Sequential Progression requires an active subscription."
-          onSuccessRedirect={window.location.pathname}
-        />
-      </div>
-    );
-  }
-
   if (!roadmap || !roadmap.items || roadmap.items.length === 0) {
     return (
       <div className="page-container">
@@ -517,7 +461,7 @@ export default function Roadmap() {
               <Badge variant="blue" size="sm">Role: {roadmap.target_role}</Badge>
               {companyName && <Badge variant="gray" size="sm">Org: {companyName}</Badge>}
               {resumeName && <Badge variant="gray" size="sm">Resume: {resumeName}</Badge>}
-              <Badge variant="emerald" size="sm">✓ MySQL Verified</Badge>
+              <Badge variant="emerald" size="sm">MySQL Verified</Badge>
             </div>
             <h1 className="page-title" style={{ margin: 0, fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main, #f1f5f9)' }}>
               Career Roadmap: {roadmap.target_role}
@@ -558,7 +502,7 @@ export default function Roadmap() {
               loading={reanalyzing}
               onClick={handleReanalyzeSkills}
             >
-              Re-analyze My Skills ⚡
+              Re-analyze My Skills
             </Button>
             <Button
               variant="outline"
@@ -634,9 +578,13 @@ export default function Roadmap() {
 
             <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid var(--border-color, #30415c)', fontSize: '0.775rem', color: 'var(--text-muted, #94a3b8)' }}>
               {nextMilestone ? (
-                <span>Next Milestone: <strong style={{ color: 'var(--text-main, #f1f5f9)' }}>Phase {nextMilestone.phase_number} — {nextMilestone.skill_name}</strong> (🔒 locked)</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  Next Milestone: <strong style={{ color: 'var(--text-main, #f1f5f9)' }}>Phase {nextMilestone.phase_number} — {nextMilestone.skill_name}</strong> (<Lock size={11} /> Locked)
+                </span>
               ) : (
-                <span style={{ color: 'var(--emerald, #10b981)' }}>🎉 Final Milestone reached!</span>
+                <span style={{ color: 'var(--emerald, #10b981)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <CheckCircle2 size={13} /> Final Milestone reached!
+                </span>
               )}
             </div>
           </div>
@@ -720,8 +668,8 @@ export default function Roadmap() {
                 <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                   <span style={{ fontSize: '0.78rem', fontWeight: '700', color: '#065f46' }}>Skills Mastered:</span>
                   {reanalysisResult.skills_improved.map((sk, idx) => (
-                    <span key={idx} style={{ backgroundColor: '#d1fae5', color: '#065f46', fontSize: '0.75rem', padding: '2px 8px', borderRadius: '4px', fontWeight: '600' }}>
-                      ✓ {sk}
+                    <span key={idx} style={{ backgroundColor: '#d1fae5', color: '#065f46', fontSize: '0.75rem', padding: '2px 8px', borderRadius: '4px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                      <Check size={11} /> {sk}
                     </span>
                   ))}
                 </div>
@@ -863,9 +811,9 @@ export default function Roadmap() {
                       LEVEL {step.level}
                     </span>
                     {isPassed ? (
-                      <Badge variant="emerald" size="sm">✓ Mastered</Badge>
+                      <Badge variant="emerald" size="sm">Mastered</Badge>
                     ) : isActive ? (
-                      <Badge variant="blue" size="sm">⚡ Active Focus</Badge>
+                      <Badge variant="blue" size="sm">Active Focus</Badge>
                     ) : (
                       <Badge variant="gray" size="sm">Upcoming</Badge>
                     )}
@@ -1138,7 +1086,7 @@ export default function Roadmap() {
                 {roadmap.overall_progress}%
               </span>
               <Badge variant={roadmap.overall_progress === 100 ? 'emerald' : 'blue'} size="md">
-                {roadmap.overall_progress === 100 ? '✓ Roadmap Fully Completed' : `${completedCount} of ${totalItems} Phases Mastered`}
+                {roadmap.overall_progress === 100 ? 'Roadmap Fully Completed' : `${completedCount} of ${totalItems} Phases Mastered`}
               </Badge>
             </div>
           </div>
@@ -1164,7 +1112,183 @@ export default function Roadmap() {
         </div>
       </Card>
 
-      {/* Chronological Phases Timeline */}
+      {/* View Switcher: Cards vs Structured Timetable Schedule */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', flexWrap: 'wrap', gap: '12px' }}>
+        <div>
+          <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main, #0f172a)' }}>
+            {roadmapViewMode === 'timetable' ? 'Structured Weekly Timetable' : 'Milestone Learning Architecture'}
+          </h2>
+          <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', color: 'var(--text-muted, #64748b)' }}>
+            {roadmapViewMode === 'timetable'
+              ? 'Personalized weekly schedule based on your available study hours, missing skill priorities, and hands-on exercises.'
+              : 'Sequential milestone phases with prerequisite gating and interactive learning workspaces.'}
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', background: 'var(--card-subtle-bg, #f1f5f9)', padding: '4px', borderRadius: '8px', border: '1px solid var(--border-color, #e2e8f0)', gap: '4px' }}>
+          <button
+            type="button"
+            onClick={() => setRoadmapViewMode('cards')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 14px',
+              borderRadius: '6px',
+              fontSize: '0.825rem',
+              fontWeight: 700,
+              border: 'none',
+              background: roadmapViewMode === 'cards' ? 'var(--bg-card, #ffffff)' : 'transparent',
+              color: roadmapViewMode === 'cards' ? 'var(--primary, #2563eb)' : 'var(--text-muted, #64748b)',
+              boxShadow: roadmapViewMode === 'cards' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <Sliders size={14} />
+            <span>Milestone Cards</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setRoadmapViewMode('timetable')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 14px',
+              borderRadius: '6px',
+              fontSize: '0.825rem',
+              fontWeight: 700,
+              border: 'none',
+              background: roadmapViewMode === 'timetable' ? 'var(--bg-card, #ffffff)' : 'transparent',
+              color: roadmapViewMode === 'timetable' ? 'var(--primary, #2563eb)' : 'var(--text-muted, #64748b)',
+              boxShadow: roadmapViewMode === 'timetable' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <Calendar size={14} />
+            <span>Weekly Timetable</span>
+          </button>
+        </div>
+      </div>
+
+      {roadmapViewMode === 'timetable' ? (
+        <Card className="mb-6 p-0" style={{ overflow: 'hidden' }}>
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border-color, #e2e8f0)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', background: 'var(--card-subtle-bg, #f8fafc)' }}>
+            <div>
+              <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-main, #0f172a)' }}>
+                Structured Weekly Learning Timetable
+              </h3>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted, #64748b)' }}>
+                Targeting {roadmap.total_duration_weeks || effectiveWeeks} Weeks • {dailyHours}h/day across {daysPerWeek} days/week ({weeklyHours} weekly hours)
+              </span>
+            </div>
+            <Badge variant="blue" size="sm">
+              Role: {roadmap.target_role || 'Target Requisition'}
+            </Badge>
+          </div>
+
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.85rem' }}>
+              <thead>
+                <tr style={{ background: 'var(--card-subtle-bg, #f1f5f9)', borderBottom: '2px solid var(--border-color, #e2e8f0)' }}>
+                  <th style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--text-muted, #64748b)', width: '80px' }}>Week</th>
+                  <th style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--text-muted, #64748b)', minWidth: '130px' }}>Skill Focus</th>
+                  <th style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--text-muted, #64748b)', minWidth: '220px' }}>Learning Objective & Topics</th>
+                  <th style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--text-muted, #64748b)', width: '110px' }}>Duration</th>
+                  <th style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--text-muted, #64748b)', minWidth: '200px' }}>Practice / Mini-Project</th>
+                  <th style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--text-muted, #64748b)', minWidth: '180px' }}>Expected Outcome</th>
+                  <th style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--text-muted, #64748b)', width: '120px', textAlign: 'center' }}>Status</th>
+                  <th style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--text-muted, #64748b)', width: '100px', textAlign: 'right' }}>Workspace</th>
+                </tr>
+              </thead>
+              <tbody>
+                {roadmap.items.map((item) => {
+                  const isDone = item.status === 'Completed' || item.progress === 100;
+                  const isInProgress = item.status === 'In Progress' && item.progress < 100;
+                  const isLocked = item.order_index > 1 && roadmap.items.some((it) => it.order_index < item.order_index && it.status !== 'Completed');
+                  const hasTasks = Array.isArray(item.tasks) && item.tasks.length > 0;
+                  const completedTasksCount = hasTasks ? item.tasks.filter((t) => t.is_completed).length : 0;
+
+                  return (
+                    <tr
+                      key={item.id}
+                      style={{
+                        borderBottom: '1px solid var(--border-color, #e2e8f0)',
+                        background: isDone ? 'rgba(16, 185, 129, 0.03)' : isInProgress ? 'rgba(37, 99, 235, 0.03)' : 'transparent',
+                        opacity: isLocked ? 0.75 : 1,
+                        transition: 'background-color 0.15s ease'
+                      }}
+                    >
+                      <td style={{ padding: '14px', verticalAlign: 'top', fontWeight: 800, color: 'var(--primary, #2563eb)' }}>
+                        Week {item.phase_number}
+                      </td>
+                      <td style={{ padding: '14px', verticalAlign: 'top' }}>
+                        <strong style={{ display: 'block', color: 'var(--text-main, #0f172a)', fontSize: '0.9rem' }}>{item.skill_name}</strong>
+                        <span style={{ fontSize: '0.725rem', color: item.priority === 'HIGH' ? '#dc2626' : '#d97706', fontWeight: 700 }}>
+                          {item.priority} Priority
+                        </span>
+                      </td>
+                      <td style={{ padding: '14px', verticalAlign: 'top', color: 'var(--text-sub, #475569)' }}>
+                        <div style={{ fontWeight: 600, color: 'var(--text-main, #0f172a)', marginBottom: '4px' }}>{item.title}</div>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted, #64748b)' }}>
+                          {item.topics && item.topics.length > 0 ? item.topics.slice(0, 3).join(', ') : item.description}
+                        </div>
+                      </td>
+                      <td style={{ padding: '14px', verticalAlign: 'top', whiteSpace: 'nowrap' }}>
+                        <span style={{ fontWeight: 600, color: 'var(--text-main, #0f172a)' }}>{item.duration_weeks}</span>
+                        <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--text-muted, #64748b)' }}>~{dailyHours}h / day</span>
+                      </td>
+                      <td style={{ padding: '14px', verticalAlign: 'top', color: 'var(--text-sub, #475569)' }}>
+                        <div style={{ fontSize: '0.825rem', lineHeight: '1.4' }}>
+                          {item.practice_project || `Build a practical mini-project implementing ${item.skill_name} architecture.`}
+                        </div>
+                      </td>
+                      <td style={{ padding: '14px', verticalAlign: 'top', color: 'var(--text-sub, #475569)' }}>
+                        <div style={{ fontSize: '0.825rem', lineHeight: '1.4' }}>
+                          {item.learning_outcomes && item.learning_outcomes.length > 0
+                            ? item.learning_outcomes[0]
+                            : `Demonstrated competency in ${item.skill_name} verified by assessment quiz.`}
+                        </div>
+                      </td>
+                      <td style={{ padding: '14px', verticalAlign: 'top', textAlign: 'center' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                          <span
+                            className={`status-pill ${
+                              isDone ? 'status-pill-emerald' : isLocked ? 'status-pill-neutral' : isInProgress ? 'status-pill-blue' : 'status-pill-neutral'
+                            }`}
+                            style={{ fontSize: '0.75rem', padding: '2px 8px' }}
+                          >
+                            {isDone ? 'Completed' : isLocked ? 'Locked' : isInProgress ? `${item.progress}%` : 'Not Started'}
+                          </span>
+                          {hasTasks && (
+                            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted, #64748b)' }}>
+                              {completedTasksCount}/{item.tasks.length} tasks
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td style={{ padding: '14px', verticalAlign: 'top', textAlign: 'right' }}>
+                        <Button
+                          variant={isDone ? 'secondary' : isInProgress ? 'primary' : 'outline'}
+                          size="xs"
+                          disabled={isLocked}
+                          onClick={() => setWorkspaceItem(item)}
+                        >
+                          {isLocked ? 'Locked' : isDone ? 'Review' : 'Workspace'}
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      ) : (
+      /* Chronological Phases Timeline Cards */
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '32px' }}>
         {roadmap.items.map((item, idx) => {
           const isUpdating = updatingItemId === item.id;
@@ -1297,7 +1421,21 @@ export default function Roadmap() {
                       border: '1px solid var(--border-color, #30415c)'
                     }}
                   >
-                    {isDone ? '✓ Completed' : isLocked ? '🔒 Locked' : isInProgress ? `▶ In Progress (${item.progress || 50}%)` : 'Not Started'}
+                    {isDone ? (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <CheckCircle2 size={11} /> Completed
+                      </span>
+                    ) : isLocked ? (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <Lock size={11} /> Locked
+                      </span>
+                    ) : isInProgress ? (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <PlayCircle size={11} /> In Progress ({item.progress || 50}%)
+                      </span>
+                    ) : (
+                      'Not Started'
+                    )}
                   </span>
 
                   {/* Open Learning Workspace Action */}
@@ -1484,6 +1622,7 @@ export default function Roadmap() {
           );
         })}
       </div>
+      )}
 
       {/* Bottom Re-analysis Callout */}
       <Card className="text-center py-4 mb-4" style={{ background: 'var(--bg-card, #162238)', border: '1px solid var(--border-color, #30415c)' }}>
@@ -1502,7 +1641,7 @@ export default function Roadmap() {
               loading={reanalyzing}
               onClick={handleReanalyzeSkills}
             >
-              Re-analyze My Skills ⚡
+              Re-analyze My Skills
             </Button>
             <Button
               variant="outline"
@@ -1539,15 +1678,6 @@ export default function Roadmap() {
           }}
         />
       )}
-
-      {/* Subscription Paywall Modal */}
-      <UpgradeModal
-        isOpen={upgradeModalOpen}
-        onClose={() => setUpgradeModalOpen(false)}
-        featureName="career_roadmap"
-        reasonMessage="Personalized Career Roadmap & Sequential Progression requires an active subscription."
-        onSuccessRedirect={window.location.pathname}
-      />
     </div>
   );
 }

@@ -146,9 +146,10 @@ export default function Register() {
   if (success) {
     return (
       <AuthLayout
+        mode="register"
         title="Account Created Successfully"
         subtitle="Your CareerSense AI account is ready."
-        maxWidth="460px"
+        maxWidth="480px"
       >
         <div className="success-modal-body" style={{ textAlign: 'center', padding: '1rem 0' }}>
           <div
@@ -168,7 +169,7 @@ export default function Register() {
             <CheckCircle2 size={36} color="#10B981" />
           </div>
           <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary, #fff)', marginBottom: '0.5rem' }}>
-            Account Created ✓
+            Account Created Successfully
           </h3>
           <p className="success-lead-text" style={{ color: 'var(--text-muted, #94a3b8)', fontSize: '0.925rem', lineHeight: 1.5, marginBottom: '1.5rem' }}>
             Your account has been registered successfully with secure encryption. Please sign in to access your Candidate Dashboard.
@@ -189,9 +190,10 @@ export default function Register() {
 
   return (
     <AuthLayout
+      mode="register"
       title="Create Your Account"
       subtitle="Start your AI-powered career journey."
-      maxWidth="520px"
+      maxWidth="540px"
     >
       {serverError && (
         <div className="auth-alert-error" role="alert" style={{ marginBottom: '1rem' }}>
@@ -211,7 +213,7 @@ export default function Register() {
               type="text"
               name="fullName"
               className={`form-input ${errors.fullName ? 'input-error' : ''}`}
-              placeholder="e.g. Manesh Jadhav"
+              placeholder="Enter your full name"
               value={formData.fullName}
               onChange={handleChange}
               autoComplete="name"
@@ -252,7 +254,7 @@ export default function Register() {
                 type="tel"
                 name="phone"
                 className={`form-input ${errors.phone ? 'input-error' : ''}`}
-                placeholder="e.g. 9876543210"
+                placeholder="Phone (optional)"
                 value={formData.phone}
                 onChange={handleChange}
                 disabled={submitting}
@@ -319,7 +321,7 @@ export default function Register() {
                 type={showPassword ? 'text' : 'password'}
                 name="password"
                 className={`form-input password-input ${errors.password ? 'input-error' : ''}`}
-                placeholder="Min 8 chars"
+                placeholder="Min 8 characters"
                 value={formData.password}
                 onChange={handleChange}
                 autoComplete="new-password"
@@ -376,7 +378,7 @@ export default function Register() {
           disabled={submitting}
           className="w-full submit-cta-btn"
         >
-          {submitting ? 'Creating Account...' : 'Create Account'}
+          {submitting ? 'Creating Account...' : 'Create Free Account'}
         </Button>
       </form>
 

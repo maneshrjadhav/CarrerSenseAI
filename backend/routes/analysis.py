@@ -4,16 +4,21 @@ CareerSense AI - Final Year Engineering Project
 """
 
 import os
+import logging
 from flask import Blueprint, request, jsonify, current_app
 from extensions import db
 from models import (
     User, Resume, JobDescription, Analysis, AnalysisSkill,
     SkillGap, Roadmap, RoadmapItem, Report
 )
+from models.resume_intelligence import ResumeAnalysis
 from utils.auth_helper import token_required
 from services.matching_service import perform_comprehensive_match
 from services.roadmap_generator import generate_personalized_roadmap
-from services.resume_parser import extract_candidate_metadata
+from services.resume_parser import extract_candidate_metadata, validate_and_extract_pdf
+from services.resume_quality_service import analyze_resume_quality
+
+logger = logging.getLogger(__name__)
 
 analysis_bp = Blueprint('analysis', __name__)
 
@@ -64,10 +69,19 @@ def create_analysis(current_user):
 
     resume_text = resume.extracted_text or ""
     if not resume_text.strip():
-        return jsonify({
-            "success": False,
-            "message": "No readable text found in this resume. Please upload a readable PDF resume."
-        }), 400
+        if resume.file_path and os.path.exists(resume.file_path):
+            try:
+                extracted = validate_and_extract_pdf(resume.file_path)
+                resume_text = extracted.get('raw_text', '')
+                resume.extracted_text = resume_text
+                db.session.commit()
+            except Exception:
+                pass
+        if not resume_text.strip():
+            return jsonify({
+                "success": False,
+                "message": "No readable text found in this resume. Please upload a readable PDF resume."
+            }), 422
 
     try:
         # 2. Save JobDescription to MySQL
@@ -93,6 +107,15 @@ def create_analysis(current_user):
         cand_name = cand_meta.get('candidate_name') or current_user.full_name
         cand_email = cand_meta.get('email') or current_user.email
         cand_phone = cand_meta.get('phone') or current_user.phone
+
+        # Query or calculate independent Resume Quality Score
+        resume_analysis = db.session.query(ResumeAnalysis).filter_by(resume_id=resume.id).first()
+        resume_quality_score = round(resume_analysis.quality_score, 1) if resume_analysis else None
+        if resume_quality_score is None:
+            q_res = analyze_resume_quality(resume_text, cand_meta)
+            resume_quality_score = q_res.get('quality_score', 0.0)
+        metrics['resume_quality_score'] = resume_quality_score
+        metrics['quality_score'] = resume_quality_score
 
         # 4. Create Analysis record in MySQL
         analysis_record = Analysis(
@@ -226,14 +249,24 @@ def create_analysis(current_user):
         return jsonify({
             "success": True,
             "message": "Resume and Job Description analysis completed successfully.",
+            "match_id": analysis_record.id,
             "analysis_id": analysis_record.id,
             "analysis": analysis_record.to_dict(),
+            "target_role": target_role,
+            "company_name": company_name,
+            "resume": {
+                "id": resume.id,
+                "filename": resume.filename
+            },
+            "resume_quality_score": resume_quality_score,
             "metrics": metrics,
             "matched_skills": match_result['matched_skills'],
             "missing_skills": match_result['missing_skills'],
             "skill_gaps": match_result['skill_gaps'],
             "partial_matches": match_result['partial_matches'],
             "extra_skills": match_result['extra_skills'],
+            "resume_skills": match_result.get('resume_skills', []),
+            "required_jd_skills": match_result.get('required_jd_skills', []),
             "roadmap": roadmap_record.to_dict()
         }), 201
 
@@ -255,6 +288,9 @@ def get_analysis_detail(current_user, analysis_id):
     if analysis.user_id != current_user.id:
         return jsonify({"success": False, "message": "Forbidden: You cannot access another user's analysis."}), 403
 
+    resume = db.session.query(Resume).filter_by(id=analysis.resume_id).first()
+    jd = db.session.query(JobDescription).filter_by(id=analysis.job_description_id).first()
+
     # Load skills
     skills = db.session.query(AnalysisSkill).filter_by(analysis_id=analysis_id).all()
     skill_gaps = db.session.query(SkillGap).filter_by(analysis_id=analysis_id).all()
@@ -266,28 +302,60 @@ def get_analysis_detail(current_user, analysis_id):
     partial = [s.to_dict() for s in skills if s.match_status == 'partial']
     extra = [s.to_dict() for s in skills if s.match_status == 'extra']
 
-    cov_weight = current_app.config.get('SKILL_COVERAGE_WEIGHT', 0.60)
-    sem_weight = current_app.config.get('SEMANTIC_SIMILARITY_WEIGHT', 0.40)
+    resume_skills_set = sorted(list({s['skill_name'] for s in matched + partial + extra}))
+    required_jd_skills_set = sorted(list({s['skill_name'] for s in matched + partial + missing if s.get('is_required', True)}))
+    if not required_jd_skills_set:
+        required_jd_skills_set = sorted(list({s['skill_name'] for s in matched + partial + missing}))
+
+    # Query or calculate independent Resume Quality Score
+    resume_analysis = db.session.query(ResumeAnalysis).filter_by(resume_id=resume.id).first() if resume else None
+    resume_quality_score = round(resume_analysis.quality_score, 1) if resume_analysis else None
+    if resume_quality_score is None and resume and resume.extracted_text:
+        cand_meta = extract_candidate_metadata(resume.extracted_text)
+        q_res = analyze_resume_quality(resume.extracted_text, cand_meta)
+        resume_quality_score = q_res.get('quality_score', 0.0)
+
+    cov_weight = float(current_app.config.get('SKILL_COVERAGE_WEIGHT', 0.70))
+    sem_weight = float(current_app.config.get('SEMANTIC_SIMILARITY_WEIGHT', 0.30))
 
     return jsonify({
         "success": True,
+        "match_id": analysis.id,
+        "analysis_id": analysis.id,
         "analysis": analysis.to_dict(),
+        "target_role": analysis.target_role,
+        "company_name": jd.company_name if jd else None,
+        "resume": {
+            "id": resume.id if resume else None,
+            "filename": resume.filename if resume else "Resume.pdf"
+        },
+        "resume_quality_score": resume_quality_score,
         "metrics": {
             "overall_match_score": analysis.match_score,
+            "final_match_score": analysis.match_score,
+            "final_score": analysis.match_score,
             "skill_coverage": analysis.skill_coverage,
+            "skill_match_score": analysis.skill_coverage,
+            "skill_score": analysis.skill_coverage,
             "semantic_similarity": analysis.semantic_similarity,
+            "tfidf_similarity_score": analysis.semantic_similarity,
+            "tfidf_score": analysis.semantic_similarity,
+            "resume_quality_score": resume_quality_score,
+            "quality_score": resume_quality_score,
             "total_required_skills": analysis.total_required_skills,
-            "matched_skills_count": analysis.matched_skills_count,
-            "missing_skills_count": analysis.missing_skills_count,
-            "partial_skills_count": analysis.partial_skills_count,
+            "matched_skills_count": len(matched),
+            "missing_skills_count": len(missing),
+            "partial_skills_count": len(partial),
             "extra_skills_count": len(extra),
             "weights": {
                 "skill_coverage_weight": cov_weight,
-                "semantic_similarity_weight": sem_weight
+                "semantic_similarity_weight": sem_weight,
+                "skill_score_weight": 0.70,
+                "tfidf_score_weight": 0.30
             },
             "formula_explanation": (
-                f"Overall Score = ({int(cov_weight*100)}% × Skill Coverage {analysis.skill_coverage}%) + "
-                f"({int(sem_weight*100)}% × Semantic Similarity {analysis.semantic_similarity}%) = {analysis.match_score}%"
+                f"Final Match Score = (Skill Match Score {analysis.skill_coverage}% × 0.70) + "
+                f"(TF-IDF Similarity Score {analysis.semantic_similarity}% × 0.30) = {analysis.match_score}%"
             )
         },
         "matched_skills": matched,
@@ -295,6 +363,8 @@ def get_analysis_detail(current_user, analysis_id):
         "skill_gaps": [g.to_dict() for g in skill_gaps],
         "partial_matches": partial,
         "extra_skills": extra,
+        "resume_skills": resume_skills_set,
+        "required_jd_skills": required_jd_skills_set,
         "roadmap": roadmap.to_dict() if roadmap else None,
         "reports": [r.to_dict() for r in reports]
     }), 200

@@ -1,7 +1,12 @@
 import React from 'react';
 import { Sparkles, Bell, User } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
-export default function Navbar({ userName = 'Manesh Jadhav' }) {
+export default function Navbar({ userName }) {
+  const auth = useAuth ? useAuth() : null;
+  const user = auth?.user;
+  const resolvedName = userName || user?.full_name || user?.name || 'Candidate';
+
   return (
     <header className="navbar">
       <div className="navbar-brand">
@@ -19,9 +24,9 @@ export default function Navbar({ userName = 'Manesh Jadhav' }) {
 
         <div className="user-profile">
           <div className="user-avatar">
-            {userName.charAt(0)}
+            {resolvedName.charAt(0).toUpperCase()}
           </div>
-          <span className="user-name">{userName}</span>
+          <span className="user-name">{resolvedName}</span>
         </div>
       </div>
     </header>

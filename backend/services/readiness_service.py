@@ -18,11 +18,11 @@ def evaluate_interview_readiness(
     """
     Evaluates whether a candidate is ready for mock interview preparation.
 
-    Criteria:
+    Criterion:
     1. Overall Job Match Score >= threshold (default: 80.0%)
-    2. Critical missing skills count <= max_critical_gaps (default: 0 HIGH priority gaps)
-    
-    A high score alone does not grant readiness if critical core skills are missing.
+
+    Missing skills are surfaced separately; the final score determines the
+    interview-versus-roadmap action required by the CareerSense workflow.
     """
     if threshold is None:
         threshold = DEFAULT_READINESS_THRESHOLD
@@ -59,34 +59,30 @@ def evaluate_interview_readiness(
     critical_count = len(high_priority_gaps)
     total_gaps_count = len(high_priority_gaps) + len(medium_priority_gaps) + len(low_priority_gaps)
 
-    # Decision logic
+    # Decision logic: the final backend match score alone determines the branch.
     score_meets_threshold = match_score >= threshold
-    critical_skills_cleared = critical_count <= max_critical_gaps
-
-    is_ready = score_meets_threshold and critical_skills_cleared
+    is_ready = score_meets_threshold
 
     if is_ready:
         status = "Interview Ready"
-        headline = "Great Match! You are Ready for Technical Interview Practice."
+        headline = "🎉 Excellent match! Your profile aligns strongly with this job. You're ready to prepare for the interview."
         reason = (
-            f"Your match score of {match_score}% meets the {threshold}% readiness threshold, "
-            f"and you have zero critical missing skills."
+            f"Your match score of {match_score}% meets or exceeds the {threshold}% readiness threshold. "
+            "You're ready to explore interview preparation."
         )
         recommended_action = "prepare_interview"
-        action_button_label = "Prepare Your Interview →"
+        action_button_label = "Start Interview Preparation"
+        message = "🎉 Excellent match! Your profile aligns strongly with this job. You're ready to prepare for the interview."
     else:
         status = "Skill Improvement Recommended"
         recommended_action = "create_roadmap"
-        action_button_label = "Create My Career Roadmap →"
-        
-        reasons = []
-        if not score_meets_threshold:
-            reasons.append(f"Match score ({match_score}%) is below the {threshold}% readiness threshold")
-        if not critical_skills_cleared:
-            reasons.append(f"{critical_count} critical required skill(s) missing: {', '.join(high_priority_gaps[:3])}")
-        
-        headline = "Skill Remediation Recommended Before Interview Practice."
-        reason = " and ".join(reasons) + ". We recommend completing your personalized Career Roadmap first."
+        action_button_label = "Build My Career Roadmap"
+        headline = "🚀 You can improve your match! Let's identify your skill gaps and build a focused learning plan."
+        reason = (
+            f"Match score ({match_score}%) is below the {threshold}% readiness threshold. "
+            "Let's build the missing skills with a personalized roadmap."
+        )
+        message = "🚀 You can improve your match! Let's identify your skill gaps and build a focused learning plan."
 
     return {
         "is_interview_ready": is_ready,
@@ -98,6 +94,7 @@ def evaluate_interview_readiness(
         "status": status,
         "headline": headline,
         "reason": reason,
+        "message": message,
         "recommended_action": recommended_action,
         "action_button_label": action_button_label
     }

@@ -22,7 +22,7 @@ export default function WelcomeHeader({ user }) {
           <span>AI CAREER INTELLIGENCE SYSTEM</span>
         </div>
         <h1 className="welcome-heading">
-          {getTimeGreeting()}, {firstName} 👋
+          {getTimeGreeting()}, {firstName}
         </h1>
         <p className="welcome-subtitle">
           Your AI-powered career intelligence at a glance.

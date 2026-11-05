@@ -27,7 +27,8 @@ import {
   Radio,
   Bookmark,
   RefreshCw,
-  ExternalLink
+  ExternalLink,
+  Check
 } from 'lucide-react';
 
 import Card from '../components/common/Card';
@@ -39,17 +40,12 @@ import interviewService from '../services/interviewService';
 import jobMatchService from '../services/jobMatchService';
 import dashboardService from '../services/dashboardService';
 import { useToast } from '../context/ToastContext';
-import UpgradeModal from '../components/subscription/UpgradeModal';
 
 export default function Interview() {
   const { matchId: paramMatchId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const toast = useToast();
-
-  // Subscription modal state
-  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
-  const [lockedReason, setLockedReason] = useState('');
 
   // STAGE CONTROLLER: 'setup' | 'intro' | 'questions' | 'report'
   const [currentStage, setCurrentStage] = useState('setup');
@@ -245,12 +241,7 @@ export default function Interview() {
         toast.error(res.message || 'Could not start interview session.');
       }
     } catch (err) {
-      if (err.status === 403 || err.data?.subscription_required) {
-        setLockedReason(err.message || 'Mock Interview Simulation is a premium feature. Please upgrade your plan to start interview sessions.');
-        setUpgradeModalOpen(true);
-      } else {
-        toast.error(err.message || 'Error initializing interview session.');
-      }
+      toast.error(err.message || 'Error initializing interview session.');
     } finally {
       setStartingSession(false);
     }
@@ -464,18 +455,26 @@ export default function Interview() {
       setSubmittingAnswer(true);
       const res = await interviewService.submitAnswer(sessionId, currentQ.id, {
         candidate_answer: answerText,
-        answering_mode: hardwareMode === 'video' || hardwareMode === 'audio_only' ? 'speech_to_text' : 'typed',
+        answer_mode: hardwareMode === 'video' || hardwareMode === 'audio_only' ? 'speech_to_text' : 'typed',
         time_taken_seconds: 120
       });
 
-      if (res.success && res.evaluation) {
-        toast.success(`Answer evaluated! Score: ${res.evaluation.score_breakdown?.overall_score || 0}/100`);
+      if (res.success && res.question) {
+        const evaluation = res.question.evaluation || null;
+        const evalScore = evaluation?.score ?? evaluation?.score_breakdown?.overall_score ?? res.question.score;
 
-        // Cache evaluation
-        setQuestionEvaluations((prev) => ({
-          ...prev,
-          [currentQ.id]: res.evaluation
-        }));
+        if (evaluation) {
+          setQuestionEvaluations((prev) => ({
+            ...prev,
+            [currentQ.id]: evaluation
+          }));
+        }
+
+        toast.success(
+          evalScore != null
+            ? `Answer evaluated! Score: ${Math.round(evalScore)}/100`
+            : 'Answer submitted successfully.'
+        );
 
         // Refresh session data
         const updated = await interviewService.getSession(sessionId);
@@ -536,7 +535,19 @@ export default function Interview() {
   const companyName = jobMatch?.company_name || null;
   const questions = sessionData?.questions || [];
   const currentQ = questions[currentQuestionIndex];
-  const currentEval = currentQ ? (questionEvaluations[currentQ.id] || (currentQ.is_submitted ? currentQ : null)) : null;
+  const currentEval = currentQ
+    ? (questionEvaluations[currentQ.id] || (currentQ.is_submitted ? (currentQ.evaluation || currentQ) : null))
+    : null;
+
+  // Real competency data from the completed session's performance summary
+  const reportSummary = finalReport?.performance_summary || null;
+  const reportCompetencies = reportSummary?.competency_scores
+    ? Object.entries(reportSummary.competency_scores).map(([skill, score]) => ({
+        label: skill,
+        score: Math.round(score),
+        color: score >= 75 ? '#059669' : score >= 60 ? '#d97706' : '#dc2626'
+      }))
+    : [];
 
   return (
     <div className="page-container">
@@ -801,13 +812,13 @@ export default function Interview() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem' }}>
                   <Video size={18} color={cameraAllowed ? '#10b981' : cameraAllowed === false ? '#ef4444' : '#64748b'} />
                   <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>
-                    Camera: {cameraAllowed ? 'Detected ✓' : cameraAllowed === false ? 'Disabled' : 'Not Tested'}
+                    Camera: {cameraAllowed ? 'Detected' : cameraAllowed === false ? 'Disabled' : 'Not Tested'}
                   </span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem' }}>
                   <Mic size={18} color={micAllowed ? '#10b981' : micAllowed === false ? '#ef4444' : '#64748b'} />
                   <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>
-                    Microphone: {micAllowed ? 'Detected ✓' : micAllowed === false ? 'Disabled' : 'Not Tested'}
+                    Microphone: {micAllowed ? 'Detected' : micAllowed === false ? 'Disabled' : 'Not Tested'}
                   </span>
                 </div>
                 <Button
@@ -1055,8 +1066,8 @@ export default function Interview() {
                       >
                         Retake Introduction
                       </Button>
-                      <span style={{ fontSize: '0.85rem', color: '#059669', fontWeight: 700 }}>
-                        ✓ Introduction Captured ({formatTimer(180 - introTimer)})
+                      <span style={{ fontSize: '0.85rem', color: '#059669', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <Check size={14} /> Introduction Captured ({formatTimer(180 - introTimer)})
                       </span>
                     </>
                   )}
@@ -1180,7 +1191,7 @@ export default function Interview() {
                       }}
                       title={`Jump to Question ${idx + 1}`}
                     >
-                      {isSubmitted ? '✓' : idx + 1}
+                      {isSubmitted ? <Check size={12} /> : idx + 1}
                     </button>
                   );
                 })}
@@ -1195,7 +1206,7 @@ export default function Interview() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                   <Badge variant="blue" size="md">
-                    Target Skill: {currentQ.skill_focus || 'Domain Competency'}
+                    Target Skill: {currentQ.skill_name || currentQ.skill_focus || 'Domain Competency'}
                   </Badge>
                   <span
                     style={{
@@ -1208,7 +1219,7 @@ export default function Interview() {
                       color: 'var(--text-sub)'
                     }}
                   >
-                    {currentQ.question_type?.toUpperCase() || 'TECHNICAL'}
+                    {(currentQ.category || currentQ.question_type || 'Technical').toUpperCase()}
                   </span>
                   <span
                     style={{
@@ -1363,13 +1374,13 @@ export default function Interview() {
                     <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)' }}>
                       AI Pedagogical Answer Evaluation
                     </h4>
-                    <Badge variant="emerald" size="sm">✓ Answer Submitted</Badge>
+                    <Badge variant="emerald" size="sm">Answer Submitted</Badge>
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Score:</span>
                     <span style={{ fontSize: '1.4rem', fontWeight: 800, color: '#10b981' }}>
-                      {currentEval.score_breakdown?.overall_score || currentEval.score || 0}/100
+                      {currentEval.score_breakdown?.overall_score ?? currentEval.score ?? '—'}/100
                     </span>
                   </div>
                 </div>
@@ -1378,11 +1389,14 @@ export default function Interview() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
                   {/* Strengths */}
                   <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.25)', borderRadius: '8px', padding: '14px' }}>
-                    <strong style={{ display: 'block', fontSize: '0.85rem', color: '#059669', marginBottom: '8px' }}>
-                      ✓ Strengths Identified:
+                    <strong style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: '#059669', marginBottom: '8px' }}>
+                      <CheckCircle2 size={14} /> Strengths Identified:
                     </strong>
                     <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '0.825rem', color: 'var(--text-main)', lineHeight: 1.45 }}>
-                      {(currentEval.strengths || currentEval.ai_evaluation?.strengths || ['Candidate provided coherent architectural context.']).map((s, idx) => (
+                      {((currentEval.strengths || currentEval.ai_evaluation?.strengths || []).length > 0
+                        ? (currentEval.strengths || currentEval.ai_evaluation.strengths)
+                        : ['No specific strengths recorded for this answer.']
+                      ).map((s, idx) => (
                         <li key={idx}>{s}</li>
                       ))}
                     </ul>
@@ -1390,11 +1404,14 @@ export default function Interview() {
 
                   {/* Missing Concepts */}
                   <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '8px', padding: '14px' }}>
-                    <strong style={{ display: 'block', fontSize: '0.85rem', color: '#dc2626', marginBottom: '8px' }}>
-                      ⚠️ Missing / Gap Concepts:
+                    <strong style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: '#dc2626', marginBottom: '8px' }}>
+                      <AlertTriangle size={14} /> Missing / Gap Concepts:
                     </strong>
                     <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '0.825rem', color: 'var(--text-main)', lineHeight: 1.45 }}>
-                      {(currentEval.missing_concepts || currentEval.ai_evaluation?.missing_concepts || ['Mention production monitoring and error handling boundaries.']).map((m, idx) => (
+                      {((currentEval.missing_concepts || currentEval.ai_evaluation?.missing_concepts || []).length > 0
+                        ? (currentEval.missing_concepts || currentEval.ai_evaluation.missing_concepts)
+                        : ['No specific gap concepts recorded for this answer.']
+                      ).map((m, idx) => (
                         <li key={idx}>{m}</li>
                       ))}
                     </ul>
@@ -1417,13 +1434,13 @@ export default function Interview() {
                 )}
 
                 {/* Why This Model Answer is Stronger */}
-                {currentEval.ai_evaluation?.why_stronger && (
+                {(currentEval.why_stronger || currentEval.ai_evaluation?.why_stronger) && (
                   <div style={{ backgroundColor: 'var(--primary-light)', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '12px 14px' }}>
                     <strong style={{ display: 'block', fontSize: '0.8rem', color: 'var(--primary)', marginBottom: '4px', textTransform: 'uppercase' }}>
                       Why This Reference Answer is Stronger:
                     </strong>
                     <p style={{ margin: 0, fontSize: '0.825rem', color: 'var(--text-main)', lineHeight: 1.4 }}>
-                      {currentEval.ai_evaluation.why_stronger}
+                      {currentEval.why_stronger || currentEval.ai_evaluation.why_stronger}
                     </p>
                   </div>
                 )}
@@ -1504,7 +1521,7 @@ export default function Interview() {
                     Overall Rating
                   </span>
                   <strong style={{ fontSize: '1.1rem', color: '#059669' }}>
-                    {finalReport?.readiness_verdict || 'Placement Ready'}
+                    {reportSummary?.readiness_verdict || 'Evaluation Complete'}
                   </strong>
                 </div>
 
@@ -1522,7 +1539,7 @@ export default function Interview() {
                   }}
                 >
                   <span style={{ fontSize: '1.8rem', fontWeight: 800, color: '#10b981', lineHeight: 1 }}>
-                    {Math.round(finalReport?.overall_score || 82)}%
+                    {finalReport?.overall_score != null ? `${Math.round(finalReport.overall_score)}%` : '—'}
                   </span>
                   <span style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-muted)' }}>SCORE</span>
                 </div>
@@ -1530,47 +1547,42 @@ export default function Interview() {
             </div>
           </Card>
 
-          {/* Competency Breakdown Cards */}
+          {/* Competency Breakdown Cards (real per-skill scores from evaluated answers) */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
-            {[
-              {
-                label: 'Domain Knowledge',
-                score: Math.round(finalReport?.summary_report?.competency_breakdown?.domain_knowledge || 84),
-                color: '#2563eb'
-              },
-              {
-                label: 'Communication & Structure',
-                score: Math.round(finalReport?.summary_report?.competency_breakdown?.communication || 80),
-                color: '#059669'
-              },
-              {
-                label: 'Problem Solving & Architecture',
-                score: Math.round(finalReport?.summary_report?.competency_breakdown?.problem_solving || 82),
-                color: '#7c3aed'
-              },
-              {
-                label: 'Self-Introduction Delivery',
-                score: Math.round(finalReport?.summary_report?.competency_breakdown?.delivery || 85),
-                color: '#d97706'
-              }
-            ].map((comp, idx) => (
+            {reportCompetencies.length > 0 ? (
+              reportCompetencies.map((comp, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    backgroundColor: 'var(--bg-card)',
+                    padding: '16px',
+                    borderRadius: '10px',
+                    border: '1px solid var(--border-color)',
+                    boxShadow: 'var(--shadow-xs)'
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-main)' }}>{comp.label}</span>
+                    <strong style={{ fontSize: '0.9rem', color: comp.color }}>{comp.score}%</strong>
+                  </div>
+                  <ProgressBar value={comp.score} height={6} />
+                </div>
+              ))
+            ) : (
               <div
-                key={idx}
                 style={{
-                  backgroundColor: 'var(--bg-card)',
+                  backgroundColor: 'var(--card-subtle-bg)',
                   padding: '16px',
                   borderRadius: '10px',
                   border: '1px solid var(--border-color)',
-                  boxShadow: 'var(--shadow-xs)'
+                  fontSize: '0.85rem',
+                  color: 'var(--text-muted)',
+                  gridColumn: '1 / -1'
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-main)' }}>{comp.label}</span>
-                  <strong style={{ fontSize: '0.9rem', color: comp.color }}>{comp.score}%</strong>
-                </div>
-                <ProgressBar value={comp.score} height={6} />
+                No competency scores recorded — answers were not evaluated in this session.
               </div>
-            ))}
+            )}
           </div>
 
           {/* Question-by-Question Review Table */}
@@ -1696,15 +1708,6 @@ export default function Interview() {
           </Card>
         </div>
       )}
-
-      {/* Upgrade Subscription Modal */}
-      <UpgradeModal
-        isOpen={upgradeModalOpen}
-        onClose={() => setUpgradeModalOpen(false)}
-        featureName="interview_prep"
-        reasonMessage={lockedReason || "AI Mock Interview Preparation requires an active CareerSense AI subscription."}
-        onSuccessRedirect={window.location.pathname}
-      />
     </div>
   );
 }

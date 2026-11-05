@@ -11,8 +11,6 @@ import {
   CheckCircle,
   Sun,
   Moon,
-  CreditCard,
-  Sparkles,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -134,29 +132,6 @@ export default function Topbar({ onToggleMobileMenu }) {
           )}
         </div>
 
-        {/* Pricing & Upgrade Quick Link */}
-        <Link
-          to="/pricing"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.35rem',
-            padding: '0.4rem 0.85rem',
-            borderRadius: '9999px',
-            backgroundColor: 'rgba(37, 99, 235, 0.1)',
-            color: 'var(--primary, #2563eb)',
-            fontSize: '0.82rem',
-            fontWeight: 600,
-            textDecoration: 'none',
-            border: '1px solid rgba(37, 99, 235, 0.25)',
-            transition: 'all 0.2s ease',
-          }}
-          title="View Subscription Plans & Pricing"
-        >
-          <Sparkles size={14} />
-          <span>Plans</span>
-        </Link>
-
         {/* User Profile Pill & Dropdown */}
         <div className="profile-wrapper" ref={dropdownRef}>
           <button
@@ -184,16 +159,6 @@ export default function Topbar({ onToggleMobileMenu }) {
                 <span>{user?.email || 'Authenticated User'}</span>
               </div>
               <div className="dropdown-divider"></div>
-
-              <Link
-                to="/pricing"
-                className="dropdown-menu-item"
-                role="menuitem"
-                onClick={() => setDropdownOpen(false)}
-              >
-                <CreditCard size={15} />
-                <span>Subscription Plans</span>
-              </Link>
 
               <Link
                 to="/profile"

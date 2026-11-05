@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Briefcase, Check, AlertCircle, Sparkles, ArrowRight, Clock } from 'lucide-react';
+import { Search, Briefcase, Check, AlertCircle, Sparkles, ArrowRight, Clock, XCircle } from 'lucide-react';
 import Card from '../components/common/Card';
 import Badge from '../components/common/Badge';
 import ProgressBar from '../components/common/ProgressBar';
@@ -122,11 +122,11 @@ export default function Matches() {
 
                 <div className="job-skills-split flex-between pt-2">
                   <div className="flex gap-4 text-xs">
-                    <span className="text-emerald font-semibold">
-                      ✓ {job.matched_skills_count} Matched Skills
+                    <span className="text-emerald font-semibold" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <Check size={13} /> {job.matched_skills_count} Matched Skills
                     </span>
-                    <span className="text-rose font-semibold">
-                      ✕ {job.missing_skills_count} Missing Gaps
+                    <span className="text-rose font-semibold" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <XCircle size={13} /> {job.missing_skills_count} Missing Gaps
                     </span>
                     <span className="text-secondary">
                       Coverage: {job.skill_coverage}% • Semantic: {job.semantic_similarity}%

@@ -30,7 +30,7 @@ export default function ResumeStatus({
               <span className="status-timestamp">Updated {uploadDate}</span>
             </div>
           </div>
-          <Badge variant="emerald" size="sm">✓ Verified</Badge>
+          <Badge variant="emerald" size="sm">Verified</Badge>
         </div>
 
         <div className="resume-meta-box">

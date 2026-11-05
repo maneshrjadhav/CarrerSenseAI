@@ -20,7 +20,12 @@ import {
   ChevronUp,
   Video,
   Mic,
-  Compass
+  Compass,
+  Check,
+  X,
+  Wrench,
+  ShieldCheck,
+  Info
 } from 'lucide-react';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
@@ -29,7 +34,7 @@ import BackButton from '../components/common/BackButton';
 import ProgressBar from '../components/common/ProgressBar';
 import jobMatchService from '../services/jobMatchService';
 import { evaluateReadiness, READINESS_THRESHOLD, MAX_CRITICAL_GAPS } from '../utils/readinessHelper';
-import UpgradeModal from '../components/subscription/UpgradeModal';
+import { getJobMatchFeedback, getJobMatchConditionalAction, getResumeQualityFeedback } from '../config/scoreFeedbackConfig';
 import TargetedResumeBuilderModal from '../components/resume/TargetedResumeBuilderModal';
 
 export default function JobMatchResult() {
@@ -48,22 +53,8 @@ export default function JobMatchResult() {
   const [targetedBuilderOpen, setTargetedBuilderOpen] = useState(false);
   const [showImprovePopup, setShowImprovePopup] = useState(false);
 
-  // Subscription gating & paywall modal state
-  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
-  const [lockedFeature, setLockedFeature] = useState('career_roadmap');
-  const [lockedReason, setLockedReason] = useState('');
-  const [targetRedirect, setTargetRedirect] = useState('');
-
-  const handleFeatureAccess = (feature, targetRoute, fallbackReason) => {
-    const hasSub = Boolean(matchData?.has_subscription);
-    if (hasSub) {
-      navigate(targetRoute);
-    } else {
-      setLockedFeature(feature);
-      setLockedReason(fallbackReason);
-      setTargetRedirect(targetRoute);
-      setUpgradeModalOpen(true);
-    }
+  const handleFeatureAccess = (feature, targetRoute, fallbackReason, navigationState = null) => {
+    navigate(targetRoute, navigationState ? { state: navigationState } : undefined);
   };
 
   const openSkillModal = (skill) => {
@@ -105,7 +96,7 @@ export default function JobMatchResult() {
               0
             );
             const isDismissed = sessionStorage.getItem(`cs_dismissed_improve_popup_${matchId}`);
-            if (score < 75 && !isDismissed) {
+            if (score < READINESS_THRESHOLD && !isDismissed) {
               setShowImprovePopup(true);
             }
           } else {
@@ -140,27 +131,13 @@ export default function JobMatchResult() {
   };
 
   const handleDownloadPDF = async () => {
-    const hasSub = Boolean(matchData?.has_subscription);
-    if (!hasSub) {
-      setLockedFeature('ats_report');
-      setLockedReason('ATS Compliance & Job-Match Report PDF download requires an active CareerSense AI subscription.');
-      setTargetRedirect(window.location.pathname);
-      setUpgradeModalOpen(true);
-      return;
-    }
     try {
       setGeneratingReport(true);
       await jobMatchService.generateReport(matchId);
       const url = jobMatchService.getReportDownloadUrl(matchId);
       window.open(url, '_blank');
     } catch (err) {
-      if (err.status === 403 || err.data?.subscription_required) {
-        setLockedFeature('ats_report');
-        setLockedReason('ATS Compliance & Job-Match Report PDF download requires an active CareerSense AI subscription.');
-        setUpgradeModalOpen(true);
-      } else {
-        alert(err.message || 'Could not generate report.');
-      }
+      alert(err.message || 'Could not generate report.');
     } finally {
       setGeneratingReport(false);
     }
@@ -210,12 +187,34 @@ export default function JobMatchResult() {
     matched_skills = [],
     missing_skills = [],
     partial_matches = [],
-    extra_skills = []
+    extra_skills = [],
+    resume_skills: apiResumeSkills = [],
+    required_jd_skills: apiRequiredJdSkills = []
   } = matchData;
 
-  const finalScore = Math.round(metrics.overall_match_score || analysis.match_score || 0);
-  const skillCoverage = Math.round(metrics.skill_coverage || analysis.skill_coverage || 0);
-  const semanticSim = Math.round(metrics.semantic_similarity || analysis.semantic_similarity || 0);
+  const finalScore = Math.round(metrics.final_score ?? metrics.final_match_score ?? metrics.overall_match_score ?? analysis.match_score ?? 0);
+  const skillScore = Math.round(metrics.skill_score ?? metrics.skill_match_score ?? metrics.skill_coverage ?? analysis.skill_coverage ?? 0);
+  const tfidfScore = Math.round(metrics.tfidf_score ?? metrics.tfidf_similarity_score ?? metrics.semantic_similarity ?? analysis.semantic_similarity ?? 0);
+  const resumeQualityScore = metrics.resume_quality_score ?? metrics.quality_score ?? matchData.resume_quality_score ?? null;
+  const skillCoverage = skillScore;
+  const semanticSim = tfidfScore;
+
+  // Synthesize complete normalized resume skills and required JD skills
+  const resumeSkills = apiResumeSkills.length > 0
+    ? apiResumeSkills
+    : Array.from(new Set([
+        ...matched_skills.map((s) => s.skill_name),
+        ...partial_matches.map((s) => s.skill_name),
+        ...extra_skills.map((s) => s.skill_name)
+      ])).filter(Boolean).sort();
+
+  const requiredJdSkills = apiRequiredJdSkills.length > 0
+    ? apiRequiredJdSkills
+    : Array.from(new Set([
+        ...matched_skills.map((s) => s.skill_name),
+        ...partial_matches.map((s) => s.skill_name),
+        ...missing_skills.map((s) => s.skill_name)
+      ])).filter(Boolean).sort();
 
   const getScoreCategory = (val) => {
     if (val >= 90) return { label: 'Excellent Match', color: '#059669', badgeVariant: 'emerald' };
@@ -242,10 +241,10 @@ export default function JobMatchResult() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '6px' }}>
               <h1 className="page-title" style={{ margin: 0 }}>Job Match Intelligence</h1>
-              <Badge variant="emerald" size="sm">✓ MySQL Verified</Badge>
+              <Badge variant="emerald" size="sm">MySQL Verified</Badge>
               <Badge variant="blue" size="sm">Match #{matchId}</Badge>
               <Badge variant={isInterviewReady ? 'emerald' : 'amber'} size="sm">
-                {isInterviewReady ? '🎯 Interview Ready' : '⚠️ Skill Improvement Recommended'}
+                {isInterviewReady ? 'Interview Ready' : 'Skill Improvement Recommended'}
               </Badge>
             </div>
             <p className="page-subtitle" style={{ margin: 0 }}>
@@ -341,8 +340,8 @@ export default function JobMatchResult() {
               <span style={{ fontSize: '2.4rem', fontWeight: '800', color: category.color, lineHeight: 1 }}>
                 {finalScore}%
               </span>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: '700', marginTop: '2px' }}>
-                MATCH
+              <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: '700', marginTop: '2px', textAlign: 'center' }}>
+                FINAL MATCH
               </span>
             </div>
 
@@ -354,7 +353,7 @@ export default function JobMatchResult() {
                 </Badge>
               </div>
               <p style={{ fontSize: '0.875rem', color: '#64748b', margin: '0 0 12px 0', lineHeight: '1.4' }}>
-                {finalScore >= 75
+                {finalScore >= READINESS_THRESHOLD
                   ? `High qualification match for ${target_role}. Your resume reflects significant alignment with required tools and responsibilities.`
                   : finalScore >= 60
                   ? `Moderate alignment for ${target_role}. You have foundational competencies, but closing specific skill gaps will dramatically boost callback rates.`
@@ -397,10 +396,13 @@ export default function JobMatchResult() {
             >
               <strong style={{ color: '#1e293b' }}>Mathematical Formula:</strong>
               <div style={{ fontFamily: 'monospace', color: '#0f172a', margin: '4px 0' }}>
-                Final Score = (Skill Coverage × 0.60) + (TF-IDF Cosine Similarity × 0.40)
+                Final Match Score = (Skill Match Score × 0.70) + (TF-IDF Similarity Score × 0.30)
               </div>
               <div style={{ color: '#475569' }}>
-                = ({skillCoverage}% × 0.60) + ({semanticSim}% × 0.40) = <strong>{finalScore}%</strong>
+                = ({skillScore}% × 0.70) + ({tfidfScore}% × 0.30) = <strong>{finalScore}%</strong>
+              </div>
+              <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid #cbd5e1', fontSize: '0.78rem', color: '#64748b' }}>
+                <em>Note: Resume Quality Score ({resumeQualityScore !== null ? `${Math.round(resumeQualityScore)}/100` : '—'}) reflects independent document structure and is completely separate from the Job Match Score ({finalScore}%).</em>
               </div>
             </div>
           )}
@@ -409,53 +411,76 @@ export default function JobMatchResult() {
         {/* Card 2: Dual Breakdown Components */}
         <Card title="Score Breakdown Components" subtitle="Mathematical metrics from NLP vector space">
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {/* Skill Coverage */}
+            {/* Skill Match Score */}
             <div>
               <div className="flex-between mb-1">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Layers size={16} className="text-primary" />
-                  <strong style={{ fontSize: '0.9rem', color: '#1e293b' }}>Skill Coverage (60% Weight)</strong>
+                  <strong style={{ fontSize: '0.9rem', color: '#1e293b' }}>Skill Match Score (70% Weight)</strong>
                 </div>
                 <span style={{ fontSize: '1.1rem', fontWeight: '800', color: '#2563eb' }}>
-                  {skillCoverage}%
+                  {skillScore}%
                 </span>
               </div>
               <p style={{ margin: '0 0 6px 0', fontSize: '0.8rem', color: '#64748b' }}>
-                {matched_skills.length} matched / {totalRequired} total required competencies in JD
+                {matched_skills.length} matched / {totalRequired} total required competencies in JD (partials count for 50% credit)
               </p>
-              <ProgressBar value={skillCoverage} variant="primary" height={8} />
+              <ProgressBar value={skillScore} variant="primary" height={8} />
             </div>
 
-            {/* Semantic Similarity */}
+            {/* TF-IDF Similarity Score */}
             <div>
               <div className="flex-between mb-1">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Sparkles size={16} className="text-emerald" />
-                  <strong style={{ fontSize: '0.9rem', color: '#1e293b' }}>Semantic Similarity (40% Weight)</strong>
+                  <strong style={{ fontSize: '0.9rem', color: '#1e293b' }}>TF-IDF Similarity Score (30% Weight)</strong>
                 </div>
                 <span style={{ fontSize: '1.1rem', fontWeight: '800', color: '#059669' }}>
-                  {semanticSim}%
+                  {tfidfScore}%
                 </span>
               </div>
               <p style={{ margin: '0 0 6px 0', fontSize: '0.8rem', color: '#64748b' }}>
                 Cosine similarity across n-gram statistical TF-IDF term vectors
               </p>
-              <ProgressBar value={semanticSim} variant="emerald" height={8} />
+              <ProgressBar value={tfidfScore} variant="emerald" height={8} />
+            </div>
+
+            {/* Resume Quality Score */}
+            <div>
+              <div className="flex-between mb-1">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <FileText size={16} style={{ color: '#7c3aed' }} />
+                  <strong style={{ fontSize: '0.9rem', color: '#1e293b' }}>Resume Quality Score (Independent Document Caliber)</strong>
+                </div>
+                <span style={{ fontSize: '1.1rem', fontWeight: '800', color: '#7c3aed' }}>
+                  {resumeQualityScore !== null ? `${Math.round(resumeQualityScore)}/100` : 'Evaluated'}
+                </span>
+              </div>
+              <p style={{ margin: '0 0 6px 0', fontSize: '0.8rem', color: '#64748b' }}>
+                Independent structural completeness, section formatting, and presentation depth
+              </p>
+              {resumeQualityScore !== null && (
+                <ProgressBar value={Math.round(resumeQualityScore)} variant="purple" height={8} />
+              )}
             </div>
 
             {/* Quick Metrics Bar */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', paddingTop: '8px', borderTop: '1px solid #f1f5f9' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', paddingTop: '8px', borderTop: '1px solid #f1f5f9' }}>
               <div style={{ textAlign: 'center', background: '#f8fafc', padding: '8px', borderRadius: '6px' }}>
-                <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748b' }}>Matched</span>
+                <span style={{ display: 'block', fontSize: '0.72rem', color: '#64748b' }}>Matched</span>
                 <strong style={{ fontSize: '1.05rem', color: '#059669' }}>{matched_skills.length}</strong>
               </div>
               <div style={{ textAlign: 'center', background: '#f8fafc', padding: '8px', borderRadius: '6px' }}>
-                <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748b' }}>Partial</span>
+                <span style={{ display: 'block', fontSize: '0.72rem', color: '#64748b' }}>Partial</span>
                 <strong style={{ fontSize: '1.05rem', color: '#d97706' }}>{partial_matches.length}</strong>
               </div>
               <div style={{ textAlign: 'center', background: '#f8fafc', padding: '8px', borderRadius: '6px' }}>
-                <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748b' }}>Missing</span>
+                <span style={{ display: 'block', fontSize: '0.72rem', color: '#64748b' }}>Missing</span>
                 <strong style={{ fontSize: '1.05rem', color: '#dc2626' }}>{missing_skills.length}</strong>
+              </div>
+              <div style={{ textAlign: 'center', background: '#f8fafc', padding: '8px', borderRadius: '6px' }}>
+                <span style={{ display: 'block', fontSize: '0.72rem', color: '#64748b' }}>Quality</span>
+                <strong style={{ fontSize: '1.05rem', color: '#7c3aed' }}>{resumeQualityScore !== null ? `${Math.round(resumeQualityScore)}` : '—'}</strong>
               </div>
             </div>
           </div>
@@ -494,7 +519,7 @@ export default function JobMatchResult() {
                     AI Interview Readiness Assessment
                   </h3>
                   <Badge variant={isInterviewReady ? 'emerald' : 'amber'} size="md">
-                    {isInterviewReady ? '✓ INTERVIEW READY' : '⚠️ SKILL IMPROVEMENT RECOMMENDED'}
+                    {isInterviewReady ? 'INTERVIEW READY' : 'SKILL IMPROVEMENT RECOMMENDED'}
                   </Badge>
                 </div>
                 <p style={{ margin: '2px 0 0 0', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -535,14 +560,8 @@ export default function JobMatchResult() {
                     variant="outline"
                     size="md"
                     icon={Video}
-                    onClick={() => {
-                      if (matchData?.has_subscription) {
-                        navigate(`/interview-prep/${matchId}`);
-                      } else {
-                        handleFeatureAccess('interview_prep', `/interview-prep/${matchId}`, 'Candidate has not reached the 80% readiness threshold. Practicing interview early requires an active subscription.');
-                      }
-                    }}
-                    title={matchData?.has_subscription ? "Practice ahead of roadmap completion" : "Active subscription required to practice before 80% threshold"}
+                    onClick={() => navigate(`/interview-prep/${matchId}`)}
+                    title="Practice AI mock interview for this target role"
                   >
                     Practice Interview Anyway →
                   </Button>
@@ -563,10 +582,14 @@ export default function JobMatchResult() {
                   {finalScore}% / {readiness.threshold || 80}% min
                 </span>
               </div>
-              <p style={{ margin: 0, fontSize: '0.825rem', color: 'var(--text-sub)' }}>
-                {finalScore >= (readiness.threshold || 80)
-                  ? `✓ Exceeds minimum readiness threshold of ${readiness.threshold || 80}% for ${target_role}.`
-                  : `Score is currently ${(readiness.threshold || 80) - finalScore}% below the recommended interview threshold.`}
+              <p style={{ margin: 0, fontSize: '0.825rem', color: 'var(--text-sub)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                {finalScore >= (readiness.threshold || 80) ? (
+                  <>
+                    <CheckCircle2 size={13} className="text-emerald" /> Exceeds minimum readiness threshold of {readiness.threshold || 80}% for {target_role}.
+                  </>
+                ) : (
+                  `Score is currently ${(readiness.threshold || 80) - finalScore}% below the recommended interview threshold.`
+                )}
               </p>
             </div>
 
@@ -580,10 +603,14 @@ export default function JobMatchResult() {
                   {readiness.critical_missing_count || (readiness.criticalGaps || []).length} High-Priority Gaps
                 </span>
               </div>
-              <p style={{ margin: 0, fontSize: '0.825rem', color: 'var(--text-sub)' }}>
-                {(readiness.critical_missing_count || (readiness.criticalGaps || []).length) === 0
-                  ? '✓ Zero critical core engineering competencies missing from your profile.'
-                  : `${readiness.critical_missing_count || (readiness.criticalGaps || []).length} core requirement(s) should be covered before formal technical rounds.`}
+              <p style={{ margin: 0, fontSize: '0.825rem', color: 'var(--text-sub)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                {(readiness.critical_missing_count || (readiness.criticalGaps || []).length) === 0 ? (
+                  <>
+                    <CheckCircle2 size={13} className="text-emerald" /> Zero critical core engineering competencies missing from your profile.
+                  </>
+                ) : (
+                  `${readiness.critical_missing_count || (readiness.criticalGaps || []).length} core requirement(s) should be covered before formal technical rounds.`
+                )}
               </p>
             </div>
 
@@ -619,10 +646,13 @@ export default function JobMatchResult() {
                       padding: '3px 10px',
                       borderRadius: '6px',
                       fontSize: '0.8rem',
-                      fontWeight: 700
+                      fontWeight: 700,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px'
                     }}
                   >
-                    🔴 {skillName}
+                    <XCircle size={12} /> {skillName}
                   </span>
                 ))}
               </div>
@@ -674,7 +704,7 @@ export default function JobMatchResult() {
                     }}
                   >
                     <span>{s.skill_name}</span>
-                    <span style={{ color: '#059669', fontSize: '0.8rem' }}>✓</span>
+                    <Check size={13} style={{ color: '#059669' }} />
                   </span>
                 ))}
               </div>
@@ -778,8 +808,8 @@ export default function JobMatchResult() {
                       title="Click to view skill details &amp; curriculum"
                     >
                       <span>{s.skill_name}</span>
-                      <span style={{ color: '#dc2626', fontSize: '0.8rem' }}>✕</span>
-                      <span style={{ fontSize: '0.7rem', color: '#94a3b8', marginLeft: '2px' }}>ℹ️</span>
+                      <X size={13} style={{ color: '#dc2626' }} />
+                      <Info size={12} style={{ color: '#94a3b8' }} />
                     </button>
                   ))}
                 </div>
@@ -787,7 +817,83 @@ export default function JobMatchResult() {
             )}
           </div>
 
-          {/* 4. EXTRA SKILLS */}
+          {/* 4. RESUME SKILLS (ALL DETECTED CANDIDATE SKILLS) */}
+          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FileText size={18} className="text-primary" />
+                <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: 'var(--text-main)' }}>
+                  RESUME SKILLS ({resumeSkills.length})
+                </h4>
+              </div>
+              <span style={{ fontSize: '0.8rem', fontWeight: '700', color: '#2563eb', background: '#eff6ff', padding: '2px 8px', borderRadius: '9999px' }}>
+                Extracted from Candidate Profile
+              </span>
+            </div>
+            {resumeSkills.length === 0 ? (
+              <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>No skills extracted from resume.</p>
+            ) : (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {resumeSkills.map((sName, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid #cbd5e1',
+                      borderRadius: '6px',
+                      padding: '4px 10px',
+                      fontSize: '0.825rem',
+                      fontWeight: '600',
+                      color: 'var(--text-main)',
+                      boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
+                    }}
+                  >
+                    {sName}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 5. REQUIRED JD SKILLS */}
+          <div style={{ background: '#faf5ff', border: '1px solid #e9d5ff', borderRadius: '8px', padding: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Briefcase size={18} style={{ color: '#7c3aed' }} />
+                <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: '#6b21a8' }}>
+                  REQUIRED JD SKILLS ({requiredJdSkills.length})
+                </h4>
+              </div>
+              <span style={{ fontSize: '0.8rem', fontWeight: '700', color: '#7c3aed', background: '#f3e8ff', padding: '2px 8px', borderRadius: '9999px' }}>
+                Target Role Requisition
+              </span>
+            </div>
+            {requiredJdSkills.length === 0 ? (
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#7c3aed' }}>No required skills extracted from job description.</p>
+            ) : (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {requiredJdSkills.map((sName, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid #d8b4fe',
+                      borderRadius: '6px',
+                      padding: '4px 10px',
+                      fontSize: '0.825rem',
+                      fontWeight: '600',
+                      color: '#6b21a8',
+                      boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
+                    }}
+                  >
+                    {sName}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 6. EXTRA SKILLS */}
           {extra_skills.length > 0 && (
             <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '14px' }}>
               <h5 style={{ margin: '0 0 8px 0', fontSize: '0.85rem', fontWeight: '700', color: '#475569' }}>
@@ -1006,8 +1112,8 @@ export default function JobMatchResult() {
               {/* Recommended Hands-on Project */}
               {selectedSkillModal.practice_project && (
                 <div style={{ backgroundColor: 'var(--primary-light)', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '14px' }}>
-                  <strong style={{ display: 'block', fontSize: '0.85rem', color: 'var(--primary)', marginBottom: '4px' }}>
-                    🛠️ Recommended Hands-on Practice Project:
+                  <strong style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: 'var(--primary)', marginBottom: '4px' }}>
+                    <Wrench size={14} /> Recommended Hands-on Practice Project:
                   </strong>
                   <p style={{ margin: 0, fontSize: '0.825rem', color: 'var(--text-main)', lineHeight: 1.4 }}>
                     {selectedSkillModal.practice_project}
@@ -1097,8 +1203,8 @@ export default function JobMatchResult() {
             </p>
 
             <div style={{ background: 'var(--card-subtle-bg, #f8fafc)', border: '1px solid var(--border-color, #e2e8f0)', borderRadius: '10px', padding: '12px', marginBottom: '20px', fontSize: '0.85rem' }}>
-              <div style={{ fontWeight: 700, color: 'var(--text-main, #0f172a)', marginBottom: '4px' }}>
-                🛡️ Ethical ATS Optimization:
+              <div style={{ fontWeight: 700, color: 'var(--text-main, #0f172a)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <ShieldCheck size={14} className="text-primary" /> Ethical ATS Optimization:
               </div>
               <div style={{ color: 'var(--text-muted, #64748b)' }}>
                 Real experience preserved. Missing skills placed transparently under <em>"Competencies in Progress"</em>.
@@ -1150,15 +1256,6 @@ export default function JobMatchResult() {
           jobDescription: matchData?.job_description_text || matchData?.job_description?.description || '',
           analysisId: matchId
         }}
-      />
-
-      {/* Upgrade Subscription Modal */}
-      <UpgradeModal
-        isOpen={upgradeModalOpen}
-        onClose={() => setUpgradeModalOpen(false)}
-        featureName={lockedFeature}
-        reasonMessage={lockedReason}
-        onSuccessRedirect={targetRedirect}
       />
     </div>
   );

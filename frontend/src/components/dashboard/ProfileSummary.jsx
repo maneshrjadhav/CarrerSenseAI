@@ -2,21 +2,36 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, GraduationCap, Target, FileText, ArrowRight } from 'lucide-react';
 
-export default function ProfileSummary({ user }) {
+export default function ProfileSummary({
+  user,
+  latestTargetRole = null,
+  resumesCount = 0,
+  hasAnalysis = false,
+  education = null,
+}) {
   const navigate = useNavigate();
 
-  // Compute honest completion percentage based on actual filled fields
-  let completion = 20; // Base account creation
-  if (user?.full_name || user?.name) completion += 20;
-  if (user?.email) completion += 20;
-  if (user?.phone) completion += 20;
-  if (user?.dob) completion += 20;
+  const effectiveEducation = user?.education || education;
+
+  // Honest completion percentage based on actually filled fields
+  let completion = 20; // account creation
+  if (user?.full_name || user?.name) completion += 16;
+  if (user?.email) completion += 16;
+  if (user?.phone) completion += 16;
+  if (user?.dob) completion += 16;
+  if (effectiveEducation) completion += 16;
+  completion = Math.min(completion, 100);
 
   const displayName = user?.full_name || user?.name || 'Candidate';
   const displayEmail = user?.email || 'Not specified';
   const displayPhone = user?.phone || 'Not provided';
-  const displayTarget = user?.career_target || 'Software Engineer / Developer';
-  const resumeStatus = user?.resumes_count > 0 ? 'Uploaded (Pending Analysis)' : 'Not analyzed yet';
+  const displayEducation = effectiveEducation || 'Not provided';
+  const displayTarget = latestTargetRole || user?.career_target || 'Not set yet';
+
+  let resumeStatus = 'No resume uploaded';
+  if (resumesCount > 0) {
+    resumeStatus = hasAnalysis ? 'Uploaded & analyzed' : 'Uploaded (pending analysis)';
+  }
 
   return (
     <div className="dashboard-card profile-summary-card">
@@ -61,13 +76,13 @@ export default function ProfileSummary({ user }) {
             <GraduationCap size={14} />
             <span>Education</span>
           </div>
-          <span className="detail-value">Undergraduate / Tech</span>
+          <span className="detail-value">{displayEducation}</span>
         </div>
 
         <div className="profile-detail-item">
           <div className="detail-label-icon">
             <Target size={14} />
-            <span>Career Target</span>
+            <span>Latest Target Role</span>
           </div>
           <span className="detail-value">{displayTarget}</span>
         </div>
@@ -94,4 +109,3 @@ export default function ProfileSummary({ user }) {
     </div>
   );
 }
-

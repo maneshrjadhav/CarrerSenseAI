@@ -5,6 +5,7 @@ export default function Button({
   variant = 'primary', // 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
   size = 'md', // 'sm' | 'md' | 'lg'
   icon: Icon,
+  iconPosition = 'left',
   loading = false,
   disabled = false,
   type = 'button',
@@ -22,10 +23,13 @@ export default function Button({
     >
       {loading ? (
         <span className="btn-spinner"></span>
-      ) : Icon ? (
+      ) : Icon && iconPosition === 'left' ? (
         <Icon size={size === 'sm' ? 14 : size === 'lg' ? 20 : 16} className="btn-icon" />
       ) : null}
       <span>{children}</span>
+      {!loading && Icon && iconPosition === 'right' ? (
+        <Icon size={size === 'sm' ? 14 : size === 'lg' ? 20 : 16} className="btn-icon btn-icon-right" />
+      ) : null}
     </button>
   );
 }
